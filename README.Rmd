@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-rasterbc provides a simple set of helper functions for accessing a large set of spatial ecological data on the province of BC during the period 2001-2018, in raster format for analysis in R.
+rasterbc provides a simple set of helper functions for accessing a large set of spatial ecological data on the province of BC during the period 2001-2018, in raster format.
 
-Metadata associated with these layers, and code for downloading them from their original sources can be found in a sister repository, [rasterbc_src](https://github.com/deankoch/rasterbc_src), and all raster data files will be hosted as a data publication (with associated DOI) on [FRDR](https://www.frdr-dfdr.ca/repo/) for permanence and easy referencing. 
+Links to metadata associated with these layers, and code for downloading them from their original sources can be found in a sister repository, [rasterbc_src](https://github.com/deankoch/rasterbc_src), and all raster data files will be hosted as a data publication (with associated DOI) on [FRDR](https://www.frdr-dfdr.ca/repo/) for permanence and easy referencing. 
 
 ## Installation
 
@@ -32,27 +32,37 @@ install_github('deankoch/rasterbc')
 ```
 
 
-## Example
+## Basic usage
 
-(boilerplate examples, to be replaced soon) This is a basic example which shows you how to solve a common problem:
+`rasterbc` is a data-retrieval tool. Start by setting a storage directory for the raster layers:
 
-```{r example}
+```{r initializing}
 library(rasterbc)
-## basic example code
+datadir_bc(select=TRUE, 'H:/rasterbc_data')
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+Depending on the geographical extent of interest and the number different layers requested, the cumulative filesize of the downloaded data can be quite large. For example, if every layer is downloaded, then around 30 GB of space is needed. Make sure you have selected a drive with enough free space for your project.
 
-```{r cars}
-summary(cars)
+To demonstrate this package we'll need a polygon covering a (relatively) small geographical extent in BC. Start by loading the `bcmaps` package and grabbing the polygons for the BC provincial boundary and the Central Okanagan Regional District
+
+```{r load-example}
+library(bcmaps)
+example.name = 'Regional District of Central Okanagan'
+bc.bound.sf = bc_bound()
+districts.sf = regional_districts()
+example.sf = districts.sf[districts.sf$ADMIN_AREA_NAME==example.name, ]
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+Any sfc class object could be used here, provided its geometry intersects with the provincial boundary of BC. The idea is that the user specifes their study area, and rasterbc downloads only the required data, avoiding cumbersome and memory-intensive intermediate steps involving large rasters.
 
-You can also embed plots, for example:
+Have a look at where the selected district lies in the province, with reference to the NTS/SNRC grid (sf object `NTS.polygons`, which is lazy-loaded with this package): You can Use `st_geometry` to drop the feature columns from the `sf` objects and keep only the geometries, which helps to de-clutter plots whenever you're just interested in the location(s) of something, and not the attributes attached to those locations.
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r plot-example}
+plot(st_geometry(NTS.polygons), main=example.name, border='red')
+plot(st_geometry(bc.bound.sf), add=TRUE, col=adjustcolor('blue', alpha.f=0.2))
+plot(st_geometry(example.sf), add=TRUE, col=adjustcolor('yellow', alpha.f=0.5))
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+rmarkdown::render('README.Rmd')
+
