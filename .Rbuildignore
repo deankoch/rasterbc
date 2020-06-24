@@ -2,3 +2,8 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+^README\.html$
+^README\.html$
+^demo\.R$
+^demo\_files$
+

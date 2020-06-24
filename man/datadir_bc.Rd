@@ -21,7 +21,7 @@ this directory is stored in the global options list for R under 'rasterbc.data.d
 \details{
 By default this is the path returned by \code{rappdirs::user_data_dir}. With argument \code{select==TRUE}, a different
 directory can be specified: If this is not specified in \code{data.dir}, the user is prompted to choose it via an interactive
-file dialog.
+file dialog. To check the current setting for data.dir, run \code{getOption('rasterbc.data.dir')}
 }
 \examples{
 datadir_bc(TRUE, 'H:/')
