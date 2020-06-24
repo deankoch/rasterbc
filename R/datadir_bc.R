@@ -1,13 +1,15 @@
 #' Set local directory for storage of raster data files
 #'
-#' All files downloaded/created by the rasterbc package are written to the directory assigned by this function.
+#' All files downloaded/created by the rasterbc package are written to the directory assigned by this function. The path to
+#' this directory is stored in the global options list for R under 'rasterbc.data.dir'
 #'
 #' By default this is the path returned by \code{rappdirs::user_data_dir}. With argument \code{select==TRUE}, a different
-#' directory can be specified: By default the user is prompted for this choice by an interactive file dialog. Alternatively it
-#' can be specified in \code{data.dir}.
+#' directory can be specified: If this is not specified in \code{data.dir}, the user is prompted to choose it via an interactive
+#' file dialog.
+#'
 #'
 #' @param select A boolean indicating whether the directory should be automatically selected (default) or user-selected
-#' @param data.dir An (optional) character string, providing the absolute path to the storage directory
+#' @param data.dir An (optional) character string, providing the absolute path to the desired storage directory
 #'
 #' @return character string, the absolute path to the selected storage directory
 #'
@@ -56,5 +58,6 @@ datadir_bc = function(select=FALSE, data.dir=NULL)
 
     }
   }
+  options('rasterbc.data.dir'=data.dir)
   return(data.dir)
 }
