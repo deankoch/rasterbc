@@ -5,18 +5,21 @@
 \alias{NTS.polygons}
 \title{National Topographic System Index Maps for British Columbia.}
 \format{
-Simple feature collection with 89 features and 1 field:
+Simple feature collection (of type POLYGON), with 89 features and 1 field:
 \describe{
   \item{NTS_SNRC}{four-character mapsheet code}
 }
 }
 \source{
-\url{https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765}
+Reproduced (in NAD83 / BC Albers projection) from the shapefile 'nts_snrc_250k.shp' in the zip archive 'nts_snrc.zip'
+available from \href{http://ftp.geogratis.gc.ca/pub/nrcan_rncan/vector/index/}{http://geogratis.gc.ca/} (accessed June 11, 2020).
 }
 \usage{
 NTS.polygons
 }
 \description{
-Polygons delineating mapsheet boundaries for 1:250,000 maps, from Natural Resources Canada
+Mapsheet boundary polygons for 1:250,000 maps, from Natural Resources Canada. The
+\href{https://open.canada.ca/en/open-government-licence-canada}{Open Government License - Canada} applies.
+More info \href{https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765}{available here}
 }
 \keyword{datasets}
