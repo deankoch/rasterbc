@@ -11,3 +11,16 @@
 #' @source Reproduced (in NAD83 / BC Albers projection) from the shapefile 'nts_snrc_250k.shp' in the zip archive 'nts_snrc.zip'
 #' available from \href{http://ftp.geogratis.gc.ca/pub/nrcan_rncan/vector/index/}{http://geogratis.gc.ca/} (accessed June 11, 2020).
 'NTS.polygons'
+
+#' Metadata for rasterbc collections
+#'
+#' This will soon be filled in with a shortened version of the info available at the
+#' \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src} github repository. The script ('metadata.R')
+#' used to generate this file can be found in the rasterbc/data-raw/ subdirectory.
+#'
+#' @format Nested list containing metadata and URLs for all of the files available through rasterbc
+#' \describe{
+#'   \item{dem}{Digital Elevation Model data from Natural Resources Canada}
+#' }
+#' @source Various Canadian government environment ministries
+'metadata_bc'
