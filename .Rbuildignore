@@ -6,4 +6,4 @@
 ^README\.html$
 ^demo\.R$
 ^demo\_files$
-
+^data\-raw$

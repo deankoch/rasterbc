@@ -2,4 +2,5 @@
 
 export(datadir_bc)
 export(findblocks_bc)
+export(listswap_bc)
 importFrom(utils,choose.dir)
