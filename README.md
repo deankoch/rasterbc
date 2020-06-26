@@ -69,7 +69,7 @@ data, avoiding cumbersome and memory-intensive intermediate steps
 involving large rasters.
 
 Have a look at where the selected district lies in the province, with
-reference to the NTS/SNRC grid (sf object `NTS.polygons`, which is
+reference to the NTS/SNRC grid (sf object `ntspoly_bc`, which is
 lazy-loaded with this package): You can Use `st_geometry` to drop the
 feature columns from the `sf` objects and keep only the geometries,
 which helps to de-clutter plots whenever you’re just interested in the
@@ -77,7 +77,7 @@ location(s) of something, and not the attributes attached to those
 locations.
 
 ``` r
-plot(st_geometry(NTS.polygons), main=example.name, border='red')
+plot(st_geometry(ntspoly_bc), main=example.name, border='red')
 plot(st_geometry(bc.bound.sf), add=TRUE, col=adjustcolor('blue', alpha.f=0.2))
 plot(st_geometry(example.sf), add=TRUE, col=adjustcolor('yellow', alpha.f=0.5))
 ```

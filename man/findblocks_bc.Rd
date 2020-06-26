@@ -18,7 +18,7 @@ This function identifies which blocks are needed to cover a given (user-supplied
 }
 \details{
 Returns the 4-character NTS/SNRC codes corresponding to mapsheets that intersect with the geometry set(s) in input.sf. If input.sf
-is NULL, returns the character vector of all codes, ordered according to the rows of 'NTS.polygons'.
+is NULL, returns the character vector of all codes, ordered according to the rows of 'ntspoly_bc'.
 }
 \examples{
 findblocks_bc()

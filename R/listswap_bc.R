@@ -18,7 +18,7 @@
 #' @examples
 #' example.element = setNames(paste0('C:/', 1:10), paste0('foo', 1:10))
 #' example.list = list(a=example.element, b=list(c=example.element, d=example.element))
-#' my_listswap(example.list, 'C:/', 'https://somewhere/')
+#' listswap_bc(example.list, 'C:/', 'https://somewhere/')
 listswap_bc = function(input.list, input.prefix, output.prefix)
 {
   if(!is.list(input.list))

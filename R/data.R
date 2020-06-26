@@ -10,7 +10,7 @@
 #' }
 #' @source Reproduced (in NAD83 / BC Albers projection) from the shapefile 'nts_snrc_250k.shp' in the zip archive 'nts_snrc.zip'
 #' available from \href{http://ftp.geogratis.gc.ca/pub/nrcan_rncan/vector/index/}{http://geogratis.gc.ca/} (accessed June 11, 2020).
-'NTS.polygons'
+'ntspoly_bc'
 
 #' Metadata for rasterbc collections
 #'

@@ -19,6 +19,6 @@ metadata_bc
 \description{
 This will soon be filled in with a shortened version of the info available at the
 \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src} github repository. The script ('metadata.R')
-used to generate this file can be found in the data-raw/ subdirectory.
+used to generate this file can be found in the rasterbc/data-raw/ subdirectory.
 }
 \keyword{datasets}
