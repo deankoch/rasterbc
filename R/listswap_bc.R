@@ -1,14 +1,14 @@
 #' recursively crawl a nested list structure, converting all character strings according to a rule
 #'
-#' This function takes a list (possibly nested) of file paths
-#' or web url paths, and swaps the prefix (leading n characters) of each character string for a different one.
+#' This function takes a list (possibly nested) of file paths or web url paths, and for those matching
+#' the input prefix string (ie having the same leading characters), swaps the prefix for a different one.
 #'
 #' When transferring files from a local machine to the web hosting service for storage (or vice versa),
 #' I preserve the directory structure for tidyness. This helper function makes it easier to convert a large nested list of file paths
 #' to a list of file download URLs (and vice versa).
 #'
-#' @param input.list A list (possible nested), whose terminal elements are all character strings (or vectors of them) beginning with input.prefix
-#' @param input.prefix The character string found at the beginning of every terminal element of input.list (ie. startsWith(xx, input.prefix)==TRUE)
+#' @param input.list A list (possible nested), whose terminal elements are all character strings (or vectors of them)
+#' @param input.prefix The character string to parse in the entries of input.list (ie. startsWith(xx, input.prefix)==TRUE)
 #' @param output.prefix The character string to swap in for input.prefix
 #'
 #' @return A list with the same structure and element names as input.list, but with each terminal element (character string, or
@@ -24,9 +24,32 @@ listswap_bc = function(input.list, input.prefix, output.prefix)
   if(!is.list(input.list))
   {
     # do the string swap when we encounter a vector of character strings
-    return(sapply(input.list, function(path) paste0(output.prefix, strsplit(path, input.prefix)[[1]][2])))
-  } else {
+    return(sapply(input.list, function(path) {
 
+      # handle non-character list entries
+      if(class(input.list) != 'character')
+      {
+        # non-character entries are not touched
+        return(path)
+
+      } else {
+
+        # skip strings that don't have the specified input prefix
+        if(startsWith(path, input.prefix)) {
+
+          # swap in the string prefix
+          return(paste0(output.prefix, strsplit(path, input.prefix)[[1]][2]))
+
+        } else {
+
+          # non-matching entries are not touched
+          return(path)
+        }
+
+      }
+    }))
+
+  } else {
     # recursive call if list entry is itself a list
     lapply(input.list, function(list.entry) listswap_bc(list.entry, input.prefix, output.prefix))
   }

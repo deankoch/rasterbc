@@ -40,6 +40,14 @@ library(rasterbc)
 datadir_bc(select=TRUE, 'H:/rasterbc_data')
 #> [1] "data storage path set to: H:/rasterbc_data"
 #> [1] "directory exists"
+#> Warning in datadir_bc(select = TRUE, "H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
+#> [1] "H:/rasterbc_data"
+```
+
+This path string is stored as an R option. View it using:
+
+``` r
+print(getOption('rasterbc.data.dir'))
 #> [1] "H:/rasterbc_data"
 ```
 

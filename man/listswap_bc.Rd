@@ -7,9 +7,9 @@
 listswap_bc(input.list, input.prefix, output.prefix)
 }
 \arguments{
-\item{input.list}{A list (possible nested), whose terminal elements are all character strings (or vectors of them) beginning with input.prefix}
+\item{input.list}{A list (possible nested), whose terminal elements are all character strings (or vectors of them)}
 
-\item{input.prefix}{The character string found at the beginning of every terminal element of input.list (ie. startsWith(xx, input.prefix)==TRUE)}
+\item{input.prefix}{The character string to parse in the entries of input.list (ie. startsWith(xx, input.prefix)==TRUE)}
 
 \item{output.prefix}{The character string to swap in for input.prefix}
 }
@@ -18,8 +18,8 @@ A list with the same structure and element names as input.list, but with each te
 vector of character strings) modified according to the prefix swap rule.
 }
 \description{
-This function takes a list (possibly nested) of file paths
-or web url paths, and swaps the prefix (leading n characters) of each character string for a different one.
+This function takes a list (possibly nested) of file paths or web url paths, and for those matching
+the input prefix string (ie having the same leading characters), swaps the prefix for a different one.
 }
 \details{
 When transferring files from a local machine to the web hosting service for storage (or vice versa),

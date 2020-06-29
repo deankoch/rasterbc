@@ -41,6 +41,11 @@ library(rasterbc)
 datadir_bc(select=TRUE, 'H:/rasterbc_data')
 ```
 
+This path string is stored as an R option. View it using:
+```{r view-datadir}
+print(getOption('rasterbc.data.dir'))
+```
+
 Depending on the geographical extent of interest and the number different layers requested, the cumulative filesize of the downloaded data can be quite large. For example, if every layer is downloaded, then around 30 GB of space is needed. Make sure you have selected a drive with enough free space for your project.
 
 To demonstrate this package we'll need a polygon covering a (relatively) small geographical extent in BC. Start by loading the `bcmaps` package and grabbing the polygons for the BC provincial boundary and the Central Okanagan Regional District
