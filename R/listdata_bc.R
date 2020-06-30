@@ -18,6 +18,7 @@
 #' @return A (named) nested list of boolean values, one for each file. This list has the same structure and naming scheme as
 #' 'rasterbc::metadata_bc', but with boolean entries instead of character strings. The entry indicates whether the file exists on
 #' disk in the local data storage directory specified by 'rasterbc::datadir_bc'.
+#' @importFrom stats setNames
 #' @export
 #' @examples
 #' x = listdata_bc()
