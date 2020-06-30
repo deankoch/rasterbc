@@ -104,9 +104,9 @@ plot(example.clipped.tif, main=paste0(example.name, '\nDigital Elevation Model')
 
 ### test code snippets for metadata prep
 
-x = listdata_bc()
 
-x = listdata_bc('dem', 'loss')
+
+
 
 
 

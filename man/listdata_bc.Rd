@@ -27,17 +27,17 @@ which of these exist on disk already
 \details{
 The layers available through this package are organized into "collections", corresponding to their original online source.
 Layers in a collection are further organized by variable name, and are uniquely identified by the character string "varname"
-(and, if applicable, the year): The syntax for the varname string is one of the following:
+(and, if applicable, the year). To see the full list of variable names by collection, run
 
-<variable name> (for collections 'dem', 'bgcz', 'borders', 'gfc')
-
-<variable name>-<year> (for collections 'nfdb', 'cutblocks', 'pine', 'gfc')
-
-<variable name>-<species code>-<year> (for collection 'fids')
-
-To do: When arguments collection and/or varname are provided, check only for those (sub)collections, returning
+When arguments collection and/or varname are provided, check only for those (sub)collections, returning
 the corresponding (sub)list. This saves having to scan the entire data storage directory, which can be slow.
 }
 \examples{
-listdata_bc()
+x = listdata_bc()
+x = listdata_bc(collection='bgcz', verbose=1)
+x = listdata_bc(collection='dem', verbose=2)
+x = listdata_bc(collection='dem', varname='aspect', verbose=2)
+x = listdata_bc(collection='fids', varname='IBM_trace', year=2005, verbose=2)
+print(x)
+
 }

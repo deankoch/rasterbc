@@ -9,6 +9,7 @@
 #' @param input.sf A simple features object (class sfc), at least part of which intersects with the province of BC
 #'
 #' @return A vector of character strings, the 4-character NTS/SNRC codes of the mapsheets that overlap with input.sf
+#' @importFrom stats setNames
 #' @export
 #' @examples
 #' findblocks_bc()

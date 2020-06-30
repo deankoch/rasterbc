@@ -5,15 +5,9 @@
 #'
 #' The layers available through this package are organized into "collections", corresponding to their original online source.
 #' Layers in a collection are further organized by variable name, and are uniquely identified by the character string "varname"
-#' (and, if applicable, the year): The syntax for the varname string is one of the following:
+#' (and, if applicable, the year). To see the full list of variable names by collection, run
 #'
-#' <variable name> (for collections 'dem', 'bgcz', 'borders', 'gfc')
-#'
-#' <variable name>-<year> (for collections 'nfdb', 'cutblocks', 'pine', 'gfc')
-#'
-#' <variable name>-<species code>-<year> (for collection 'fids')
-#'
-#' To do: When arguments collection and/or varname are provided, check only for those (sub)collections, returning
+#' When arguments collection and/or varname are provided, check only for those (sub)collections, returning
 #' the corresponding (sub)list. This saves having to scan the entire data storage directory, which can be slow.
 #'
 #' @param collection character string, indicating the data collection to query
@@ -26,7 +20,13 @@
 #' disk in the local data storage directory specified by 'rasterbc::datadir_bc'.
 #' @export
 #' @examples
-#' listdata_bc()
+#' x = listdata_bc()
+#' x = listdata_bc(collection='bgcz', verbose=1)
+#' x = listdata_bc(collection='dem', verbose=2)
+#' x = listdata_bc(collection='dem', varname='aspect', verbose=2)
+#' x = listdata_bc(collection='fids', varname='IBM_trace', year=2005, verbose=2)
+#' print(x)
+#'
 listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
 {
   # get the data storage directory...
@@ -40,6 +40,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
   # check if a collection was specified
   if(is.null(collection))
   {
+
     # recursive call to query all collections when "collection" argument is not assigned
     return(lapply(setNames(nm=names(rasterbc::metadata_bc)), function(collection) listdata_bc(collection, varname, year, verbose)))
 
@@ -55,6 +56,14 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
         # check if a varname argument has been supplied
         if(is.null(varname))
         {
+          # printout to list variable names
+          printout.prefix = 'available variable names: '
+          printout.suffix = paste(rasterbc::metadata_bc[[collection]]$metadata$varnames, collapse=', ')
+          if(verbose == 1)
+          {
+            print(paste(printout.prefix, printout.suffix))
+          }
+
           # recursive call to query all variable names when "varname" argument is not assigned
           return(lapply(varnames, function(varname) listdata_bc(collection, varname, year, verbose)))
 
@@ -77,7 +86,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
               fnames.exist = setNames(file.exists(paste0(data.dir, fnames)), fnames)
               printout.prefix = paste0('[', collection, '] ', sum(fnames.exist), '/', length(fnames))
               printout.suffix = paste0(varname, ' blocks (storage: ', paste0(data.dir, collection), ')')
-              if(verbose > 0)
+              if(verbose > 1)
               {
                 # printout indicating fraction of blocks downloaded
                 print(paste(printout.prefix, printout.suffix))
@@ -113,7 +122,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
                   fnames.exist = setNames(file.exists(paste0(data.dir, fnames)), fnames)
                   printout.prefix = paste0('[', year, ']:[', collection, ']: ', sum(fnames.exist), '/', length(fnames), ' ')
                   printout.suffix = paste0(varname, ' blocks (storage: ', paste0(data.dir, collection, '/', year), ')')
-                  if(verbose > 0)
+                  if(verbose > 1)
                   {
                     # printout indicating fraction of blocks downloaded
                     print(paste0(printout.prefix, printout.suffix))
@@ -122,10 +131,9 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
 
                 } else {
 
-                  # error when "year" argument is invalid
-                  error.msg = paste0('variable name "', varname, '" not found in collection "', collection, '"')
-                  suggestions.msg = paste('\nChoose one of:', paste(varnames, collapse=', '))
-                  stop(paste(error.msg, suggestions.msg))
+                  # warning when "year" argument is invalid
+                  warning(paste0('variable name "', varname, '" not found in collection "', collection, '" for year ', year))
+                  return(NULL)
 
                 }
 
