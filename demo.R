@@ -102,8 +102,10 @@ plot(example.clipped.tif, main=paste0(example.name, '\nDigital Elevation Model')
 #' (either as a vector of mapsheet codes, or an sfc object), and any required blocks will be downloaded into the directory specified
 #' by `rasterbc::datadir_bc`, combined, and returned as a `RasterLayer` object:
 
-### test code snippets for metadata prep
+out.raster = getdata_bc(example.sf, 'dem', 'dem')
+plot(out.raster)
 
+x = listdata_bc('dem', verbose=2)
 
 
 

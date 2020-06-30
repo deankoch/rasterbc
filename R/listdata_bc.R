@@ -84,7 +84,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
 
               # build list of filenames and boolean indicating whether they exist on disk
               fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
-              fnames.exist = setNames(file.exists(paste0(data.dir, fnames)), fnames)
+              fnames.exist = setNames(file.exists(paste0(data.dir, collection, '/', fnames)), fnames)
               printout.prefix = paste0('[', collection, '] ', sum(fnames.exist), '/', length(fnames))
               printout.suffix = paste0(varname, ' blocks (storage: ', paste0(data.dir, collection), ')')
               if(verbose > 1)
@@ -120,7 +120,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
 
                   # build list of filenames and existence boolean
                   fnames = rasterbc::metadata_bc[[collection]]$fname$block[[which(idx.year)]][[varname]]
-                  fnames.exist = setNames(file.exists(paste0(data.dir, fnames)), fnames)
+                  fnames.exist = setNames(file.exists(paste0(data.dir, collection, '/', fnames)), fnames)
                   printout.prefix = paste0('[', year, ']:[', collection, ']: ', sum(fnames.exist), '/', length(fnames), ' ')
                   printout.suffix = paste0(varname, ' blocks (storage: ', paste0(data.dir, collection, '/', year), ')')
                   if(verbose > 1)

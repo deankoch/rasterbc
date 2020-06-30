@@ -2,6 +2,7 @@
 
 export(datadir_bc)
 export(findblocks_bc)
+export(getdata_bc)
 export(listdata_bc)
 export(listswap_bc)
 importFrom(stats,setNames)
