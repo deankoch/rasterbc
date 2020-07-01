@@ -90,7 +90,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
     print(paste(printout.prefix, printout.suffix))
 
     # create subdirectories of data.dir as needed
-    dir.create(file.path(data.dir, collection, 'blocks'), recursive=TRUE)
+    suppressWarnings(dir.create(file.path(data.dir, collection, 'blocks'), recursive=TRUE))
 
     # download the blocks in a loop with a progress bar printout
     pb = txtProgressBar(min=0, max=sum(!idx.exists), style=3)

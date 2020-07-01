@@ -94,7 +94,8 @@ directory for the raster layers:
 library(rasterbc)
 datadir_bc(select=TRUE, 'H:/rasterbc_data')
 #> [1] "data storage path set to: H:/rasterbc_data"
-#> [1] "directory created"
+#> [1] "directory exists"
+#> Warning in datadir_bc(select = TRUE, "H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
 #> [1] "H:/rasterbc_data"
 ```
 
@@ -131,6 +132,8 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
+#> Loading required package: sf
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -206,10 +209,7 @@ will be detected, and the download skipped. *eg.* repeat the call…
 
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
-#> [1] "[dem]:[dem] downloading 3 block(s) to: H:/rasterbc_data/dem"
-#>   |             |     |   0%  |             |==   |  33%[1] " writing to: blocks/dem_092H.tif"
-#>   |             |===  |  67%[1] " writing to: blocks/dem_082E.tif"
-#>   |             |=====| 100%[1] " writing to: blocks/dem_082L.tif"
+#> [1] "all 3 block(s) found in local data storage. Nothing to download"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -220,6 +220,7 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
+#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -245,8 +246,13 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpqEPy5f\\file468460b1325.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpKYixDU\\file2f817f97af1.tif"
 #> [1] "creating mosaic of 3 block(s)"
+#> 
+#> Attaching package: 'gdalUtils'
+#> The following object is masked from 'package:sf':
+#> 
+#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -283,23 +289,11 @@ specifying their their NTS/SNRC codes, *eg.*
 ``` r
 example.blockcodes = c('092B', '092C')
 getdata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "[dem]:[slope] downloading 2 block(s) to: H:/rasterbc_data/dem"
-#> Warning in
-#> dir.create(file.path(data.dir,
-#> collection,
-#> "blocks"),
-#> recursive
-#> = TRUE):
-#> 'H:
-#> \rasterbc_data\dem\blocks'
-#> already
-#> exists
-#>   |        ||   0%  |        ||  50%[1] " writing to: blocks/slope_092B.tif"
-#>   |        || 100%[1] " writing to: blocks/slope_092C.tif"
+#> [1] "all 2 block(s) found in local data storage. Nothing to download"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpqEPy5f\\file46868574091.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpKYixDU\\file2f844eb4c1e.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"

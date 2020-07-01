@@ -101,7 +101,7 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
     print('clipping layer...')
     if(!is.poly)
     {
-      warning('cannot clip to this geometry')
+      #warning('cannot clip to this geometry')
 
     } else {
 
