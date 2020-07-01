@@ -12,7 +12,7 @@
 # load the package and set the data directory
 library(devtools)
 load_all() # replace with library(rasterbc) when finished development
-datadir_bc(select=TRUE, 'H:/rasterbc_data/')
+datadir_bc(select=TRUE, 'H:/rasterbc_data')
 
 #' This path string is stored as an R option. View it using:
 print(getOption('rasterbc.data.dir'))

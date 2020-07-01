@@ -93,6 +93,8 @@ for(collection in names(collections.lyrs))
 }
 
 # to do: transfer some of the metadata, add units etc
+metadata_bc$dem$metadata$units = setNames(c('metres', 'degrees', 'degrees'), metadata_bc$dem$metadata$varnames)
+metadata_bc$dem$metadata$details = setNames(c('above sea level', 'from horizontal', 'counterclockwise from North'), metadata_bc$dem$metadata$varnames)
 
 # write to data directory for package
 use_data(metadata_bc, overwrite=TRUE)

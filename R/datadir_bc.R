@@ -58,6 +58,15 @@ datadir_bc = function(select=FALSE, data.dir=NULL)
 
     }
   }
+
+  # if the last character is a forward-slash, remove it
+  last.char = substr(data.dir, nchar(data.dir), nchar(data.dir))
+  if(last.char=='/')
+  {
+    data.dir = substr(data.dir, 1, nchar(data.dir)-1)
+  }
+
+  # set the option and finish
   options('rasterbc.data.dir'=data.dir)
   return(data.dir)
 }

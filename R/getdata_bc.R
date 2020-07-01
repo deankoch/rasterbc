@@ -7,31 +7,24 @@
 #' and `year` are written to the directory specified by `rasterbc::datadir_bc`, and blocks already downloaded are not downloaded
 #' again (unless `force.dl==TRUE`).
 #'
-#' Argument `load.mode` specifies whether/how the blocks should be loaded into memory. 'noload' only downloads the blocks, but
-#' does not load them (returning NULL); The others return a rasterLayer: 'all' uses `gdalUtils::gdal_mosaic` to merge the blocks
-#' into a larger rasterLayer, covering all (and likely more) of the input extent; 'clip' and 'mask' (the default) assume that `geo`
-#' is a (multi)polygon, cropping the merged blocks to its boundary; and  with 'mask', all data not inside the polygon is set to NA.
-#'
 #' Note that if no extent object (`geo`) is supplied, then all required blocks are downloaded. Missing arguments to `collection`,
 #' `varname`, and `year` will prompt the function to download ALL corresponding layers. eg. getdata_bc('dem') will
 #' download all three layers (`dem`, `aspect`, `slope`) in the `dem` collection; and getdata_bc('fids', year=2012) will download
-#' 'fids' layers from the year 2012. When a large number of layers are queued up in this way, consider setting `load.mode` to 'noload'
-#' to avoid attempting to load too much data into R at once.
+#' 'fids' layers from the year 2012.
 #'
 #' @param geo vector of character strings (NTS/SNRC codes) or any geometry set of type sfc
 #' @param collection character string, indicating the data collection to query
 #' @param varname character string, indicating the layer to query
 #' @param year integer, indicating the year to query
-#' @param load.mode character string, one of 'noload', 'all', 'clip', 'mask'
 #' @param force.dl boolean, indicates to download (and overwrite) any existing data
 #'
-#' @return A `rasterLayer` (or list of them) or NULL, depending on the value of `load.mode`
+#' @return A character string (or vector of them) containing the absolute path(s) to the file(s) written
 #' @importFrom methods as
 #' @importFrom utils download.file
 #' @importFrom utils setTxtProgressBar
 #' @importFrom utils txtProgressBar
 #' @export
-getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.mode='mask', force.dl=FALSE)
+getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.dl=FALSE)
 {
   # get the data storage directory...
   data.dir = getOption('rasterbc.data.dir')
@@ -81,7 +74,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.m
   # build the full list of blocks available to download
   fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
   urls = paste0(rasterbc::metadata_bc[[collection]]$frdr, fnames)
-  dest.files = paste0(data.dir, collection, '/', fnames)
+  dest.files = file.path(data.dir, collection, fnames)
 
   # check to see which (if any) of these blocks have been downloaded already
   idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0)[idx.geo]
@@ -93,14 +86,14 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.m
     {
       printout.prefix = paste0('[', year, ']:', printout.prefix)
     }
-    printout.suffix = paste('downloading', sum(!idx.exists), 'block(s) to: ', data.dir, collection)
+    printout.suffix = paste0('downloading ', sum(!idx.exists), ' block(s) to: ', data.dir, '/', collection)
     print(paste(printout.prefix, printout.suffix))
 
     # create subdirectories of data.dir as needed
-    dir.create(paste0(data.dir, collection, '/blocks'), recursive=TRUE)
+    dir.create(file.path(data.dir, collection, 'blocks'), recursive=TRUE)
 
     # download the blocks in a loop with a progress bar printout
-    pb = txtProgressBar(min=1, max=sum(!idx.exists), style=3)
+    pb = txtProgressBar(min=0, max=sum(!idx.exists), style=3)
     for(idx.queue in 1:sum(!idx.exists))
     {
       setTxtProgressBar(pb, idx.queue)
@@ -117,41 +110,5 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.m
 
   }
 
-  # if in download-only mode...
-  if(load.mode == 'noload')
-  {
-    # ...we're finished...
-    return(NULL)
-
-  } else {
-
-    # ... otherwise, merge the blocks
-    tempfile.tif = paste0(tempfile(), '.tif')
-    gdalUtils::mosaic_rasters(dest.files[idx.geo], dst_dataset=tempfile.tif)
-
-    # load the output, assign min/max stats and variable name
-    out.raster = raster::setMinMax(raster::raster(tempfile.tif))
-    #unlink(tempfile.tif)
-  }
-
-  if(load.mode %in% c('clip', 'mask'))
-  {
-    if(!is.poly)
-    {
-      warning('cannot clip to this geometry')
-
-    } else {
-
-      out.raster = raster::crop(out.raster, as(geo.input, 'Spatial'))
-      if(load.mode == 'mask')
-      {
-        out.raster = raster::mask(out.raster, as(geo.input, 'Spatial'))
-      }
-    }
-  }
-
-  return(out.raster)
-
-
-
+  return(dest.files[idx.geo])
 }

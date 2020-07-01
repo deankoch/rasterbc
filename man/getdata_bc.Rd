@@ -9,7 +9,6 @@ getdata_bc(
   collection = NULL,
   varname = NULL,
   year = NULL,
-  load.mode = "mask",
   force.dl = FALSE
 )
 }
@@ -22,12 +21,10 @@ getdata_bc(
 
 \item{year}{integer, indicating the year to query}
 
-\item{load.mode}{character string, one of 'noload', 'all', 'clip', 'mask'}
-
 \item{force.dl}{boolean, indicates to download (and overwrite) any existing data}
 }
 \value{
-A `rasterLayer` (or list of them) or NULL, depending on the value of `load.mode`
+A character string (or vector of them) containing the absolute path(s) to the file(s) written
 }
 \description{
 Downloads and/or loads all blocks covering the geographical extent specified in input argument `geo`. This can be a vector of
@@ -38,14 +35,8 @@ Data for the layer specified by `collection`, `varname`,
 and `year` are written to the directory specified by `rasterbc::datadir_bc`, and blocks already downloaded are not downloaded
 again (unless `force.dl==TRUE`).
 
-Argument `load.mode` specifies whether/how the blocks should be loaded into memory. 'noload' only downloads the blocks, but
-does not load them (returning NULL); The others return a rasterLayer: 'all' uses `gdalUtils::gdal_mosaic` to merge the blocks
-into a larger rasterLayer, covering all (and likely more) of the input extent; 'clip' and 'mask' (the default) assume that `geo`
-is a (multi)polygon, cropping the merged blocks to its boundary; and  with 'mask', all data not inside the polygon is set to NA.
-
 Note that if no extent object (`geo`) is supplied, then all required blocks are downloaded. Missing arguments to `collection`,
 `varname`, and `year` will prompt the function to download ALL corresponding layers. eg. getdata_bc('dem') will
 download all three layers (`dem`, `aspect`, `slope`) in the `dem` collection; and getdata_bc('fids', year=2012) will download
-'fids' layers from the year 2012. When a large number of layers are queued up in this way, consider setting `load.mode` to 'noload'
-to avoid attempting to load too much data into R at once.
+'fids' layers from the year 2012.
 }
