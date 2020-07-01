@@ -245,7 +245,7 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpqEPy5f\\file4684d6763da.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpqEPy5f\\file468460b1325.tif"
 #> [1] "creating mosaic of 3 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -299,7 +299,7 @@ getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpqEPy5f\\file4683ab2c13.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpqEPy5f\\file46868574091.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
@@ -389,22 +389,20 @@ raster(victoria_slope.path)
 #> values     : 0, 55.09229  (min, max)
 ```
 
-If you’re finished with `rasterbc` and want to remove all traces of
-stored data (or if you simply want to free up space), the data directory
-(or any part of its contents) can be deleted using your file browser, or
-the R commmand:
+If you’re finished with `rasterbc` and want to remove all of the stored
+data, or if you simply want to free up space, the entire data directory
+or any of its contents can be deleted using your file browser.
+Alternatively the following R commmand can be used:
 
 ``` r
 unlink(getOption('rasterbc.data.dir'), recursive=TRUE)
 ```
 
-This is quite safe (unless you’ve set the data directory to something
-silly, like ‘C:/’) and will not break the `rasterbc` installation,
-however all downloaded data will be erased and you will need to run
+This is quite safe unless you’ve set the data directory to something
+silly, like ‘C:/’, and will not break the `rasterbc` installation.
+However all downloaded data will be erased and you will need to run
 `datadir_bc` again before using the other package functions.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- rmarkdown::render('README.Rmd', overwrite=TRUE) -->
-
-<!-- rmarkdown::render('README.Rmd', run_pandoc=FALSE, clean=TRUE) -->
+<!-- rmarkdown::render('README.Rmd') -->
