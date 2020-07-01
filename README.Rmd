@@ -198,4 +198,4 @@ This is quite safe unless you've set the data directory to something silly, like
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- rmarkdown::render('README.Rmd') -->
-#
+

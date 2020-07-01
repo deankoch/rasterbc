@@ -132,8 +132,6 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
-#> Loading required package: sf
-#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -220,7 +218,6 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
-#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -246,13 +243,8 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpKYixDU\\file2f817f97af1.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpaW0U5j\\file3030e7e243.tif"
 #> [1] "creating mosaic of 3 block(s)"
-#> 
-#> Attaching package: 'gdalUtils'
-#> The following object is masked from 'package:sf':
-#> 
-#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -293,21 +285,11 @@ getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpKYixDU\\file2f844eb4c1e.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpaW0U5j\\file303061ad12d9.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 #> [1] "clipping layer..."
-#> Warning in
-#> opendata_bc(example.blockcodes,
-#> collection
-#> = "dem",
-#> varname =
-#> "slope"):
-#> cannot
-#> clip
-#> to this
-#> geometry
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.blockcodes, collapse=', '), ': slope'))
 plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
 text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
