@@ -7,8 +7,8 @@
 
 <!-- badges: end -->
 
-`rasterbc` provides a simple set of helper functions for accessing a
-large set of spatial ecological data on the province of BC during the
+`rasterbc` provides a set of helper functions for accessing a large
+collection of spatial ecological data on the province of BC during the
 period 2001-2018, in a common (gridded) raster format. The goal is to
 make this type of data more accessible and easier to import into R, for
 the benefit of modelers interested in the forest ecology of BC.
@@ -95,7 +95,8 @@ library(rasterbc)
 datadir_bc(select=TRUE, 'H:/rasterbc_data')
 #> [1] "data storage path set to: H:/rasterbc_data"
 #> [1] "directory exists"
-#> Warning in datadir_bc(select = TRUE, "H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
+#> Warning in datadir_bc(select = TRUE, "H:/rasterbc_data"): warning: this
+#> directory appears to be non-empty. Contents may be overwritten!
 #> [1] "H:/rasterbc_data"
 ```
 
@@ -246,7 +247,7 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\Rtmpi8Wai6\\file241071cc3cb9.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\Rtmp0S0y5H\\filec5c1e3e63d.tif"
 #> [1] "creating mosaic of 3 block(s)"
 #> 
 #> Attaching package: 'gdalUtils'
@@ -293,7 +294,7 @@ getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\Rtmpi8Wai6\\file24107dcd47f.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\Rtmp0S0y5H\\filec5c65127ab1.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"

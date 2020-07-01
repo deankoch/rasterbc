@@ -63,7 +63,7 @@ library(rasterbc)
 datadir_bc(select=TRUE, 'H:/rasterbc_data')
 ```
 
-If this directory contains any files/folders (eg. if you have used `rasterbc` before with this directory), a warning message is printed. This is to caution users that if the storage directory has existing files matching those fetched by the `rasterbc` package, those data can be overwritten. This can only happen via calls of the form `raster::getdata_bc(..., force.dl=TRUE)`. However to be safe you should set the data directory to a path that won't used by other applications; *eg.* a subfolder of your home directory or external storage device, with a unique folder name.
+If this directory contains any files/folders (eg. if you have used `rasterbc` before with this directory), a warning message is printed. This is to caution users that if the storage directory has existing files matching those fetched by the `rasterbc` package, those data can be overwritten. This can only happen via calls of the form `raster::getdata_bc(..., force.dl=TRUE)`. However, to be safe you should set the data directory to a path that won't used by other applications; *eg.* a subfolder of your home directory or external storage device, with a unique folder name.
 
 This path string is stored as an R option. View it using:
 ```{r view-datadir}
@@ -143,7 +143,7 @@ plot(st_geometry(example.sf), add=TRUE)
 plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
 ```
 
-Note that any simple features object of class `sf` or `sfc` could be used for the argument `geo`, provided its geometry intersects with the provincial boundary of BC. However the intended usage is for the user to delineate their region of interest as a `(MULTI)POLYGON` object (here, `example.sf` is a `MULTIPOLYGON`). Note that geometries of other classes (such `SpatialPolygons`, as defined by `sp`; or data frames containing coordinates of vertices) can often be coerced to `sf` using a command like `sf::st_as_sf(other_geometry_class_object)`.
+Note that any simple features object of class `sf` or `sfc` could be used for the argument `geo`, provided its geometry intersects with the provincial boundary of BC. However, the intended usage is for the user to delineate their region of interest as a `(MULTI)POLYGON` object (here, `example.sf` is a `MULTIPOLYGON`). Note that geometries of other classes (such `SpatialPolygons`, as defined by `sp`; or data frames containing coordinates of vertices) can often be coerced to `sf` using a command like `sf::st_as_sf(other_geometry_class_object)`.
 
 Alternatively, users can directly download individual blocks by specifying their their NTS/SNRC codes, *eg.*
 ```{r get-example-blocks, R.options = list(width = 10), dpi=400}
@@ -194,7 +194,7 @@ If you're finished with `rasterbc` and want to remove all of the stored data, or
 unlink(getOption('rasterbc.data.dir'), recursive=TRUE)
 ```
 
-This is quite safe unless you've set the data directory to something silly, like 'C:/', and will not break the `rasterbc` installation. However all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions.
+This is quite safe unless you've set the data directory to something silly, like 'C:/', and will not break the `rasterbc` installation. However, all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- rmarkdown::render('README.Rmd') -->
