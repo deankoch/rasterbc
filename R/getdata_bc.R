@@ -7,10 +7,6 @@
 #' and `year` are written to the directory specified by `rasterbc::datadir_bc`, and blocks already downloaded are not downloaded
 #' again (unless `force.dl==TRUE`).
 #'
-#' Note that if no extent object (`geo`) is supplied, then all required blocks are downloaded. Missing arguments to `collection`,
-#' `varname`, and `year` will prompt the function to download ALL corresponding layers. eg. getdata_bc('dem') will
-#' download all three layers (`dem`, `aspect`, `slope`) in the `dem` collection; and getdata_bc('fids', year=2012) will download
-#' 'fids' layers from the year 2012.
 #'
 #' @param geo vector of character strings (NTS/SNRC codes) or any geometry set of type sfc
 #' @param collection character string, indicating the data collection to query
@@ -26,6 +22,14 @@
 #' @export
 getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.dl=FALSE)
 {
+  # May add this later:
+  # If no extent object (`geo`) is supplied, then all required blocks are downloaded. Missing arguments to `collection`,
+  # `varname`, and `year` will prompt the function to download ALL corresponding layers. eg. getdata_bc('dem') will
+  # download all three layers (`dem`, `aspect`, `slope`) in the `dem` collection; and getdata_bc('fids', year=2012) will download
+  # 'fids' layers from the year 2012.
+  #
+
+
   # get the data storage directory...
   data.dir = getOption('rasterbc.data.dir')
   if(is.null(data.dir))
@@ -34,7 +38,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
     stop('Data directory undefined. Set it using raster::datadir_bc()')
   }
 
-  # check that geo is valid, replace (as needed)with the required mapsheet codes
+  # check that geo is valid, replace (as needed) with the required mapsheet codes
   is.poly = FALSE
   if(is.character(geo))
   {
@@ -63,16 +67,35 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
 
     } else {
 
-      # unrecognize input type:
+      # unrecognized input type:
       stop('geo must of type sf, sfc, or character (vector of NTS/SNRC codes)')
     }
   }
 
-  # find the index of the particular blocks needed
-  idx.geo = names(rasterbc::metadata_bc[[collection]]$fname$block[[varname]]) %in% geo
+  # handle empty collection argument
+  if(is.null(collection))
+  {
+    # printout of collection and variables names
+    listdata_bc()
+  }
 
-  # build the full list of blocks available to download
-  fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
+  # build a list of filenames available to download for this collection/varname/year
+  if(is.null(rasterbc::metadata_bc[[collection]]$metadata$years[[varname]]))
+  {
+    # case: data are one-time, not time series
+    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
+
+  } else {
+
+    # case: data are from time-series
+    year.string = paste0('yr', year)
+    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[year.string]][[varname]]
+  }
+
+  # find the index of the particular blocks needed
+  idx.geo = names(fnames) %in% geo
+
+  # build the full list of urls for this collection/varname/year and their local paths
   urls = paste0(rasterbc::metadata_bc[[collection]]$frdr, fnames)
   dest.files = file.path(data.dir, collection, fnames)
 
@@ -90,7 +113,17 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
     print(paste(printout.prefix, printout.suffix))
 
     # create subdirectories of data.dir as needed
-    suppressWarnings(dir.create(file.path(data.dir, collection, 'blocks'), recursive=TRUE))
+    if(is.null(rasterbc::metadata_bc[[collection]]$metadata$years[[varname]]))
+    {
+      # case: data are one-time, not time series
+      suppressWarnings(dir.create(file.path(data.dir, collection, 'blocks'), recursive=TRUE))
+
+    } else {
+
+      # case: data are from time-series
+      suppressWarnings(dir.create(file.path(data.dir, collection, 'blocks', year), recursive=TRUE))
+    }
+
 
     # download the blocks in a loop with a progress bar printout
     pb = txtProgressBar(min=0, max=sum(!idx.exists), style=3)

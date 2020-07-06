@@ -34,9 +34,4 @@ Downloads and/or loads all blocks covering the geographical extent specified in 
 Data for the layer specified by `collection`, `varname`,
 and `year` are written to the directory specified by `rasterbc::datadir_bc`, and blocks already downloaded are not downloaded
 again (unless `force.dl==TRUE`).
-
-Note that if no extent object (`geo`) is supplied, then all required blocks are downloaded. Missing arguments to `collection`,
-`varname`, and `year` will prompt the function to download ALL corresponding layers. eg. getdata_bc('dem') will
-download all three layers (`dem`, `aspect`, `slope`) in the `dem` collection; and getdata_bc('fids', year=2012) will download
-'fids' layers from the year 2012.
 }

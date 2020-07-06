@@ -41,9 +41,17 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
   # check if a collection was specified
   if(is.null(collection))
   {
-
-    # recursive call to query all collections when "collection" argument is not assigned
-    return(lapply(setNames(nm=names(rasterbc::metadata_bc)), function(collection) listdata_bc(collection, varname, year, verbose)))
+    # recursive calls to query all collections when "collection" argument is not assigned
+    collections = setNames(nm=names(rasterbc::metadata_bc))
+    return.val = vector(mode='list', length=length(collections))
+    names(return.val) = collections
+    cat('variable names available in rasterbc:')
+    for(collection in collections)
+    {
+      cat(paste0(' \n\n\"', collection, '\" collection:\n'))
+      return.val[[collection]] = listdata_bc(collection, varname, year, verbose)
+    }
+    return(return.val)
 
   } else {
 
@@ -54,15 +62,14 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
         # a valid collection string has been specified. Fetch all of its variable names
         varnames = setNames(nm=names(rasterbc::metadata_bc[[collection]]$metadata$varnames))
 
-        # check if a varname argument has been supplied
+        # check if a varname argument has not been supplied
         if(is.null(varname))
         {
           # printout to list variable names
-          printout.prefix = 'available variable names: '
-          printout.suffix = paste(rasterbc::metadata_bc[[collection]]$metadata$varnames, collapse=', ')
+          printout = paste0('\"', paste(rasterbc::metadata_bc[[collection]]$metadata$varnames, collapse='", "'), '\"')
           if(verbose == 1)
           {
-            print(paste(printout.prefix, printout.suffix))
+            cat(printout)
           }
 
           # recursive call to query all variable names when "varname" argument is not assigned
@@ -73,8 +80,9 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
           # check if the supplied varname argument has been misspelled before proceeding
           if(varname %in% varnames)
           {
-            # check if this varname corresponds to a time-series
-            if(varname == rasterbc::metadata_bc[[collection]]$metadata$varnames[varname])
+
+            # check if this varname is a one time layer, or a time-series
+            if(is.null(rasterbc::metadata_bc[[collection]]$metadata$years[varname]))
             {
               # case: varname is a one-time layer (no time-series, year argument ignored)
               if(!is.null(year))
@@ -90,7 +98,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
               if(verbose > 1)
               {
                 # printout indicating fraction of blocks downloaded
-                print(paste(printout.prefix, printout.suffix))
+                cat(paste(printout.prefix, printout.suffix))
               }
 
               # return the booleans (with names indicating filepath)
@@ -127,6 +135,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
                   {
                     # printout indicating fraction of blocks downloaded
                     print(paste0(printout.prefix, printout.suffix))
+
                   }
                   return(fnames.exist)
 
@@ -137,7 +146,6 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
                   return(NULL)
 
                 }
-
               }
 
             }
@@ -146,7 +154,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
 
             # error when "varname" argument is invalid
             error.msg = paste0('variable name "', varname, '" not found in collection "', collection, '"')
-            suggestions.msg = paste('\nChoose one of:', paste(varnames, collapse=', '))
+            suggestions.msg = paste('\nChoose one of the following variable names:', paste0('\"', paste(varnames, collapse='\", \"')), '\"')
             stop(paste(error.msg, suggestions.msg))
 
           }
@@ -156,7 +164,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
 
       # error when "collection" argument is invalid
       error.msg = paste0('collection "', collection, '" not found.')
-      suggestions.msg = paste('\nChoose one of:', paste(collections, collapse=', '))
+      suggestions.msg = paste('\nChoose one of the following collections:', paste0('\"', paste(collections, collapse='\", \"')), '\"')
       stop(paste(error.msg, suggestions.msg))
     }
 

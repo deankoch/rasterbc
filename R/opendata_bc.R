@@ -67,12 +67,22 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
     }
   }
 
-  # find the index of the particular blocks needed
-  idx.geo = names(rasterbc::metadata_bc[[collection]]$fname$block[[varname]]) %in% geo
+  # build a list of filenames available to download for this collection/varname/year
+  if(is.null(rasterbc::metadata_bc[[collection]]$metadata$years[[varname]]))
+  {
+    # case: data are one-time, not time series
+    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
 
-  # build the full list of blocks
-  fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
+  } else {
+
+    # case: data are from time-series
+    year.string = paste0('yr', year)
+    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[year.string]][[varname]]
+  }
   dest.files = file.path(data.dir, collection, fnames)
+
+  # find the index of the particular blocks needed
+  idx.geo = names(fnames) %in% geo
 
   # check that all of these blocks have been downloaded already
   idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0)[idx.geo]
@@ -94,7 +104,7 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
 
   # load the output, assign min/max stats and variable name
   out.raster = raster::setMinMax(raster::raster(tempfile.tif))
-  names(out.raster) = paste(c(year, varname), collapse='_')
+  names(out.raster) = paste(c(varname, year), collapse='_')
 
   if(load.mode %in% c('clip', 'mask'))
   {
