@@ -7,7 +7,7 @@
 
 <!-- badges: end -->
 
-`rasterbc` provides a set of helper functions for accessing a large
+rasterbc provides a set of helper functions for accessing a large
 collection of spatial ecological data on the province of BC during the
 period 2001-2018, in a common (gridded) raster format. The goal is to
 make this data more accessible and easier to import into R, for the
@@ -57,6 +57,12 @@ associated DOI) on [FRDR](https://www.frdr-dfdr.ca/repo/) for permanence
 and easy referencing.
 
 ## News
+
+**05/07/2020**
+
+All collections except ‘cutblocks’ are now on [FRDR’s demo
+site](https://demo.frdr-dfdr.ca/repo/handle/doi:10.80217/demo.278?mode=full),
+and can be accessed via this package.
 
 **30/06/2020**
 
@@ -132,6 +138,8 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
+#> Loading required package: sf
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -218,6 +226,7 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
+#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -243,8 +252,13 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpoNY0FQ\\file2818114a32d2.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpANHVbo\\file16a845429e7.tif"
 #> [1] "creating mosaic of 3 block(s)"
+#> 
+#> Attaching package: 'gdalUtils'
+#> The following object is masked from 'package:sf':
+#> 
+#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -285,7 +299,7 @@ getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpoNY0FQ\\file28181b917367.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpANHVbo\\file16a840d64924.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
@@ -330,7 +344,9 @@ collection we also have ‘aspect’ and ‘slope’:
 
 ``` r
 is.downloaded = listdata_bc(collection='dem', verbose=2)
-#> [dem] 3/89 dem blocks (storage: H:/rasterbc_data/dem)[dem] 2/89 slope blocks (storage: H:/rasterbc_data/dem)[dem] 3/89 aspect blocks (storage: H:/rasterbc_data/dem)
+#> [1] "[dem] 3/89 dem blocks (storage: H:/rasterbc_data/dem)"
+#> [1] "[dem] 2/89 slope blocks (storage: H:/rasterbc_data/dem)"
+#> [1] "[dem] 3/89 aspect blocks (storage: H:/rasterbc_data/dem)"
 ```
 
 And we now see listed the two ‘slope’ blocks (for southern Vancouver
