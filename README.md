@@ -10,8 +10,8 @@
 `rasterbc` provides a set of helper functions for accessing a large
 collection of spatial ecological data on the province of BC during the
 period 2001-2018, in a common (gridded) raster format. The goal is to
-make this type of data more accessible and easier to import into R, for
-the benefit of modelers interested in the forest ecology of BC.
+make this data more accessible and easier to import into R, for the
+benefit of modelers interested in the forest ecology of BC.
 
 Links to metadata associated with these layers, and code for downloading
 them from their original sources can be found in a sister repository,
@@ -95,8 +95,7 @@ library(rasterbc)
 datadir_bc(select=TRUE, 'H:/rasterbc_data')
 #> [1] "data storage path set to: H:/rasterbc_data"
 #> [1] "directory exists"
-#> Warning in datadir_bc(select = TRUE, "H:/rasterbc_data"): warning: this
-#> directory appears to be non-empty. Contents may be overwritten!
+#> Warning in datadir_bc(select = TRUE, "H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
 #> [1] "H:/rasterbc_data"
 ```
 
@@ -105,7 +104,7 @@ If this directory contains any files/folders (eg. if you have used
 This is to caution users that if the storage directory has existing
 files matching those fetched by the `rasterbc` package, those data can
 be overwritten. This can only happen via calls of the form
-`raster::getdata_bc(..., force.dl=TRUE)`. However to be safe you should
+`raster::getdata_bc(..., force.dl=TRUE)`. However, to be safe you should
 set the data directory to a path that won’t used by other applications;
 *eg.* a subfolder of your home directory or external storage device,
 with a unique folder name.
@@ -133,8 +132,6 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
-#> Loading required package: sf
-#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -221,7 +218,6 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
-#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -247,13 +243,8 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\Rtmp0S0y5H\\filec5c1e3e63d.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpoNY0FQ\\file2818114a32d2.tif"
 #> [1] "creating mosaic of 3 block(s)"
-#> 
-#> Attaching package: 'gdalUtils'
-#> The following object is masked from 'package:sf':
-#> 
-#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -277,12 +268,12 @@ plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
 
 Note that any simple features object of class `sf` or `sfc` could be
 used for the argument `geo`, provided its geometry intersects with the
-provincial boundary of BC. However the intended usage is for the user to
-delineate their region of interest as a `(MULTI)POLYGON` object (here,
-`example.sf` is a `MULTIPOLYGON`). Note that geometries of other classes
-(such `SpatialPolygons`, as defined by `sp`; or data frames containing
-coordinates of vertices) can often be coerced to `sf` using a command
-like `sf::st_as_sf(other_geometry_class_object)`.
+provincial boundary of BC. However, the intended usage is for the user
+to delineate their region of interest as a `(MULTI)POLYGON` object
+(here, `example.sf` is a `MULTIPOLYGON`). Note that geometries of other
+classes (such `SpatialPolygons`, as defined by `sp`; or data frames
+containing coordinates of vertices) can often be coerced to `sf` using a
+command like `sf::st_as_sf(other_geometry_class_object)`.
 
 Alternatively, users can directly download individual blocks by
 specifying their their NTS/SNRC codes, *eg.*
@@ -294,7 +285,7 @@ getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\Rtmp0S0y5H\\filec5c65127ab1.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpoNY0FQ\\file28181b917367.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
@@ -339,9 +330,7 @@ collection we also have ‘aspect’ and ‘slope’:
 
 ``` r
 is.downloaded = listdata_bc(collection='dem', verbose=2)
-#> [1] "[dem] 3/89 dem blocks (storage: H:/rasterbc_data/dem)"
-#> [1] "[dem] 2/89 slope blocks (storage: H:/rasterbc_data/dem)"
-#> [1] "[dem] 0/89 aspect blocks (storage: H:/rasterbc_data/dem)"
+#> [dem] 3/89 dem blocks (storage: H:/rasterbc_data/dem)[dem] 2/89 slope blocks (storage: H:/rasterbc_data/dem)[dem] 3/89 aspect blocks (storage: H:/rasterbc_data/dem)
 ```
 
 And we now see listed the two ‘slope’ blocks (for southern Vancouver
@@ -385,7 +374,7 @@ unlink(getOption('rasterbc.data.dir'), recursive=TRUE)
 
 This is quite safe unless you’ve set the data directory to something
 silly, like ‘C:/’, and will not break the `rasterbc` installation.
-However all downloaded data will be erased and you will need to run
+However, all downloaded data will be erased and you will need to run
 `datadir_bc` again before using the other package functions.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->

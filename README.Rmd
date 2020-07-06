@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-`rasterbc` provides a set of helper functions for accessing a large collection of spatial ecological data on the province of BC during the period 2001-2018, in a common (gridded) raster format. The goal is to make this type of data more accessible and easier to import into R, for the benefit of modelers interested in the forest ecology of BC.
+`rasterbc` provides a set of helper functions for accessing a large collection of spatial ecological data on the province of BC during the period 2001-2018, in a common (gridded) raster format. The goal is to make this data more accessible and easier to import into R, for the benefit of modelers interested in the forest ecology of BC.
 
 Links to metadata associated with these layers, and code for downloading them from their original sources can be found in a sister repository, [rasterbc_src](https://github.com/deankoch/rasterbc_src). Links to the documentation for this code, and to the original sources, are listed below:
 
