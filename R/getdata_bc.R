@@ -80,7 +80,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   }
 
   # build a list of filenames available to download for this collection/varname/year
-  if(is.null(rasterbc::metadata_bc[[collection]]$metadata$years[[varname]]))
+  if(all(is.na(rasterbc::metadata_bc[[collection]]$metadata$year[[varname]])))
   {
     # case: data are one-time, not time series
     fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
@@ -113,7 +113,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
     print(paste(printout.prefix, printout.suffix))
 
     # create subdirectories of data.dir as needed
-    if(is.null(rasterbc::metadata_bc[[collection]]$metadata$years[[varname]]))
+    if(all(is.na(rasterbc::metadata_bc[[collection]]$metadata$year[[varname]])))
     {
       # case: data are one-time, not time series
       suppressWarnings(dir.create(file.path(data.dir, collection, 'blocks'), recursive=TRUE))

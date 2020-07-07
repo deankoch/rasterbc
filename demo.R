@@ -29,22 +29,16 @@ getdata_bc(geo=example.sf, collection, varname)
 geotest = opendata_bc(geo=example.sf, collection, varname)
 plot(geotest)
 
-collection = 'fids'
-varname = 'IBM_mid'
-year = 2011
-z = listdata_bc(collection)
-y = listdata_bc(collection, varname)
-x = listdata_bc(collection, varname, year)
-getdata_bc(geo=example.sf, collection, varname, year)
-geotest = opendata_bc(geo=example.sf, collection, varname, year)
-plot(geotest)
+
+z = listdata_bc('bgcz', verbose=2)
+
 
 collection = 'fids'
-varname = 'IBB_max'
-year = 2011
+varname = 'IBM_mid'
+year = 2018
 z = listdata_bc(collection)
 y = listdata_bc(collection, varname)
-x = listdata_bc(collection, varname, year)
+x = listdata_bc(collection, varname, c(2017,2018))
 getdata_bc(geo=example.sf, collection, varname, year)
 geotest = opendata_bc(geo=example.sf, collection, varname, year)
 plot(geotest)
@@ -58,6 +52,25 @@ x = listdata_bc(collection, varname, year)
 getdata_bc(geo=example.sf, collection, varname, year)
 geotest = opendata_bc(geo=example.sf, collection, varname, year)
 plot(geotest)
+
+collection = 'gfc'
+varname = 'treecover'
+z = listdata_bc(collection)
+y = listdata_bc(collection, varname)
+getdata_bc(geo=example.sf, collection, varname)
+geotest = opendata_bc(geo=example.sf, collection, varname)
+plot(geotest)
+
+
+collection = 'gfc'
+varname = 'loss'
+year = 2019
+z = listdata_bc(collection)
+y = listdata_bc(collection, varname)
+getdata_bc(geo=example.sf, collection, varname, year)
+geotest = opendata_bc(geo=example.sf, collection, varname, year)
+plot(geotest)
+
 
 #+ include=FALSE
 # Convert to markdown by running the following line (uncommented)...

@@ -45,73 +45,149 @@ for(collection in collections)
   cfg.src = listswap_bc(cfg$src[names(cfg$src) != 'dir'], original.data.dir, '')
   cfg.codes = cfg$out$code
   cfg.data.url = paste0(cfg.frdr, collection, '/')
-  metadata_bc[[collection]] = list(source=cfg.src, frdr=cfg.data.url, fname=cfg.fname, metadata=list(coding=cfg.codes))
+  metadata_bc[[collection]] = list(source=cfg.src, frdr=cfg.data.url, fname=cfg.fname, metadata=list(df=NULL, year=NULL, coding=cfg.codes))
 }
 
 # the 'pine' layers have their cfg.src$years entry as character strings. Replace these with integers
 metadata_bc[['pine']]$source$years = setNames(as.integer(metadata_bc[['pine']]$source$years), nm=names(metadata_bc[['pine']]$source$years))
 
-# add a list to the metadata entry specifying a printout of all varnames
-# prepare the full list of available variables as a nested list of strings to print on console
-collections.lyrs = lapply(metadata_bc, function(collection) setNames(nm=names(collection$fname$block)))
-for(collection in names(collections.lyrs))
+# prepare the full list of available variables as a list of dataframes
+for(collection in names(metadata_bc))
 {
-  # assign the variable names based on the block directory names
-  metadata_bc[[collection]]$metadata$varnames = collections.lyrs[[collection]]
+  # initially assign the variable names based on the block directory names
+  collection.varnames = setNames(nm=names(metadata_bc[[collection]]$fname$block))
+  #metadata_bc[[collection]]$metadata$varnames = collection.varnames
 
   # check if this collection is/contains a time-series (a year-indexed set of rasters)...
   collection.years = metadata_bc[[collection]]$source$years
   if(!is.null(collection.years))
   {
     # ... if so, check which variables are associated with time-series
-    is.year = setNames(grepl('(yr)(\\d+)', collections.lyrs[[collection]]), collections.lyrs[[collection]])
+    is.year = setNames(grepl('(yr)(\\d+)', collection.varnames), collection.varnames)
 
     # check which variables are available in which years
     lyrs.byyear = lapply(which(is.year), function(idx.year) names(metadata_bc[[collection]]$fname$block[[idx.year]]))
     ts.lyrs = unique(unlist(lyrs.byyear))
     lyr.year.matrix = sapply(ts.lyrs, function(lyr) sapply(lyrs.byyear, function(year) lyr %in% year))
 
-    # for each variable, construct a string indicating the available years
-    lyr.string.list = setNames(nm=ts.lyrs)
-    for(lyr in lyr.string.list)
+    # for each variable, construct a string indicating the available years and also store them as integer vector
+    timeseries.string = setNames(nm=ts.lyrs)
+    collection.yearlist = setNames(vector(mode='list', length=length(timeseries.string)), ts.lyrs)
+    for(lyr in timeseries.string)
     {
       available.years = collection.years[names(which(lyr.year.matrix[, lyr]))]
+      collection.yearlist[[lyr]] = available.years
 
       # strings for printing time series info into console
-      lyr.string.list[[lyr]] = paste(available.years, collapse=', ')
+      timeseries.string[[lyr]] = paste(available.years, collapse=', ')
       if(identical(unname(available.years), min(available.years):max(available.years)))
       {
         # if the years are sequential, use a short-form string (eg. "2001-2018")
-        lyr.string.list[[lyr]] = paste(range(available.years), collapse='-')
+        timeseries.string[[lyr]] = paste(range(available.years), collapse='-')
       }
     }
 
     # reorder the fids collection to group species together
     if(collection == 'fids')
     {
-      new.index = rep(NA, length(lyr.string.list))
+      # for loops with a counter seems to be the simplest way to do this
+      new.index = rep(NA, length(timeseries.string))
       new.index.pointer = 0
       for(species in names(metadata_bc[[collection]]$source$spp.codes))
       {
+        # the ordering coded in the for loop argument is the desired ordering (min first, then mid, ...)
         for(stat in c('min','mid','max', names(metadata_bc[[collection]]$source$sev.codes$post2003)))
         {
           new.index.pointer = new.index.pointer + 1
-          new.index[new.index.pointer] = which(paste0(species, '_', stat) == names(lyr.string.list))
+          new.index[new.index.pointer] = which(paste0(species, '_', stat) == names(timeseries.string))
         }
       }
 
-      lyr.string.list = lyr.string.list[new.index]
+      # reorder the relevant objects
+      timeseries.string = timeseries.string[new.index]
+      collection.yearlist = collection.yearlist[new.index]
     }
 
-    # write this list to metadata_bc
-    metadata_bc[[collection]]$metadata$varnames = setNames(nm=c(collections.lyrs[[collection]][!is.year], names(lyr.string.list)))
-    metadata_bc[[collection]]$metadata$years = c(rep(NULL, sum(!is.year)), lyr.string.list)
+    # overwrite the variable names vector
+    collection.varnames = setNames(nm=c(collection.varnames[!is.year], names(timeseries.string)))
+
+    # create a vector of strings indicating the years
+    collection.yearstrings = setNames(c(rep(NA, sum(!is.year)), timeseries.string), collection.varnames)
+
+    # create a list of vectors indicating the years
+    collection.yearlist = setNames(c(rep(NA, sum(!is.year)), collection.yearlist), names(collection.varnames))
+
+  } else {
+
+    # assign NA values to the years field when the variable is not yearly
+    collection.yearstrings = setNames(rep(NA, length(collection.varnames)), collection.varnames)
+    collection.yearlist = setNames(rep(list(NA), length(collection.varnames)), collection.varnames)
   }
+
+  # write these results to the metadata list
+  metadata_bc[[collection]]$metadata$df = data.frame(varname=collection.varnames, year=collection.yearstrings)
+  metadata_bc[[collection]]$metadata$year = collection.yearlist
+
 }
 
-# to do: transfer some of the metadata, add units etc
-metadata_bc$dem$metadata$units = setNames(c('metres', 'degrees', 'degrees'), metadata_bc$dem$metadata$varnames)
-metadata_bc$dem$metadata$details = setNames(c('above sea level', 'from horizontal', 'counterclockwise from North'), metadata_bc$dem$metadata$varnames)
+# With this skeleton defined, I add the rest of the metadata by hand...
+
+# biogeoclimatic zone
+metadata_bc[['bgcz']]$metadata$df$unit = rep('integer code', nrow(metadata_bc[['bgcz']]$metadata$df))
+metadata_bc[['bgcz']]$metadata$df$description = c(region = 'regional placename',
+                                                  org = 'more specific placename',
+                                                  cover = 'landcover type (water, ice, land)',
+                                                  zone = 'biogeoclimatic zone classification',
+                                                  subzone = 'subclassification of zone',
+                                                  variant = 'subclassification of subzone')
+
+# geographical boundary and position
+metadata_bc[['borders']]$metadata$df$unit = c(prov = 'indicator',
+                                              latitude = 'degrees north',
+                                              longitude = 'degrees west')
+metadata_bc[['borders']]$metadata$df$description = c(prov = 'out-of-province mask',
+                                                     latitude = 'geodetic latitude (south-north position)',
+                                                     longitude = 'geodetic longitude (east-west position)')
+
+# forestry harvest activity
+metadata_bc[['cutblocks']]$metadata$df$unit = c(harvest = 'fraction of cell area')
+metadata_bc[['cutblocks']]$metadata$df$description = c(harvest = 'forest cover loss attributed to harvest')
+
+# digital elevation model
+metadata_bc[['dem']]$metadata$df$unit = c(dem = 'metres above sea level',
+                                          slope = 'degrees above horizontal',
+                                          aspect = 'degrees (counterclockwise) from north')
+metadata_bc[['dem']]$metadata$df$description = c(dem = 'digital elevation map',
+                                                 slope = 'derived from digital elevation map',
+                                                 aspect = 'derived from digital elevation map')
+
+# insect damage
+metadata_bc[['fids']]$metadata$df$unit = rep('fraction of cell area', nrow(metadata_bc[['fids']]$metadata$df))
+stat.strings = paste(c('minimum', 'midpoint', 'maximum'), 'of total forest cover loss')
+sev.strings = paste(c('trace', 'light', 'moderate', 'severe', 'very severe'), 'rated damage observation')
+pest.strings = c(IBM = 'mountain pine beetle', IBS = 'spruce beetle', IBD = 'douglas-fir beetle', IBB = 'western balsam bark beetle')
+metadata_bc[['fids']]$metadata$df$description = paste(paste(c(stat.strings, sev.strings), 'attributed to'), rep(pest.strings, each=8))
+
+# global forest change
+metadata_bc[['gfc']]$metadata$df$unit = c('fraction of cell area', rep('binary', 3))
+metadata_bc[['gfc']]$metadata$df$description = c(treecover = 'tree cover estimate circa year 2000',
+                                                 gain = 'indicator for forest regrowth during period 2000-2019',
+                                                 mask = 'landcover classification (0=water, 1=land)',
+                                                 loss = 'yearly indicator for forest loss')
+
+# wildfire
+metadata_bc[['nfdb']]$metadata$df$unit = c('fraction of cell area')
+metadata_bc[['nfdb']]$metadata$df$description = c('proportion of area falling within a recorded wildfire boundary')
+
+# forest attributes
+metadata_bc[['pine']]$metadata$df$unit = c(rep('fraction of cell area', 2), 'fraction of \"vegTreed\" area', 'years', rep('fraction of \"needle\" area', 10))
+highlevel.strings = paste(c(paste(c('vegetation', 'tree', 'needle-leaf species'), 'cover'), 'stand age'),  'estimate')
+species.strings = paste(c('whitebark', 'jack', 'lodgepole', 'western white', 'ponderosa', 'red', 'unidentified', 'eastern white', 'scots', 'total'), 'pine cover estimate')
+metadata_bc[['pine']]$metadata$df$description = c(highlevel.strings, species.strings)
+
+
+# xx = lapply(names(metadata_bc), function(x) cbind(collection=rep(x, nrow(metadata_bc[[x]]$metadata$df)), metadata_bc[[x]]$metadata$df))
+# print(do.call(rbind, xx), row.names=FALSE)
 
 # write to data directory for package
 use_data(metadata_bc, overwrite=TRUE)

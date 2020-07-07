@@ -60,13 +60,13 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
     if(collection %in% collections)
     {
         # a valid collection string has been specified. Fetch all of its variable names
-        varnames = setNames(nm=names(rasterbc::metadata_bc[[collection]]$metadata$varnames))
+        varnames = setNames(nm=rasterbc::metadata_bc[[collection]]$metadata$df$varname)
 
         # check if a varname argument has not been supplied
         if(is.null(varname))
         {
           # printout to list variable names
-          printout = paste0('\"', paste(rasterbc::metadata_bc[[collection]]$metadata$varnames, collapse='", "'), '\"')
+          printout = paste0('\"', paste(rasterbc::metadata_bc[[collection]]$metadata$df$varname, collapse='", "'), '\"')
           if(verbose == 1)
           {
             cat(printout)
@@ -82,7 +82,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
           {
 
             # check if this varname is a one time layer, or a time-series
-            if(is.null(rasterbc::metadata_bc[[collection]]$metadata$years[varname]))
+            if(all(is.na(rasterbc::metadata_bc[[collection]]$metadata$year[varname])))
             {
               # case: varname is a one-time layer (no time-series, year argument ignored)
               if(!is.null(year))
