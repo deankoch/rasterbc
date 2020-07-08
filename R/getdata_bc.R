@@ -90,7 +90,14 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
 
   } else {
 
-    # case: data are from time-series
+    # case: data are from time-series. Check for year argument
+    if(is.null(year))
+    {
+      err.msg.line1 = paste0('Variable \"', varname, '\" from collection \"', collection, '\" requires a year argument')
+      err.msg.line2 = paste0('Please specify one of the years: ', rasterbc::metadata_bc[[collection]]$metadata$df[varname, 'year'])
+      stop(paste(c(err.msg.line1, err.msg.line2), collapse='\n'))
+    }
+
     year.string = paste0('yr', year)
     fnames = rasterbc::metadata_bc[[collection]]$fname$block[[year.string]][[varname]]
   }

@@ -124,6 +124,10 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
         print('masking layer...')
         out.raster = raster::mask(out.raster, as(geo.input, 'Spatial'))
       }
+
+    } else {
+
+      print('loading block(s)')
     }
   }
 
