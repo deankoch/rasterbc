@@ -148,8 +148,6 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
-#> Loading required package: sf
-#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -236,7 +234,6 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
-#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -264,13 +261,8 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c02f706710.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c0be53667.tif"
 #> [1] "creating mosaic of 3 block(s)"
-#> 
-#> Attaching package: 'gdalUtils'
-#> The following object is masked from 'package:sf':
-#> 
-#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -311,7 +303,7 @@ example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #>   |        ||   0%  |        ||  50%[1] " writing to: dem/blocks/slope_092B.tif"
 #>   |        || 100%[1] " writing to: dem/blocks/slope_092C.tif"
 #> 
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c05fff7093.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c057e71274.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
@@ -355,22 +347,10 @@ layers. *eg.* in the ‘dem’ collection we also have ‘aspect’ and ‘slope
 
 ``` r
 listdata_bc(collection='dem', verbose=2)
-#>        year
-#> dem      NA
-#> slope    NA
-#> aspect   NA
-#>                               description
-#> dem                 digital elevation map
-#> slope  derived from digital elevation map
-#> aspect derived from digital elevation map
-#>                                         unit
-#> dem                 (metres above sea level)
-#> slope             (degrees above horizontal)
-#> aspect (degrees counterclockwise from north)
-#>        blocks.downloaded
-#> dem                 3/89
-#> slope               2/89
-#> aspect              0/89
+#>        year                        description                                  unit blocks.downloaded
+#> dem      NA              digital elevation map              (metres above sea level)              3/89
+#> slope    NA derived from digital elevation map            (degrees above horizontal)              2/89
+#> aspect   NA derived from digital elevation map (degrees counterclockwise from north)              0/89
 ```
 
 And we now see listed the two ‘slope’ blocks (for southern Vancouver

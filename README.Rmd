@@ -181,7 +181,7 @@ This shows that of the 89 blocks for the variable name 'dem' (in the collection 
 
 By default, the `listdata_bc` function prints a list of all available layers. *eg.* in the 'dem' collection we also have 'aspect' and 'slope':
 
-```{r listdata_bc-second, R.options = list(width = 35)}
+```{r listdata_bc-second, R.options = list(width = 125)}
 listdata_bc(collection='dem', verbose=2)
 ```
 
