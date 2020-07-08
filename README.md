@@ -223,7 +223,10 @@ will be detected, and the download skipped. *eg.* repeat the call…
 
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
-#> [1] "all 3 block(s) found in local data storage. Nothing to download"
+#> [1] "[dem]:[dem] downloading 3 block(s) to: H:/rasterbc_data/dem"
+#>   |             |     |   0%  |             |==   |  33%[1] " writing to: dem/blocks/dem_092H.tif"
+#>   |             |===  |  67%[1] " writing to: dem/blocks/dem_082E.tif"
+#>   |             |=====| 100%[1] " writing to: dem/blocks/dem_082L.tif"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -261,7 +264,7 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13482f74f5e.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13483b13280.tif"
 #> [1] "creating mosaic of 3 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -299,8 +302,11 @@ specifying their their NTS/SNRC codes, *eg.*
 ``` r
 example.blockcodes = c('092B', '092C')
 example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "all 2 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13481f2e6ad.tif"
+#> [1] "[dem]:[slope] downloading 2 block(s) to: H:/rasterbc_data/dem"
+#>   |        ||   0%  |        ||  50%[1] " writing to: dem/blocks/slope_092B.tif"
+#>   |        || 100%[1] " writing to: dem/blocks/slope_092C.tif"
+#> 
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file134838925b87.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
@@ -359,7 +365,7 @@ listdata_bc(collection='dem', verbose=2)
 #>        blocks.downloaded
 #> dem                 3/89
 #> slope               2/89
-#> aspect              3/89
+#> aspect              0/89
 ```
 
 And we now see listed the two ‘slope’ blocks (for southern Vancouver

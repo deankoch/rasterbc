@@ -37,7 +37,7 @@ All raster data files will be hosted as a data publication (with associated DOI)
 
 **07/07/2020**
 
-~~The FRDR-demo site appears to be down (as of 6pm MST), rasterbc won't be able to download anything until it's back up.~~ 
+~~The FRDR-demo site appears to be down (as of 6pm MST), rasterbc won't be able to download anything until it's back up.~~
 
 Some major changes in today's commits: Function `listdata_bc` now has cleaner and more detailed information printout, with boolean return values as an optional (mostly internal) feature; `datadir_bc` arguments have been simplified; `getdata_bc` now loads/merges data by default
 
