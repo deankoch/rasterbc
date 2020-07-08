@@ -58,6 +58,20 @@ and easy referencing.
 
 ## News
 
+**07/07/2020**
+
+The
+[FRDR-demo](https://demo.frdr-dfdr.ca/repo/handle/doi:10.80217/demo.278?mode=full)
+site appears to be down (as of 6pm MST), so the package won’t be able to
+download anything until it’s back up.
+
+Changes in today’s commit: Function `listdata_bc` has been revamped; now
+with cleaner and more detailed information printout (by default) and
+boolean return values as an alternative (mostly internal) feature.
+`datadir_bc` arguments have been simplified; and the interactive path
+selection feature has been removed to avoid platform-dependent
+complications.
+
 **05/07/2020**
 
 All collections except ‘cutblocks’ are now on [FRDR’s demo
@@ -249,7 +263,7 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba056824e96.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba042351ef5.tif"
 #> [1] "creating mosaic of 3 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -291,7 +305,7 @@ getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba0575221a8.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba0740621e4.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
