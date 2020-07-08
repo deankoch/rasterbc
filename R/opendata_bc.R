@@ -93,13 +93,20 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
 
   }
 
-  # ... otherwise, merge the blocks into a bigger geotiff using a temporary file
-  tempfile.tif = gsub('\\\\', '/', tempfile(fileext='.tif'))
-  print(paste('output to temporary file:', tempfile.tif))
-  if(sum(idx.geo)>1)
+  # check how many blocks are requested
+  if(sum(idx.geo)==1)
   {
+    # when only a single block is requested, there is no need to write a new file
+    tempfile.tif = dest.files[idx.geo]
+
+  } else {
+
+    # ... otherwise, merge the blocks into a bigger geotiff using a temporary file
+    tempfile.tif = gsub('\\\\', '/', tempfile(fileext='.tif'))
+    print(paste('output to temporary file:', tempfile.tif))
     print(paste('creating mosaic of', sum(idx.geo), 'block(s)'))
     gdalUtils::mosaic_rasters(dest.files[idx.geo], dst_dataset=tempfile.tif)
+
   }
 
   # load the output, assign min/max stats and variable name
@@ -108,13 +115,9 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
 
   if(load.mode %in% c('clip', 'mask'))
   {
-    print('clipping layer...')
-    if(!is.poly)
+    if(is.poly)
     {
-      #warning('cannot clip to this geometry')
-
-    } else {
-
+      print('clipping layer...')
       out.raster = raster::crop(out.raster, as(geo.input, 'Spatial'))
       if(load.mode == 'mask')
       {
