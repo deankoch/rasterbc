@@ -2,35 +2,41 @@
 % Please edit documentation in R/listdata_bc.R
 \name{listdata_bc}
 \alias{listdata_bc}
-\title{Identify which data layers are available online, and (optionally) which have been downloaded already}
+\title{List all available layers, or their associated filepaths and download status}
 \usage{
-listdata_bc(collection = NULL, varname = NULL, year = NULL, verbose = 1)
+listdata_bc(
+  collection = NULL,
+  varname = NULL,
+  year = NULL,
+  verbose = 1,
+  return.boolean = FALSE
+)
 }
 \arguments{
-\item{collection}{character string, indicating the data collection to query}
+\item{collection}{(Optional) character string, indicating the data collection to query}
 
-\item{varname}{character string, indicating the layer to query (see Details, below)}
+\item{varname}{(Optional) character string, indicating the layer to query (see Details, below)}
 
-\item{year}{integer, indicating the year to query (see Details, below)}
+\item{year}{(Optional) integer, indicating the year to query (see Details, below)}
 
-\item{verbose}{integer (0, 1, 2), indicating how much information about the files to print to the console}
+\item{verbose}{An integer (0, 1, 2), indicating how much information about the files to print to the console}
+
+\item{return.boolean}{A boolean, indicating whether to return a dataframe or a nested list of booleans}
 }
 \value{
-A (named) nested list of boolean values, one for each file. This list has the same structure and naming scheme as
-'rasterbc::metadata_bc', but with boolean entries instead of character strings. The entry indicates whether the file exists on
-disk in the local data storage directory specified by 'rasterbc::datadir_bc'.
+Either a (list of) dataframe(s) containing information about each raster layer, or (when `return.boolean==TRUE`) a
+nested list of boolean values (named according to filepath), with entries for each data file in the specified subset.
 }
 \description{
-Prints a list of collection and variable names available through rasterbc, and (optionally) returns a nested list indicating
-which of these exist on disk already
+Returns a list of dataframes (one per collection) describing the variables available through rasterbc, or a subset (as
+specified by `collection`, `varname`, `year`). Alternatively, if `return.boolean==TRUE`, returns a nested list indicating
+the filepaths associated with these layers, and which of them exist in the local data storage directory already.
 }
 \details{
-The layers available through this package are organized into "collections", corresponding to their original online source.
-Layers in a collection are further organized by variable name, and are uniquely identified by the character string "varname"
-(and, if applicable, the year). To see the full list of variable names by collection, run
-
-When arguments collection and/or varname are provided, check only for those (sub)collections, returning
-the corresponding (sub)list. This saves having to scan the entire data storage directory, which can be slow.
+The layers available through this package are organized into "collections", corresponding to their original online sources.
+Layers in a collection are further organized by variable name, and are uniquely identified by the character string `varname`
+(and, if applicable, `year`). The optional arguments `collection`, `varname`, `year` prompt this function to return only the
+applicable subsets.
 }
 \examples{
 x = listdata_bc()

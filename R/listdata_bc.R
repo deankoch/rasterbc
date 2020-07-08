@@ -1,23 +1,22 @@
-#' Identify which data layers are available online, and (optionally) which have been downloaded already
+#' List all available layers, or their associated filepaths and download status
 #'
-#' Prints a list of collection and variable names available through rasterbc, and (optionally) returns a nested list indicating
-#' which of these exist on disk already
+#' Returns a list of dataframes (one per collection) describing the variables available through rasterbc, or a subset (as
+#' specified by `collection`, `varname`, `year`). Alternatively, if `return.boolean==TRUE`, returns a nested list indicating
+#' the filepaths associated with these layers, and which of them exist in the local data storage directory already.
 #'
-#' The layers available through this package are organized into "collections", corresponding to their original online source.
-#' Layers in a collection are further organized by variable name, and are uniquely identified by the character string "varname"
-#' (and, if applicable, the year). To see the full list of variable names by collection, run
+#' The layers available through this package are organized into "collections", corresponding to their original online sources.
+#' Layers in a collection are further organized by variable name, and are uniquely identified by the character string `varname`
+#' (and, if applicable, `year`). The optional arguments `collection`, `varname`, `year` prompt this function to return only the
+#' applicable subsets.
 #'
-#' When arguments collection and/or varname are provided, check only for those (sub)collections, returning
-#' the corresponding (sub)list. This saves having to scan the entire data storage directory, which can be slow.
+#' @param collection (Optional) character string, indicating the data collection to query
+#' @param varname (Optional) character string, indicating the layer to query (see Details, below)
+#' @param year (Optional) integer, indicating the year to query (see Details, below)
+#' @param verbose An integer (0, 1, 2), indicating how much information about the files to print to the console
+#' @param return.boolean A boolean, indicating whether to return a dataframe or a nested list of booleans
 #'
-#' @param collection character string, indicating the data collection to query
-#' @param varname character string, indicating the layer to query (see Details, below)
-#' @param year integer, indicating the year to query (see Details, below)
-#' @param verbose integer (0, 1, 2), indicating how much information about the files to print to the console
-#'
-#' @return A (named) nested list of boolean values, one for each file. This list has the same structure and naming scheme as
-#' 'rasterbc::metadata_bc', but with boolean entries instead of character strings. The entry indicates whether the file exists on
-#' disk in the local data storage directory specified by 'rasterbc::datadir_bc'.
+#' @return Either a (list of) dataframe(s) containing information about each raster layer, or (when `return.boolean==TRUE`) a
+#' nested list of boolean values (named according to filepath), with entries for each data file in the specified subset.
 #' @importFrom stats setNames
 #' @export
 #' @examples
@@ -28,7 +27,7 @@
 #' x = listdata_bc(collection='fids', varname='IBM_trace', year=2005, verbose=2)
 #' print(x)
 #'
-listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
+listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1, return.boolean=FALSE)
 {
   # get the data storage directory...
   data.dir = getOption('rasterbc.data.dir')
@@ -41,17 +40,9 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
   # check if a collection was specified
   if(is.null(collection))
   {
-    # recursive calls to query all collections when "collection" argument is not assigned
+    # build vector of (all) collections to query when "collection" argument is not assigned
     collections = setNames(nm=names(rasterbc::metadata_bc))
-    return.val = vector(mode='list', length=length(collections))
-    names(return.val) = collections
-    cat('variable names available in rasterbc:')
-    for(collection in collections)
-    {
-      cat(paste0(' \n\n\"', collection, '\" collection:\n'))
-      return.val[[collection]] = listdata_bc(collection, varname, year, verbose)
-    }
-    return(return.val)
+    return(lapply(collections, function(collection) listdata_bc(collection, varname, year, verbose, return.boolean)))
 
   } else {
 
@@ -59,85 +50,153 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
     collections = names(rasterbc::metadata_bc)
     if(collection %in% collections)
     {
-        # a valid collection string has been specified. Fetch all of its variable names
-        varnames = setNames(nm=rasterbc::metadata_bc[[collection]]$metadata$df$varname)
+        # a valid collection string was specified. Fetch all of its variable names
+        varnames = setNames(nm=rownames(rasterbc::metadata_bc[[collection]]$metadata$df))
 
         # check if a varname argument has not been supplied
         if(is.null(varname))
         {
-          # printout to list variable names
-          printout = paste0('\"', paste(rasterbc::metadata_bc[[collection]]$metadata$df$varname, collapse='", "'), '\"')
-          if(verbose == 1)
+          # construct return values and finish
+          if(return.boolean)
           {
-            cat(printout)
+            # recursive call to query all variable names
+            return(lapply(varnames, function(varname) listdata_bc(collection, varname, year, verbose)))
+
+          } else {
+
+            # pull the metadata dataframe for this collection
+            out.df = rasterbc::metadata_bc[[collection]]$metadata$df
+
+            # prune or augment the dataframe, depending on level of verbose
+            if(verbose == 0)
+            {
+              # keep only the year column
+              out.df = out.df[, 'year', drop=FALSE]
+
+            } else if(verbose == 2) {
+
+              # append a column indicating the number of blocks downloaded
+              booleans.list = lapply(varnames, function(varname) listdata_bc(collection, varname, year, return.boolean=TRUE))
+              out.df$blocks.downloaded = sapply(booleans.list, function(lyr) paste(c(sum(unlist(lyr)), length(unlist(lyr))), collapse='/'))
+
+            }
+
+            return(out.df)
           }
 
-          # recursive call to query all variable names when "varname" argument is not assigned
-          return(lapply(varnames, function(varname) listdata_bc(collection, varname, year, verbose)))
 
         } else {
 
           # check if the supplied varname argument has been misspelled before proceeding
           if(varname %in% varnames)
           {
-
             # check if this varname is a one time layer, or a time-series
             if(all(is.na(rasterbc::metadata_bc[[collection]]$metadata$year[varname])))
             {
               # case: varname is a one-time layer (no time-series, year argument ignored)
               if(!is.null(year))
               {
-                warning('year argument (', year, ') ignored for this layer')
+                # print a warning if a year was specified
+                warning('the supplied year argument (', year, ') ignored for this (non-time-series) layer')
               }
 
-              # build list of filenames and boolean indicating whether they exist on disk
+              # build vectors of filenames and booleans indicating whether they exist on disk
               fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
-              fnames.exist = setNames(file.exists(file.path(data.dir, collection, fnames)), fnames)
-              printout.prefix = paste0('[', collection, '] ', sum(fnames.exist), '/', length(fnames))
-              printout.suffix = paste0(varname, ' blocks (storage: ', file.path(data.dir, collection), ')')
-              if(verbose > 1)
+              fnames.exist = setNames(file.exists(file.path(data.dir, fnames)), fnames)
+
+              if(return.boolean)
               {
-                # printout indicating fraction of blocks downloaded
-                cat(paste(printout.prefix, printout.suffix))
+                # return the booleans (with names indicating filepath)
+                return(fnames.exist)
+
+              } else {
+
+                # pull the metadata dataframe for this collection
+                out.df = rasterbc::metadata_bc[[collection]]$metadata$df
+                return(out.df[rownames(out.df)==varname,])
+
+
               }
 
-              # return the booleans (with names indicating filepath)
-              return(fnames.exist)
+
+
 
             } else {
 
               # case: varname has multiple years. Fetch the vector of years for this variable
-              years.all = rasterbc::metadata_bc[[collection]]$source$years
-              idx.years = sapply(names(years.all), function(year) varname %in% names(rasterbc::metadata_bc[[collection]]$fname$block[[year]]))
-              years.lyr = years.all[idx.years]
+              years = rasterbc::metadata_bc[[collection]]$metadata$year[[varname]]
 
               # check if a year argument has been supplied
               if(is.null(year))
               {
-                # recursive call to query all years when "year" argument is not assigned
-                return(lapply(years.lyr, function(year) listdata_bc(collection, varname, year, verbose)))
+                # no year supplied. Construct return values with all years and finish
+                if(return.boolean)
+                {
+                  # recursive call to query all variable names
+                  return(lapply(years, function(year) listdata_bc(collection, varname, year, verbose, return.boolean)))
+
+                } else {
+
+                  # pull the metadata dataframe for this collection
+                  out.df = rasterbc::metadata_bc[[collection]]$metadata$df
+
+                  # prune or augment the dataframe, depending on level of verbose
+                  if(verbose == 0)
+                  {
+                    # keep only the year column
+                    out.df = out.df[, 'year', drop=FALSE]
+
+                  } else if(verbose == 2) {
+
+                    # append a column indicating the number of blocks downloaded
+                    booleans.list = lapply(varnames, function(lyr) listdata_bc(collection, lyr, year, return.boolean=TRUE))
+                    out.df$blocks.downloaded = sapply(booleans.list, function(lyr) paste(c(sum(unlist(lyr)), length(unlist(lyr))), collapse='/'))
+                  }
+
+                  return(out.df)
+                }
 
               } else {
 
                 # check if the year is available
-                if(year %in% years.lyr)
+                if(year %in% years)
                 {
-                  # year argument is valid. Find its index among the other layers
-                  year.string = years.lyr[years.lyr==year]
-                  idx.year = names(rasterbc::metadata_bc[[collection]]$fname$block) == names(year.string)
-
-                  # build list of filenames and existence boolean
-                  fnames = rasterbc::metadata_bc[[collection]]$fname$block[[which(idx.year)]][[varname]]
-                  fnames.exist = setNames(file.exists(file.path(data.dir, collection, fnames)), fnames)
-                  printout.prefix = paste0('[', year, ']:[', collection, ']: ', sum(fnames.exist), '/', length(fnames), ' ')
-                  printout.suffix = paste0(varname, ' blocks (storage: ', file.path(data.dir, collection, year), ')')
-                  if(verbose > 1)
+                  # only scan for files on disk (slow) if needed
+                  if(return.boolean | verbose==2)
                   {
-                    # printout indicating fraction of blocks downloaded
-                    print(paste0(printout.prefix, printout.suffix))
+                    # year argument is valid. Find its index among the other years
+                    idx.year = names(rasterbc::metadata_bc[[collection]]$fname$block) == names(years[years==year])
+
+                    # build list of filenames and existence boolean
+                    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[which(idx.year)]][[varname]]
+                    fnames.exist = setNames(file.exists(file.path(data.dir, fnames)), fnames)
+
+                    if(return.boolean)
+                    {
+                      # return the booleans (with names indicating filepath)
+                      return(fnames.exist)
+                    }
 
                   }
-                  return(fnames.exist)
+
+                  # pull the metadata dataframe for this collection/varname and adjust year entry to match the user input
+                  out.df = rasterbc::metadata_bc[[collection]]$metadata$df[varname,]
+                  out.df$year = as.character(year)
+
+                  # prune or augment the dataframe, depending on level of verbose
+                  if(verbose == 0)
+                  {
+                    # keep only the year column
+                    out.df = out.df[, 'year', drop=FALSE]
+
+                  } else if(verbose == 2) {
+
+                    # append a column indicating the number of blocks downloaded for this one year
+                    booleans.vector = listdata_bc(collection, varname, year, return.boolean=TRUE)
+                    out.df$blocks.downloaded = paste(c(sum(booleans.vector), length(booleans.vector)), collapse='/')
+                  }
+
+                  return(out.df)
 
                 } else {
 
@@ -153,7 +212,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1)
           } else {
 
             # error when "varname" argument is invalid
-            error.msg = paste0('variable name "', varname, '" not found in collection "', collection, '"')
+            error.msg = paste0('variable name \"', varname, '\" not found in collection \"', collection, '\"')
             suggestions.msg = paste('\nChoose one of the following variable names:', paste0('\"', paste(varnames, collapse='\", \"')), '\"')
             stop(paste(error.msg, suggestions.msg))
 

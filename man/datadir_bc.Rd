@@ -4,12 +4,12 @@
 \alias{datadir_bc}
 \title{Set local directory for storage of raster data files}
 \usage{
-datadir_bc(select = FALSE, data.dir = NULL)
+datadir_bc(data.dir = NULL, suppress.warning = FALSE)
 }
 \arguments{
-\item{select}{A boolean indicating whether the directory should be automatically selected (default) or user-selected}
+\item{data.dir}{A character string, providing the absolute path to the desired storage directory}
 
-\item{data.dir}{An (optional) character string, providing the absolute path to the desired storage directory}
+\item{suppress.warning}{A boolean indicating whether to warn if selecting directory that already contains files}
 }
 \value{
 character string, the absolute path to the selected storage directory
@@ -19,9 +19,9 @@ All files downloaded/created by the rasterbc package are written to the director
 this directory is stored in the global options list for R under 'rasterbc.data.dir'
 }
 \details{
-By default this is the path returned by \code{rappdirs::user_data_dir}. With argument \code{select==TRUE}, a different
-directory can be specified: If this is not specified in \code{data.dir}, the user is prompted to choose it via an interactive
-file dialog. To check the current setting for data.dir, run \code{getOption('rasterbc.data.dir')}
+By default this is the path returned by \code{rappdirs::user_data_dir}. The optional argument \code{data.dir} specifies
+an alternative directory manually as a character string (absolute file path). The directory will be created if it doesn't already
+exist. Its path is stored as an R option: to check the current setting for data.dir, run \code{getOption('rasterbc.data.dir')}
 }
 \examples{
 datadir_bc(TRUE, 'H:/')

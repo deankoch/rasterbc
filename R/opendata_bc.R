@@ -79,13 +79,13 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
     year.string = paste0('yr', year)
     fnames = rasterbc::metadata_bc[[collection]]$fname$block[[year.string]][[varname]]
   }
-  dest.files = file.path(data.dir, collection, fnames)
+  dest.files = file.path(data.dir, fnames)
 
   # find the index of the particular blocks needed
   idx.geo = names(fnames) %in% geo
 
   # check that all of these blocks have been downloaded already
-  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0)[idx.geo]
+  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0, return.boolean=TRUE)[idx.geo]
   if(any(!idx.exists))
   {
     # error if some blocks are missing

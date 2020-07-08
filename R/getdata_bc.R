@@ -76,7 +76,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   if(is.null(collection))
   {
     # printout of collection and variables names
-    listdata_bc()
+    listdata_bc(verbose=0)
   }
 
   # build a list of filenames available to download for this collection/varname/year
@@ -97,10 +97,10 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
 
   # build the full list of urls for this collection/varname/year and their local paths
   urls = paste0(rasterbc::metadata_bc[[collection]]$frdr, fnames)
-  dest.files = file.path(data.dir, collection, fnames)
+  dest.files = file.path(data.dir, fnames)
 
   # check to see which (if any) of these blocks have been downloaded already
-  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0)[idx.geo]
+  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, return.boolean=TRUE)[idx.geo]
   if(any(!idx.exists))
   {
     # some blocks are missing. Print a message before downloading them

@@ -41,11 +41,10 @@ for(collection in collections)
 {
   # read in the metadata created by the src_*.R script
   cfg = readRDS(file.path(current.data.dir, paste0(collection, '.rds')))
-  cfg.fname = listswap_bc(cfg$out$fname$tif, paste0(original.data.dir, collection, '/'), '')
+  cfg.fname = listswap_bc(cfg$out$fname$tif, original.data.dir, '')
   cfg.src = listswap_bc(cfg$src[names(cfg$src) != 'dir'], original.data.dir, '')
   cfg.codes = cfg$out$code
-  cfg.data.url = paste0(cfg.frdr, collection, '/')
-  metadata_bc[[collection]] = list(source=cfg.src, frdr=cfg.data.url, fname=cfg.fname, metadata=list(df=NULL, year=NULL, coding=cfg.codes))
+  metadata_bc[[collection]] = list(source=cfg.src, frdr=cfg.frdr, fname=cfg.fname, metadata=list(df=NULL, year=NULL, coding=cfg.codes))
 }
 
 # the 'pine' layers have their cfg.src$years entry as character strings. Replace these with integers
@@ -125,7 +124,7 @@ for(collection in names(metadata_bc))
   }
 
   # write these results to the metadata list
-  metadata_bc[[collection]]$metadata$df = data.frame(varname=collection.varnames, year=collection.yearstrings)
+  metadata_bc[[collection]]$metadata$df = data.frame(year=collection.yearstrings)
   metadata_bc[[collection]]$metadata$year = collection.yearlist
 
 }
@@ -133,57 +132,60 @@ for(collection in names(metadata_bc))
 # With this skeleton defined, I add the rest of the metadata by hand...
 
 # biogeoclimatic zone
-metadata_bc[['bgcz']]$metadata$df$unit = rep('integer code', nrow(metadata_bc[['bgcz']]$metadata$df))
 metadata_bc[['bgcz']]$metadata$df$description = c(region = 'regional placename',
                                                   org = 'more specific placename',
                                                   cover = 'landcover type (water, ice, land)',
                                                   zone = 'biogeoclimatic zone classification',
                                                   subzone = 'subclassification of zone',
                                                   variant = 'subclassification of subzone')
+metadata_bc[['bgcz']]$metadata$df$unit = rep('(integer code)', nrow(metadata_bc[['bgcz']]$metadata$df))
+
 
 # geographical boundary and position
-metadata_bc[['borders']]$metadata$df$unit = c(prov = 'indicator',
-                                              latitude = 'degrees north',
-                                              longitude = 'degrees west')
 metadata_bc[['borders']]$metadata$df$description = c(prov = 'out-of-province mask',
                                                      latitude = 'geodetic latitude (south-north position)',
                                                      longitude = 'geodetic longitude (east-west position)')
+metadata_bc[['borders']]$metadata$df$unit = c(prov = '(indicator)',
+                                              latitude = '(degrees north)',
+                                              longitude = '(degrees west)')
 
 # forestry harvest activity
-metadata_bc[['cutblocks']]$metadata$df$unit = c(harvest = 'fraction of cell area')
 metadata_bc[['cutblocks']]$metadata$df$description = c(harvest = 'forest cover loss attributed to harvest')
+metadata_bc[['cutblocks']]$metadata$df$unit = c(harvest = '(fraction of cell area)')
+
 
 # digital elevation model
-metadata_bc[['dem']]$metadata$df$unit = c(dem = 'metres above sea level',
-                                          slope = 'degrees above horizontal',
-                                          aspect = 'degrees (counterclockwise) from north')
 metadata_bc[['dem']]$metadata$df$description = c(dem = 'digital elevation map',
                                                  slope = 'derived from digital elevation map',
                                                  aspect = 'derived from digital elevation map')
+metadata_bc[['dem']]$metadata$df$unit = c(dem = '(metres above sea level)',
+                                          slope = '(degrees above horizontal)',
+                                          aspect = '(degrees counterclockwise from north)')
 
 # insect damage
-metadata_bc[['fids']]$metadata$df$unit = rep('fraction of cell area', nrow(metadata_bc[['fids']]$metadata$df))
 stat.strings = paste(c('minimum', 'midpoint', 'maximum'), 'of total forest cover loss')
 sev.strings = paste(c('trace', 'light', 'moderate', 'severe', 'very severe'), 'rated damage observation')
 pest.strings = c(IBM = 'mountain pine beetle', IBS = 'spruce beetle', IBD = 'douglas-fir beetle', IBB = 'western balsam bark beetle')
 metadata_bc[['fids']]$metadata$df$description = paste(paste(c(stat.strings, sev.strings), 'attributed to'), rep(pest.strings, each=8))
+metadata_bc[['fids']]$metadata$df$unit = rep('(fraction of cell area)', nrow(metadata_bc[['fids']]$metadata$df))
 
 # global forest change
-metadata_bc[['gfc']]$metadata$df$unit = c('fraction of cell area', rep('binary', 3))
 metadata_bc[['gfc']]$metadata$df$description = c(treecover = 'tree cover estimate circa year 2000',
                                                  gain = 'indicator for forest regrowth during period 2000-2019',
                                                  mask = 'landcover classification (0=water, 1=land)',
                                                  loss = 'yearly indicator for forest loss')
+metadata_bc[['gfc']]$metadata$df$unit = c('(fraction of cell area)', rep('(binary)', 3))
+
 
 # wildfire
-metadata_bc[['nfdb']]$metadata$df$unit = c('fraction of cell area')
 metadata_bc[['nfdb']]$metadata$df$description = c('proportion of area falling within a recorded wildfire boundary')
+metadata_bc[['nfdb']]$metadata$df$unit = c('(fraction of cell area)')
 
 # forest attributes
-metadata_bc[['pine']]$metadata$df$unit = c(rep('fraction of cell area', 2), 'fraction of \"vegTreed\" area', 'years', rep('fraction of \"needle\" area', 10))
 highlevel.strings = paste(c(paste(c('vegetation', 'tree', 'needle-leaf species'), 'cover'), 'stand age'),  'estimate')
 species.strings = paste(c('whitebark', 'jack', 'lodgepole', 'western white', 'ponderosa', 'red', 'unidentified', 'eastern white', 'scots', 'total'), 'pine cover estimate')
 metadata_bc[['pine']]$metadata$df$description = c(highlevel.strings, species.strings)
+metadata_bc[['pine']]$metadata$df$unit = c(rep('(fraction of cell area)', 2), '(fraction of \"vegTreed\" area)', '(years)', rep('(fraction of \"needle\" area)', 10))
 
 
 # xx = lapply(names(metadata_bc), function(x) cbind(collection=rep(x, nrow(metadata_bc[[x]]$metadata$df)), metadata_bc[[x]]$metadata$df))

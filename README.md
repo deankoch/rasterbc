@@ -98,10 +98,10 @@ directory for the raster layers:
 
 ``` r
 library(rasterbc)
-datadir_bc(select=TRUE, 'H:/rasterbc_data')
+datadir_bc('H:/rasterbc_data')
 #> [1] "data storage path set to: H:/rasterbc_data"
 #> [1] "directory exists"
-#> Warning in datadir_bc(select = TRUE, "H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
+#> Warning in datadir_bc("H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
 #> [1] "H:/rasterbc_data"
 ```
 
@@ -138,8 +138,6 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
-#> Loading required package: sf
-#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -226,7 +224,6 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
-#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -252,13 +249,8 @@ memory the returned `RasterLayer` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpANHVbo\\file16a845429e7.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba056824e96.tif"
 #> [1] "creating mosaic of 3 block(s)"
-#> 
-#> Attaching package: 'gdalUtils'
-#> The following object is masked from 'package:sf':
-#> 
-#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -299,7 +291,7 @@ getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpANHVbo\\file16a840d64924.tif"
+#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba0575221a8.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
@@ -320,10 +312,10 @@ boolean vector indicating which files have been detected in your local
 storage directory:
 
 ``` r
-is.downloaded = listdata_bc(collection='dem', varname='dem')
+is.downloaded = listdata_bc(collection='dem', varname='dem', return.boolean=TRUE)
 str(is.downloaded)
 #>  Named logi [1:89] FALSE FALSE FALSE FALSE FALSE TRUE ...
-#>  - attr(*, "names")= chr [1:89] "blocks/dem_092B.tif" "blocks/dem_092C.tif" "blocks/dem_092E.tif" "blocks/dem_092F.tif" ...
+#>  - attr(*, "names")= chr [1:89] "dem/blocks/dem_092B.tif" "dem/blocks/dem_092C.tif" "dem/blocks/dem_092E.tif" "dem/blocks/dem_092F.tif" ...
 sum(is.downloaded)
 #> [1] 3
 length(is.downloaded)
@@ -338,15 +330,27 @@ by `getdata_bc`. All filenames are either of the form
 ‘varname\_mapsheet.tif’ (as in this example) or else
 varname\_year\_mapsheet.tif (for time-series data).
 
-The `listdata_bc` function can also be used to print a complete list of
-all available layers (use argument `verbose=2`). *eg.* in the ‘dem’
-collection we also have ‘aspect’ and ‘slope’:
+By default, the `listdata_bc` function prints a list of all available
+layers. *eg.* in the ‘dem’ collection we also have ‘aspect’ and ‘slope’:
 
 ``` r
-is.downloaded = listdata_bc(collection='dem', verbose=2)
-#> [1] "[dem] 3/89 dem blocks (storage: H:/rasterbc_data/dem)"
-#> [1] "[dem] 2/89 slope blocks (storage: H:/rasterbc_data/dem)"
-#> [1] "[dem] 3/89 aspect blocks (storage: H:/rasterbc_data/dem)"
+listdata_bc(collection='dem', verbose=2)
+#>        year
+#> dem      NA
+#> slope    NA
+#> aspect   NA
+#>                               description
+#> dem                 digital elevation map
+#> slope  derived from digital elevation map
+#> aspect derived from digital elevation map
+#>                                         unit
+#> dem                 (metres above sea level)
+#> slope             (degrees above horizontal)
+#> aspect (degrees counterclockwise from north)
+#>        blocks.downloaded
+#> dem                 3/89
+#> slope               2/89
+#> aspect              3/89
 ```
 
 And we now see listed the two ‘slope’ blocks (for southern Vancouver
@@ -381,17 +385,10 @@ raster(victoria_slope.path)
 
 If you’re finished with `rasterbc` and want to remove all of the stored
 data, or if you simply want to free up space, the entire data directory
-or any of its contents can be deleted using your file browser.
-Alternatively the following R commmand can be used:
-
-``` r
-unlink(getOption('rasterbc.data.dir'), recursive=TRUE)
-```
-
-This is quite safe unless you’ve set the data directory to something
-silly, like ‘C:/’, and will not break the `rasterbc` installation.
-However, all downloaded data will be erased and you will need to run
-`datadir_bc` again before using the other package functions.
+or any of its contents can be deleted using your file browser. This will
+not break the `rasterbc` installation. However, all downloaded data will
+be erased and you will need to run `datadir_bc` again before using the
+other package functions.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
