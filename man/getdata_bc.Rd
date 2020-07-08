@@ -9,29 +9,34 @@ getdata_bc(
   collection = NULL,
   varname = NULL,
   year = NULL,
-  force.dl = FALSE
+  force.dl = FALSE,
+  load.mosaic = TRUE
 )
 }
 \arguments{
-\item{geo}{vector of character strings (NTS/SNRC codes) or any geometry set of type sfc}
+\item{geo}{A vector of (NTS/SNRC code) strings, or any geometry set of type sfc, specifying geographical extent to load}
 
-\item{collection}{character string, indicating the data collection to query}
+\item{collection}{A character string indicating the data collection to query}
 
-\item{varname}{character string, indicating the layer to query}
+\item{varname}{A character string indicating the layer to query}
 
-\item{year}{integer, indicating the year to query}
+\item{year}{An integer indicating the year to query (if applicable)}
 
-\item{force.dl}{boolean, indicates to download (and overwrite) any existing data}
+\item{force.dl}{A boolean indicating whether to overwrite any existing data}
+
+\item{load.mosaic}{A boolean indicating whether to return the full (merged) raster}
 }
 \value{
-A character string (or vector of them) containing the absolute path(s) to the file(s) written
+Either: a (vector of) character string(s) containing the absolute path(s) to the file(s) written (default); or a
+RasterLayer object containing the requested data
 }
 \description{
 Downloads and/or loads all blocks covering the geographical extent specified in input argument `geo`. This can be a vector of
 (4-character) NTS/SNRC block codes, or any geometry set of type `sfc`.
 }
 \details{
-Data for the layer specified by `collection`, `varname`,
-and `year` are written to the directory specified by `rasterbc::datadir_bc`, and blocks already downloaded are not downloaded
-again (unless `force.dl==TRUE`).
+Data for the layer specified by `collection`, `varname`, and `year` are written to the directory specified by `rasterbc::datadir_bc`,
+and blocks already downloaded are not downloaded again (unless `force.dl==TRUE`). Default behaviour is to merge blocks as needed
+to construct a raster containing the requested data, returning it as a RasterLayer. If `load.mosaic==FALSE`, the function downloads
+any missing blocks (as needed), returning their filenames instead of loading them.
 }

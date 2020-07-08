@@ -3,24 +3,26 @@
 #' Downloads and/or loads all blocks covering the geographical extent specified in input argument `geo`. This can be a vector of
 #' (4-character) NTS/SNRC block codes, or any geometry set of type `sfc`.
 #'
-#' Data for the layer specified by `collection`, `varname`,
-#' and `year` are written to the directory specified by `rasterbc::datadir_bc`, and blocks already downloaded are not downloaded
-#' again (unless `force.dl==TRUE`).
+#' Data for the layer specified by `collection`, `varname`, and `year` are written to the directory specified by `rasterbc::datadir_bc`,
+#' and blocks already downloaded are not downloaded again (unless `force.dl==TRUE`). Default behaviour is to merge blocks as needed
+#' to construct a raster containing the requested data, returning it as a RasterLayer. If `load.mosaic==FALSE`, the function downloads
+#' any missing blocks (as needed), returning their filenames instead of loading them.
 #'
+#' @param geo A vector of (NTS/SNRC code) strings, or any geometry set of type sfc, specifying geographical extent to load
+#' @param collection A character string indicating the data collection to query
+#' @param varname A character string indicating the layer to query
+#' @param year An integer indicating the year to query (if applicable)
+#' @param force.dl A boolean indicating whether to overwrite any existing data
+#' @param load.mosaic A boolean indicating whether to return the full (merged) raster
 #'
-#' @param geo vector of character strings (NTS/SNRC codes) or any geometry set of type sfc
-#' @param collection character string, indicating the data collection to query
-#' @param varname character string, indicating the layer to query
-#' @param year integer, indicating the year to query
-#' @param force.dl boolean, indicates to download (and overwrite) any existing data
-#'
-#' @return A character string (or vector of them) containing the absolute path(s) to the file(s) written
+#' @return Either: a (vector of) character string(s) containing the absolute path(s) to the file(s) written (default); or a
+#' RasterLayer object containing the requested data
 #' @importFrom methods as
 #' @importFrom utils download.file
 #' @importFrom utils setTxtProgressBar
 #' @importFrom utils txtProgressBar
 #' @export
-getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.dl=FALSE)
+getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.dl=FALSE, load.mosaic=TRUE)
 {
   # May add this later:
   # If no extent object (`geo`) is supplied, then all required blocks are downloaded. Missing arguments to `collection`,
@@ -28,7 +30,6 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   # download all three layers (`dem`, `aspect`, `slope`) in the `dem` collection; and getdata_bc('fids', year=2012) will download
   # 'fids' layers from the year 2012.
   #
-
 
   # get the data storage directory...
   data.dir = getOption('rasterbc.data.dir')
@@ -42,12 +43,15 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   is.poly = FALSE
   if(is.character(geo))
   {
-    # compare with list of BC codes
+    # compare with list of BC codes and stop if any are misspelled
     idx.valid = geo %in% rasterbc::ntspoly_bc$NTS_SNRC
     if(!all(idx.valid))
     {
       stop(paste('found no match in BC for the following NTS/SNRC code(s):', paste(geo[!idx.valid], collapse=', ')))
     }
+
+    # codes are verified, save a copy in a new object
+    geo.codes = geo
 
   } else {
 
@@ -61,9 +65,8 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
         is.poly = TRUE
       }
 
-      # find the mapsheet codes, overwrite geo but keep a backup
-      geo.input = geo
-      geo = findblocks_bc(geo)
+      # find the mapsheet codes
+      geo.codes = findblocks_bc(geo)
 
     } else {
 
@@ -93,7 +96,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   }
 
   # find the index of the particular blocks needed
-  idx.geo = names(fnames) %in% geo
+  idx.geo = names(fnames) %in% geo.codes
 
   # build the full list of urls for this collection/varname/year and their local paths
   urls = paste0(rasterbc::metadata_bc[[collection]]$frdr, fnames)
@@ -143,5 +146,15 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
 
   }
 
-  return(dest.files[idx.geo])
+  if(load.mosaic)
+  {
+    # merge blocks, clip/mask as needed, and return RasterLayer pointing to a tempfile
+    return(opendata_bc(geo, collection, varname, year))
+
+  } else {
+
+    # default behaviour: return the vector of file paths
+    return(dest.files[idx.geo])
+
+  }
 }

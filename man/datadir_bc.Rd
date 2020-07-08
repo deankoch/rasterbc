@@ -24,5 +24,5 @@ an alternative directory manually as a character string (absolute file path). Th
 exist. Its path is stored as an R option: to check the current setting for data.dir, run \code{getOption('rasterbc.data.dir')}
 }
 \examples{
-datadir_bc(TRUE, 'H:/')
+datadir_bc()
 }

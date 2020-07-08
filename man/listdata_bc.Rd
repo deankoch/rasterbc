@@ -8,7 +8,7 @@ listdata_bc(
   collection = NULL,
   varname = NULL,
   year = NULL,
-  verbose = 1,
+  verbose = 2,
   return.boolean = FALSE
 )
 }

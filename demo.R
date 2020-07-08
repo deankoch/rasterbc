@@ -12,33 +12,42 @@ library(bcmaps)
 
 library(devtools)
 load_all()
-datadir_bc(select=TRUE, 'H:/rasterbc_data')
+datadir_bc('H:/rasterbc_data', TRUE)
 
 example.name = 'Regional District of Central Okanagan'
 bc.bound.sf = bc_bound()
 districts.sf = regional_districts()
 example.sf = districts.sf[districts.sf$ADMIN_AREA_NAME==example.name, ]
 
-x = listdata_bc()
+listdata_bc(verbose=0)
+listdata_bc(verbose=1)
+listdata_bc(verbose=2)
 
 collection = 'dem'
-varname = 'aspect'
-z = listdata_bc(collection)
-y = listdata_bc(collection, varname)
-getdata_bc(geo=example.sf, collection, varname)
-geotest = opendata_bc(geo=example.sf, collection, varname)
-plot(geotest)
+varname = 'dem'
+listdata_bc(collection)
+listdata_bc(collection, verbose=0)
+listdata_bc(collection, verbose=2)
+listdata_bc(collection, varname)
+
+geotest = getdata_bc(geo=example.sf, collection, varname)
+plot(geotest, col=rainbow(255))
 
 
-z = listdata_bc('bgcz', verbose=2)
+listdata_bc('bgcz', verbose=2)
 
 
 collection = 'fids'
-varname = 'IBM_mid'
-year = 2018
-z = listdata_bc(collection)
-y = listdata_bc(collection, varname)
-x = listdata_bc(collection, varname, c(2017,2018))
+varname = 'IBM_max'
+year = 2008
+listdata_bc(collection, verbose=2)
+listdata_bc(collection, varname)
+listdata_bc(collection, varname, year, verbose=2)
+
+listdata_bc(collection, verbose=0)
+listdata_bc(collection, varname)
+listdata_bc(collection, varname, year)
+
 getdata_bc(geo=example.sf, collection, varname, year)
 geotest = opendata_bc(geo=example.sf, collection, varname, year)
 plot(geotest)
@@ -46,17 +55,18 @@ plot(geotest)
 collection = 'bgcz'
 varname = 'zone'
 year = 2011
-z = listdata_bc(collection)
-y = listdata_bc(collection, varname)
-x = listdata_bc(collection, varname, year)
+listdata_bc(collection)
+listdata_bc(collection, varname)
+listdata_bc(collection, varname, year)
 getdata_bc(geo=example.sf, collection, varname, year)
 geotest = opendata_bc(geo=example.sf, collection, varname, year)
 plot(geotest)
 
 collection = 'gfc'
 varname = 'treecover'
-z = listdata_bc(collection)
-y = listdata_bc(collection, varname)
+listdata_bc(collection)
+listdata_bc(collection, verbose=2)
+listdata_bc(collection, varname)
 getdata_bc(geo=example.sf, collection, varname)
 geotest = opendata_bc(geo=example.sf, collection, varname)
 plot(geotest)
@@ -70,6 +80,10 @@ y = listdata_bc(collection, varname)
 getdata_bc(geo=example.sf, collection, varname, year)
 geotest = opendata_bc(geo=example.sf, collection, varname, year)
 plot(geotest)
+
+example.blockcodes = c('092B', '092C')
+example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
+plot(example.tif)
 
 
 #+ include=FALSE

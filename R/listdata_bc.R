@@ -27,7 +27,7 @@
 #' x = listdata_bc(collection='fids', varname='IBM_trace', year=2005, verbose=2)
 #' print(x)
 #'
-listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1, return.boolean=FALSE)
+listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=2, return.boolean=FALSE)
 {
   # get the data storage directory...
   data.dir = getOption('rasterbc.data.dir')

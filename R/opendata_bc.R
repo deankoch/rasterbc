@@ -94,7 +94,7 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
   }
 
   # ... otherwise, merge the blocks into a bigger geotiff using a temporary file
-  tempfile.tif = tempfile(fileext='.tif')
+  tempfile.tif = gsub('\\\\', '/', tempfile(fileext='.tif'))
   print(paste('output to temporary file:', tempfile.tif))
   if(sum(idx.geo)>1)
   {

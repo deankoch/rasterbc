@@ -15,7 +15,7 @@
 #' @importFrom utils choose.dir
 #' @export
 #' @examples
-#' datadir_bc(TRUE, 'H:/')
+#' datadir_bc()
 datadir_bc = function(data.dir=NULL, suppress.warning=FALSE)
 {
   # storage directory set automatically by rappdirs unless user sets select=TRUE

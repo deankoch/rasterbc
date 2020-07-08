@@ -123,13 +123,13 @@ findblocks_bc(example.sf)
 fetch them using the command:
 
 ```{r get-example, eval=FALSE}
-getdata_bc(geo=example.sf, collection='dem', varname='dem')
+getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
 ```
 
 You should see progress bars for a series of three downloads, and once finished, the paths of the downloaded files are printed to the console. Note that if a block has been downloaded already (*eg.* by a `getdata_bc` call with a different `geo` argument), the existing copy will be detected, and the download skipped. *eg.* repeat the call...
 
 ```{r get-example-again, R.options = list(width = 15)}
-getdata_bc(geo=example.sf, collection='dem', varname='dem')
+getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
 ```
 
 ... and nothing happens, because the data are there already. Verify by loading one of the files as `RasterLayer`:
@@ -141,12 +141,13 @@ print(example.raster)
 plot(example.raster, main='elevation (metres)')
 ```
 
+
+
 ### Loading/merging blocks
 
-To display the elevation data for the entire district, we need to combine the three blocks downloaded earlier. This can be done using `opendata_bc`, which
-loads all required blocks, merges them into a single (mosaic) layer, crops and masks as needed, and then loads into memory the returned `RasterLayer` object:
+To display the elevation data for the entire district, we need to combine the three blocks downloaded earlier. This can be done using `getdata_bc` with `load.mosaic=TRUE` (the default setting), which loads all required blocks, merges them into a single (mosaic) layer, crops and masks as needed, and then loads into memory the returned `RasterLayer` object:
 ```{r opendata_bc, R.options = list(width = 10), dpi=400}
-example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
+example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 print(example.tif)
 plot(example.tif, main=paste(example.name, ': elevation'))
 plot(st_geometry(example.sf), add=TRUE)
@@ -158,8 +159,7 @@ Note that any simple features object of class `sf` or `sfc` could be used for th
 Alternatively, users can directly download individual blocks by specifying their their NTS/SNRC codes, *eg.*
 ```{r get-example-blocks, R.options = list(width = 10), dpi=400}
 example.blockcodes = c('092B', '092C')
-getdata_bc(example.blockcodes, collection='dem', varname='slope')
-example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
+example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.blockcodes, collapse=', '), ': slope'))
 plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
 text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
@@ -181,7 +181,7 @@ This shows that of the 89 blocks for the variable name 'dem' (in the collection 
 
 By default, the `listdata_bc` function prints a list of all available layers. *eg.* in the 'dem' collection we also have 'aspect' and 'slope':
 
-```{r listdata_bc-second, R.options = list(width = 15)}
+```{r listdata_bc-second, R.options = list(width = 35)}
 listdata_bc(collection='dem', verbose=2)
 ```
 

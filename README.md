@@ -216,7 +216,7 @@ findblocks_bc(example.sf)
 fetch them using the command:
 
 ``` r
-getdata_bc(geo=example.sf, collection='dem', varname='dem')
+getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
 ```
 
 You should see progress bars for a series of three downloads, and once
@@ -226,7 +226,7 @@ Note that if a block has been downloaded already (*eg.* by a
 will be detected, and the download skipped. *eg.* repeat the call…
 
 ``` r
-getdata_bc(geo=example.sf, collection='dem', varname='dem')
+getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -257,13 +257,15 @@ plot(example.raster, main='elevation (metres)')
 
 To display the elevation data for the entire district, we need to
 combine the three blocks downloaded earlier. This can be done using
-`opendata_bc`, which loads all required blocks, merges them into a
-single (mosaic) layer, crops and masks as needed, and then loads into
-memory the returned `RasterLayer` object:
+`getdata_bc` with `load.mosaic=TRUE` (the default setting), which loads
+all required blocks, merges them into a single (mosaic) layer, crops and
+masks as needed, and then loads into memory the returned `RasterLayer`
+object:
 
 ``` r
-example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba042351ef5.tif"
+example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
+#> [1] "all 3 block(s) found in local data storage. Nothing to download"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13486a74e12.tif"
 #> [1] "creating mosaic of 3 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -300,12 +302,9 @@ specifying their their NTS/SNRC codes, *eg.*
 
 ``` r
 example.blockcodes = c('092B', '092C')
-getdata_bc(example.blockcodes, collection='dem', varname='slope')
+example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "all 2 block(s) found in local data storage. Nothing to download"
-#> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
-#> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
-example.tif = opendata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "output to temporary file: C:\\Users\\deank\\AppData\\Local\\Temp\\RtmpYhNOcu\\file1ba0740621e4.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file134839f66c29.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
