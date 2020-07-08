@@ -148,6 +148,8 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
+#> Loading required package: sf
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -223,10 +225,7 @@ will be detected, and the download skipped. *eg.* repeat the call…
 
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
-#> [1] "[dem]:[dem] downloading 3 block(s) to: H:/rasterbc_data/dem"
-#>   |             |     |   0%  |             |==   |  33%[1] " writing to: dem/blocks/dem_092H.tif"
-#>   |             |===  |  67%[1] " writing to: dem/blocks/dem_082E.tif"
-#>   |             |=====| 100%[1] " writing to: dem/blocks/dem_082L.tif"
+#> [1] "all 3 block(s) found in local data storage. Nothing to download"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -237,6 +236,7 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
+#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -264,8 +264,13 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13483b13280.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c02f706710.tif"
 #> [1] "creating mosaic of 3 block(s)"
+#> 
+#> Attaching package: 'gdalUtils'
+#> The following object is masked from 'package:sf':
+#> 
+#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -306,7 +311,7 @@ example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #>   |        ||   0%  |        ||  50%[1] " writing to: dem/blocks/slope_092B.tif"
 #>   |        || 100%[1] " writing to: dem/blocks/slope_092C.tif"
 #> 
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file134838925b87.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c05fff7093.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"

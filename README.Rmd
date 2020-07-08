@@ -198,7 +198,7 @@ writeRaster(example.tif, victoria_slope.path, overwrite=TRUE)
 raster(victoria_slope.path)
 ```
 
-If you're finished with `rasterbc` and want to remove all of the stored data, or if you simply want to free up space, the entire data directory or any of its contents can be deleted using your file browser. This will not break the `rasterbc` installation. However, all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions.
+If you're finished with `rasterbc` and want to remove all of the stored data, or if you simply want to free up space, the entire data directory or any of its contents can be deleted using your file browser. This will not break the `rasterbc` installation. However, all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions.   
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- rmarkdown::render('README.Rmd') -->
