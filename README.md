@@ -60,17 +60,13 @@ and easy referencing.
 
 **07/07/2020**
 
-The
-[FRDR-demo](https://demo.frdr-dfdr.ca/repo/handle/doi:10.80217/demo.278?mode=full)
-site appears to be down (as of 6pm MST), so the package won’t be able to
-download anything until it’s back up.
+~~The FRDR-demo site appears to be down (as of 6pm MST), rasterbc won’t
+be able to download anything until it’s back up.~~
 
-Changes in today’s commit: Function `listdata_bc` has been revamped; now
-with cleaner and more detailed information printout (by default) and
-boolean return values as an alternative (mostly internal) feature.
-`datadir_bc` arguments have been simplified; and the interactive path
-selection feature has been removed to avoid platform-dependent
-complications.
+Some major changes in today’s commits: Function `listdata_bc` now has
+cleaner and more detailed information printout, with boolean return
+values as an optional (mostly internal) feature; `datadir_bc` arguments
+have been simplified; `getdata_bc` now loads/merges data by default
 
 **05/07/2020**
 
@@ -265,7 +261,7 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13486a74e12.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13482f74f5e.tif"
 #> [1] "creating mosaic of 3 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -304,7 +300,7 @@ specifying their their NTS/SNRC codes, *eg.*
 example.blockcodes = c('092B', '092C')
 example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
 #> [1] "all 2 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file134839f66c29.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpOCocxk/file13481f2e6ad.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
