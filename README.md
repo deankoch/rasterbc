@@ -45,7 +45,7 @@ below:
     al., 2013](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401)
   - [Canadian national fire
     database, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md)
-    (‘fire’), from [Natural Resources
+    (‘nfdb’), from [Natural Resources
     Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
   - [Interpolated forest
     attributes, 2001, 2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
@@ -58,10 +58,12 @@ and easy referencing.
 
 ## News
 
-**07/07/2020**
+**18/09/2020**
 
-~~The FRDR-demo site appears to be down (as of 6pm MST), rasterbc won’t
-be able to download anything until it’s back up.~~
+All data (including ‘cutblocks’) have now been uploaded to FRDR’s main
+site. A DOI for the dataset and some updated links are forthcoming.
+
+**07/07/2020**
 
 Some major changes in today’s commits: Function `listdata_bc` now has
 cleaner and more detailed information printout, with boolean return
@@ -261,7 +263,7 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c0be53667.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpqcbp2U/file1cf83e3510ba.tif"
 #> [1] "creating mosaic of 3 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -299,15 +301,12 @@ specifying their their NTS/SNRC codes, *eg.*
 ``` r
 example.blockcodes = c('092B', '092C')
 example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "[dem]:[slope] downloading 2 block(s) to: H:/rasterbc_data/dem"
-#>   |        ||   0%  |        ||  50%[1] " writing to: dem/blocks/slope_092B.tif"
-#>   |        || 100%[1] " writing to: dem/blocks/slope_092C.tif"
-#> 
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpgf9yll/file3c057e71274.tif"
+#> [1] "all 2 block(s) found in local data storage. Nothing to download"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpqcbp2U/file1cf8ecc62d7.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
-#> [1] "clipping layer..."
+#> [1] "loading block(s)"
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.blockcodes, collapse=', '), ': slope'))
 plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
 text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
@@ -389,6 +388,29 @@ or any of its contents can be deleted using your file browser. This will
 not break the `rasterbc` installation. However, all downloaded data will
 be erased and you will need to run `datadir_bc` again before using the
 other package functions.
+
+### Integer codes
+
+Note that the `bgcz` collection data are factors, which are then encoded
+in the geotiff files as integer codes. In a future release, we plan to
+load these factor names automatically as a raster attribute table for
+the `RasterLayer` object. However, for now, the lookup tables can be
+accessed using the following command.
+
+``` r
+lookup.list = rasterbc::metadata_bc$bgcz$metadata$coding
+
+# eg. for region, 1=CARIBOO, 2=KOOTENAY / BOUNDARY, etc
+print(lookup.list$region)
+#> [1] "CARIBOO"            
+#> [2] "KOOTENAY / BOUNDARY"
+#> [3] "NORTHEAST"          
+#> [4] "OMINECA"            
+#> [5] "SKEENA"             
+#> [6] "SOUTH COAST"        
+#> [7] "THOMPSON / OKANAGAN"
+#> [8] "WEST COAST"
+```
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 

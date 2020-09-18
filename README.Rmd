@@ -28,16 +28,18 @@ Links to metadata associated with these layers, and code for downloading them fr
 * [Digital elevation model](https://github.com/deankoch/rasterbc_src/blob/master/src_dem.knit.md) ('dem') from [Natural Resources Canada](http://ftp.geogratis.gc.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_en.pdf)
 * [Forest insect and disease survey, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md) ('fids'), from the [BC Ministry of Forests](https://catalogue.data.gov.bc.ca/dataset/pest-infestation-polygons)
 * [Forest extent and change, 2001-2019](https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md) ('gfc'), from [Hansen et al., 2013](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401)
-* [Canadian national fire database, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md) ('fire'), from [Natural Resources Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
+* [Canadian national fire database, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md) ('nfdb'), from [Natural Resources Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
 * [Interpolated forest attributes, 2001, 2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md) ('pine') from [Beaudoin et al. (2017)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184)
 
 All raster data files will be hosted as a data publication (with associated DOI) on [FRDR](https://www.frdr-dfdr.ca/repo/) for permanence and easy referencing. 
 
 ## News
 
-**07/07/2020**
+**18/09/2020**
 
-~~The FRDR-demo site appears to be down (as of 6pm MST), rasterbc won't be able to download anything until it's back up.~~
+All data (including 'cutblocks') have now been uploaded to FRDR's main site. A DOI for the dataset and some updated links are forthcoming.
+
+**07/07/2020**
 
 Some major changes in today's commits: Function `listdata_bc` now has cleaner and more detailed information printout, with boolean return values as an optional (mostly internal) feature; `datadir_bc` arguments have been simplified; `getdata_bc` now loads/merges data by default
 
@@ -198,7 +200,19 @@ writeRaster(example.tif, victoria_slope.path, overwrite=TRUE)
 raster(victoria_slope.path)
 ```
 
-If you're finished with `rasterbc` and want to remove all of the stored data, or if you simply want to free up space, the entire data directory or any of its contents can be deleted using your file browser. This will not break the `rasterbc` installation. However, all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions.   
+If you're finished with `rasterbc` and want to remove all of the stored data, or if you simply want to free up space, the entire data directory or any of its contents can be deleted using your file browser. This will not break the `rasterbc` installation. However, all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions. 
+
+### Integer codes
+
+Note that the `bgcz` collection data are factors, which are then encoded in the geotiff files as integer codes. In a future release, we plan to load these factor names automatically as a raster attribute table for the `RasterLayer` object. However, for now, the lookup tables can be accessed using the following command.
+
+```{r load-lookup, R.options = list(width = 15)}
+lookup.list = rasterbc::metadata_bc$bgcz$metadata$coding
+
+# eg. for region, 1=CARIBOO, 2=KOOTENAY / BOUNDARY, etc
+print(lookup.list$region)
+```
+
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- rmarkdown::render('README.Rmd') -->
