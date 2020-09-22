@@ -31,9 +31,13 @@ Links to metadata associated with these layers, and code for downloading them fr
 * [Canadian national fire database, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md) ('nfdb'), from [Natural Resources Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
 * [Interpolated forest attributes, 2001, 2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md) ('pine') from [Beaudoin et al. (2017)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184)
 
-All raster data files will be hosted as a data publication (with associated DOI) on [FRDR](https://www.frdr-dfdr.ca/repo/) for permanence and easy referencing. 
+All raster data files are hosted as [a data publication](https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283) (with associated [DOI](https://doi.org/10.20383/101.0283)) on [FRDR](https://www.frdr-dfdr.ca/repo/) for permanence and easy referencing. 
 
 ## News
+
+**22/09/2020**
+
+Data publication is now finalized at FRDR
 
 **18/09/2020**
 

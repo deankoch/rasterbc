@@ -52,11 +52,17 @@ below:
     (‘pine’) from [Beaudoin et
     al. (2017)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184)
 
-All raster data files will be hosted as a data publication (with
-associated DOI) on [FRDR](https://www.frdr-dfdr.ca/repo/) for permanence
-and easy referencing.
+All raster data files are hosted as [a data
+publication](https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283)
+(with associated [DOI](https://doi.org/10.20383/101.0283)) on
+[FRDR](https://www.frdr-dfdr.ca/repo/) for permanence and easy
+referencing.
 
 ## News
+
+**22/09/2020**
+
+Data publication is now finalized at FRDR
 
 **18/09/2020**
 
@@ -113,7 +119,8 @@ library(rasterbc)
 datadir_bc('H:/rasterbc_data')
 #> [1] "data storage path set to: H:/rasterbc_data"
 #> [1] "directory exists"
-#> Warning in datadir_bc("H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
+#> Warning in datadir_bc("H:/rasterbc_data"): warning: this directory appears to be
+#> non-empty. Contents may be overwritten!
 #> [1] "H:/rasterbc_data"
 ```
 
@@ -150,6 +157,8 @@ Regional District](https://www.regionaldistrict.com/)
 
 ``` r
 library(bcmaps)
+#> Loading required package: sf
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
@@ -236,6 +245,7 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
+#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -263,8 +273,13 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpqcbp2U/file1cf83e3510ba.tif"
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpM9YqF0/file22a45c0327c.tif"
 #> [1] "creating mosaic of 3 block(s)"
+#> 
+#> Attaching package: 'gdalUtils'
+#> The following object is masked from 'package:sf':
+#> 
+#>     gdal_rasterize
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
 #> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
@@ -301,8 +316,11 @@ specifying their their NTS/SNRC codes, *eg.*
 ``` r
 example.blockcodes = c('092B', '092C')
 example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "all 2 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/Rtmpqcbp2U/file1cf8ecc62d7.tif"
+#> [1] "[dem]:[slope] downloading 2 block(s) to: H:/rasterbc_data/dem"
+#>   |        ||   0%  |        ||  50%[1] " writing to: dem/blocks/slope_092B.tif"
+#>   |        || 100%[1] " writing to: dem/blocks/slope_092C.tif"
+#> 
+#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpM9YqF0/file22a440897d0e.tif"
 #> [1] "creating mosaic of 2 block(s)"
 #> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
