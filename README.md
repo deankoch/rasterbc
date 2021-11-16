@@ -4,7 +4,6 @@
 # rasterbc
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 rasterbc provides a set of helper functions for accessing a large
@@ -19,36 +18,36 @@ them from their original sources can be found in a sister repository,
 documentation for this code, and to the original sources, are listed
 below:
 
-  - [BC biogeoclimatic
+-   [BC biogeoclimatic
     zone](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md)
     (‘bgcz’), from the [BC Ministry of
     Forests](https://catalogue.data.gov.bc.ca/dataset/f358a53b-ffde-4830-a325-a5a03ff672c3)
-  - [Geographical coordinates
+-   [Geographical coordinates
     grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md)
     (‘borders’), from [Natural Resources
     Canada](https://www.nrcan.gc.ca/maps-tools-publications/maps/topographic-maps/10995)
-  - [Consolidated
-    cutblocks, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md)
+-   [Consolidated cutblocks,
+    2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md)
     (‘cutblocks’), from the [BC Ministry of
     Forests](https://catalogue.data.gov.bc.ca/dataset/harvested-areas-of-bc-consolidated-cutblocks-)
-  - [Digital elevation
+-   [Digital elevation
     model](https://github.com/deankoch/rasterbc_src/blob/master/src_dem.knit.md)
     (‘dem’) from [Natural Resources
     Canada](http://ftp.geogratis.gc.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_en.pdf)
-  - [Forest insect and disease
-    survey, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md)
+-   [Forest insect and disease survey,
+    2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md)
     (‘fids’), from the [BC Ministry of
     Forests](https://catalogue.data.gov.bc.ca/dataset/pest-infestation-polygons)
-  - [Forest extent and
-    change, 2001-2019](https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md)
-    (‘gfc’), from [Hansen et
-    al., 2013](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401)
-  - [Canadian national fire
-    database, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md)
+-   [Forest extent and change,
+    2001-2019](https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md)
+    (‘gfc’), from [Hansen et al.,
+    2013](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401)
+-   [Canadian national fire database,
+    2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md)
     (‘nfdb’), from [Natural Resources
     Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
-  - [Interpolated forest
-    attributes, 2001, 2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
+-   [Interpolated forest attributes, 2001,
+    2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
     (‘pine’) from [Beaudoin et
     al. (2017)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184)
 
@@ -60,29 +59,33 @@ referencing.
 
 ## News
 
-**22/09/2020**
+**2021/11/16**
+
+Updates to fix broken URLs and remove dependency on gdalUtils
+
+**2020/09/22**
 
 Data publication is now finalized at FRDR
 
-**18/09/2020**
+**2020/09/18**
 
 All data (including ‘cutblocks’) have now been uploaded to FRDR’s main
 site. A DOI for the dataset and some updated links are forthcoming.
 
-**07/07/2020**
+**2020/07/07**
 
 Some major changes in today’s commits: Function `listdata_bc` now has
 cleaner and more detailed information printout, with boolean return
 values as an optional (mostly internal) feature; `datadir_bc` arguments
 have been simplified; `getdata_bc` now loads/merges data by default
 
-**05/07/2020**
+**2020/07/05**
 
 All collections except ‘cutblocks’ are now on [FRDR’s demo
 site](https://demo.frdr-dfdr.ca/repo/handle/doi:10.80217/demo.278?mode=full),
 and can be accessed via this package.
 
-**30/06/2020**
+**2020/06/30**
 
 A development version is now ready for installation from github. For
 now, only the ‘dem’ collection (‘dem’, ‘aspect’, ‘slope’) is accessible
@@ -105,9 +108,9 @@ install_github('deankoch/rasterbc')
 
 I have tried to keep dependencies to a minimum. Currently, the package
 requires: `rappdirs` (for an automated storage directory selection); and
-`sf`, `raster`, `gdalUtils` (for GIS work). If these are not already
-installed on your machine, the `install_github` line will ask to install
-them.
+`sf`, `raster` (for loading and merging geospatial data). If these are
+not already installed on your machine, the `install_github` line will
+ask to install them.
 
 ## Local data storage
 
@@ -119,8 +122,7 @@ library(rasterbc)
 datadir_bc('H:/rasterbc_data')
 #> [1] "data storage path set to: H:/rasterbc_data"
 #> [1] "directory exists"
-#> Warning in datadir_bc("H:/rasterbc_data"): warning: this directory appears to be
-#> non-empty. Contents may be overwritten!
+#> Warning in datadir_bc("H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
 #> [1] "H:/rasterbc_data"
 ```
 
@@ -158,11 +160,14 @@ Regional District](https://www.regionaldistrict.com/)
 ``` r
 library(bcmaps)
 #> Loading required package: sf
-#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
+#> Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
+#> The bcmapsdata package is no longer required to be installed for bcmaps to function.
+#> Layers are now cached as needed to 'C:\Users\deank\AppData\Local/R/cache/R/bcmaps' using the bcdata package.
 
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
 bc.bound.sf = bc_bound()
+#> bc_bound_hres was updated on 2021-11-16
 districts.sf = regional_districts()
 example.sf = districts.sf[districts.sf$ADMIN_AREA_NAME==example.name, ]
 
@@ -188,10 +193,10 @@ It is lazy-loaded as the `sf` object `ntspoly_bc`:
 ``` r
 print(ntspoly_bc)
 #> Simple feature collection with 89 features and 1 field
-#> geometry type:  POLYGON
-#> dimension:      XY
-#> bbox:           xmin: 199960.5 ymin: 331658 xmax: 1874986 ymax: 1745737
-#> projected CRS:  NAD83 / BC Albers
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: 199960.5 ymin: 331658 xmax: 1874986 ymax: 1745737
+#> Projected CRS: NAD83 / BC Albers
 #> First 10 features:
 #>    NTS_SNRC                       geometry
 #> 1      092B POLYGON ((1299175 340112.5,...
@@ -245,6 +250,11 @@ loading one of the files as `RasterLayer`:
 
 ``` r
 library(raster)
+#> Warning:
+#> package
+#> 'raster' was
+#> built under R
+#> version 4.1.1
 #> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
@@ -253,7 +263,7 @@ print(example.raster)
 #> resolution : 100, 100  (x, y)
 #> extent     : 1286588, 1439088, 450888, 572088  (xmin, xmax, ymin, ymax)
 #> crs        : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
-#> source     : H:/rasterbc_data/dem/blocks/dem_092H.tif 
+#> source     : dem_092H.tif 
 #> names      : dem_092H 
 #> values     : 7.653875, 2608.961  (min, max)
 plot(example.raster, main='elevation (metres)')
@@ -273,16 +283,7 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpM9YqF0/file22a45c0327c.tif"
 #> [1] "creating mosaic of 3 block(s)"
-#> 
-#> Attaching package: 'gdalUtils'
-#> The following object is masked from 'package:sf':
-#> 
-#>     gdal_rasterize
-#> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
-#> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
-#> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
 #> [1] "clipping layer..."
 #> [1] "masking layer..."
 print(example.tif)
@@ -316,14 +317,8 @@ specifying their their NTS/SNRC codes, *eg.*
 ``` r
 example.blockcodes = c('092B', '092C')
 example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "[dem]:[slope] downloading 2 block(s) to: H:/rasterbc_data/dem"
-#>   |        ||   0%  |        ||  50%[1] " writing to: dem/blocks/slope_092B.tif"
-#>   |        || 100%[1] " writing to: dem/blocks/slope_092C.tif"
-#> 
-#> [1] "output to temporary file: C:/Users/deank/AppData/Local/Temp/RtmpM9YqF0/file22a440897d0e.tif"
+#> [1] "all 2 block(s) found in local data storage. Nothing to download"
 #> [1] "creating mosaic of 2 block(s)"
-#> [1] "H:/rasterbc_data/dem/blocks/slope_092B.tif"
-#> [2] "H:/rasterbc_data/dem/blocks/slope_092C.tif"
 #> [1] "loading block(s)"
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.blockcodes, collapse=', '), ': slope'))
 plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
@@ -346,7 +341,7 @@ str(is.downloaded)
 #>  Named logi [1:89] FALSE FALSE FALSE FALSE FALSE TRUE ...
 #>  - attr(*, "names")= chr [1:89] "dem/blocks/dem_092B.tif" "dem/blocks/dem_092C.tif" "dem/blocks/dem_092E.tif" "dem/blocks/dem_092F.tif" ...
 sum(is.downloaded)
-#> [1] 3
+#> [1] 4
 length(is.downloaded)
 #> [1] 89
 ```
@@ -365,9 +360,9 @@ layers. *eg.* in the ‘dem’ collection we also have ‘aspect’ and ‘slope
 ``` r
 listdata_bc(collection='dem', verbose=2)
 #>        year                        description                                  unit blocks.downloaded
-#> dem      NA              digital elevation map              (metres above sea level)              3/89
+#> dem      NA              digital elevation map              (metres above sea level)              4/89
 #> slope    NA derived from digital elevation map            (degrees above horizontal)              2/89
-#> aspect   NA derived from digital elevation map (degrees counterclockwise from north)              0/89
+#> aspect   NA derived from digital elevation map (degrees counterclockwise from north)              1/89
 ```
 
 And we now see listed the two ‘slope’ blocks (for southern Vancouver
@@ -395,7 +390,7 @@ raster(victoria_slope.path)
 #> resolution : 100, 100  (x, y)
 #> extent     : 999987.5, 1299188, 359688, 450988  (xmin, xmax, ymin, ymax)
 #> crs        : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
-#> source     : H:/rasterbc_data/dem/victoria_slope.tif 
+#> source     : victoria_slope.tif 
 #> names      : victoria_slope 
 #> values     : 0, 55.09229  (min, max)
 ```
@@ -431,5 +426,4 @@ print(lookup.list$region)
 ```
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- rmarkdown::render('README.Rmd') -->

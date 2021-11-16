@@ -35,7 +35,7 @@ Data for the layer specified by `collection`, `varname`, and (as needed) `year`,
 \code{\link{datadir_bc}}, merged into a single (mosaic) layer, cropped and masked as needed, and then loaded into memory and returned
 as a \code{\link{RasterLayer-class}} object.
 
-Argument `load.mode` specifies whether/how the blocks should be loaded into memory. 'all' uses `gdalUtils::gdal_mosaic` to merge the
+Argument `load.mode` specifies whether/how the blocks should be loaded into memory. 'all' uses `raster::merge` to merge the
 blocks into a larger rasterLayer, covering all (and likely more) of the input extent; 'clip' and 'mask' (the default) assume that `geo`
 is a (multi)polygon, cropping the merged blocks to its boundary; and  with 'mask', all data not inside the polygon is set to NA.
 }

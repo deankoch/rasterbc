@@ -9,12 +9,11 @@ Description: A simple set of helper functions for accessing a large set of ecolo
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Imports: 
     rappdirs,
     sf,
     raster,
-    gdalUtils,
     methods
 Depends: 
     R (>= 2.10)
