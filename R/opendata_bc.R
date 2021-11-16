@@ -96,21 +96,18 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
   # check how many blocks are requested
   if(sum(idx.geo)==1)
   {
-    # when only a single block is requested, there is no need to write a new file
-    tempfile.tif = dest.files[idx.geo]
+    # when only a single block is requested, load it directly, assign min/max stats
+    out.raster = raster::setMinMax(raster::raster(dest.files[idx.geo]))
 
   } else {
 
-    # ... otherwise, merge the blocks into a bigger geotiff using a temporary file
-    tempfile.tif = gsub('\\\\', '/', tempfile(fileext='.tif'))
-    print(paste('output to temporary file:', tempfile.tif))
+    # ... otherwise, merge the blocks into a bigger geotiff
     print(paste('creating mosaic of', sum(idx.geo), 'block(s)'))
-    gdalUtils::mosaic_rasters(dest.files[idx.geo], dst_dataset=tempfile.tif)
+    out.raster = do.call(raster::merge, lapply(dest.files[idx.geo], raster::raster))
 
   }
 
-  # load the output, assign min/max stats and variable name
-  out.raster = raster::setMinMax(raster::raster(tempfile.tif))
+  # assign variable name
   names(out.raster) = paste(c(varname, year), collapse='_')
 
   if(load.mode %in% c('clip', 'mask'))
