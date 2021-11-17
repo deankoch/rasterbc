@@ -31,13 +31,9 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   # 'fids' layers from the year 2012.
   #
 
-  # get the data storage directory...
+  # get the data storage directory or prompt to create one if it doesn't exist yet
   data.dir = getOption('rasterbc.data.dir')
-  if(is.null(data.dir))
-  {
-    # ... or prompt to create one if it doesn't exist yet
-    stop('Data directory undefined. Set it using raster::datadir_bc()')
-  }
+  if(is.null(data.dir)) data.dir = datadir_bc(NA)
 
   # check that geo is valid, replace (as needed) with the required mapsheet codes
   is.poly = FALSE
@@ -57,13 +53,16 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
 
     if(any(c('sf', 'sfc') %in% class(geo)))
     {
-      # for simple features, retain only the geometry
-      geo = sf::st_geometry(geo)
+      # for simple features, retain only the geometry and merge multiple polygons into one
+      geo = sf::st_geometry(geo) |> sf::st_union()
       if(sf::st_geometry_type(geo) %in% c('POLYGON', 'MULTIPOLYGON'))
       {
         # this will later allow load.mode 'clip' and 'mask' to proceed
         is.poly = TRUE
       }
+
+      # transform to BC Albers projection
+      geo = sf::st_transform(geo, crs='EPSG:3005')
 
       # find the mapsheet codes
       geo.codes = findblocks_bc(geo)
