@@ -32,7 +32,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   #
 
   # get the data storage directory or prompt to create one if it doesn't exist yet
-  data.dir = getOption('rasterbc.data.dir')
+  data.dir = datadir_bc(quiet=TRUE)
   if(is.null(data.dir)) data.dir = datadir_bc(NA)
 
   # check that geo is valid, replace (as needed) with the required mapsheet codes
@@ -109,7 +109,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   dest.files = file.path(data.dir, fnames)
 
   # check to see which (if any) of these blocks have been downloaded already
-  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, return.boolean=TRUE)[idx.geo]
+  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, simple=TRUE)[idx.geo]
   if(any(!idx.exists))
   {
     # some blocks are missing. Print a message before downloading them

@@ -26,7 +26,7 @@
 opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.mode='mask')
 {
   # get the data storage directory or prompt to create one if it doesn't exist yet
-  data.dir = datadir_bc()
+  data.dir = datadir_bc(quiet=TRUE)
   if(is.null(data.dir)) data.dir = datadir_bc(NA)
 
   # check that geo is valid, replace (as needed)with the required mapsheet codes
@@ -84,7 +84,7 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
   idx.geo = names(fnames) %in% geo
 
   # check that all of these blocks have been downloaded already
-  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0, return.boolean=TRUE)[idx.geo]
+  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0, simple=TRUE)[idx.geo]
   if(any(!idx.exists))
   {
     # error if some blocks are missing

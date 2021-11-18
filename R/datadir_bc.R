@@ -39,7 +39,7 @@ datadir_bc = function(data.dir=NULL, quiet=FALSE)
   {
     if( is.null(data.dir.existing) ) { cat(initial.msg) } else {
 
-      cat(paste('current data storage path:', data.dir.existing, '\n'))
+      if(!quiet) cat(paste('current data storage path:', data.dir.existing, '\n'))
       if( !dir.exists(data.dir.existing) ) stop('data storage path not found on disk')
     }
 
@@ -77,7 +77,7 @@ datadir_bc = function(data.dir=NULL, quiet=FALSE)
     warn.msg = 'warning: this directory appears to be non-empty. Contents may be overwritten!'
     if(length(dir(data.dir, all.files=TRUE)) > 2 & !quiet) warning(warn.msg)
   }
-  cat(paste(dir.state, 'directory for data storage:', data.dir, '\n'))
+  if(!quiet) cat(paste(dir.state, 'directory for data storage:', data.dir, '\n'))
 
   # set the option and finish
   options('rasterbc.data.dir'=data.dir)
