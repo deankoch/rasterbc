@@ -16,6 +16,7 @@
 #' @param varname character string, indicating the layer to query
 #' @param year integer, indicating the year to query
 #' @param load.mode character string, one of 'all', 'clip', 'mask'
+#' @param quiet logical, suppresses console messages
 #'
 #' @return A `rasterLayer` (or list of them)
 #' @importFrom methods as
@@ -23,7 +24,7 @@
 #' @importFrom utils setTxtProgressBar
 #' @importFrom utils txtProgressBar
 #' @export
-opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.mode='mask')
+opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.mode='mask', quiet=FALSE)
 {
   # get the data storage directory or prompt to create one if it doesn't exist yet
   data.dir = datadir_bc(quiet=TRUE)
@@ -37,7 +38,8 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
     idx.valid = geo %in% rasterbc::ntspoly_bc$NTS_SNRC
     if(!all(idx.valid))
     {
-      stop(paste('found no match in BC for the following NTS/SNRC code(s):', paste(geo[!idx.valid], collapse=', ')))
+      msg.invalid = 'found no match in BC for the following NTS/SNRC code(s):'
+      stop(paste(msg.invalid, paste(geo[!idx.valid], collapse=', ')))
     }
 
   } else {
@@ -46,11 +48,7 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
     {
       # for simple features, retain only the geometry and merge multiple polygons into one
       geo = sf::st_geometry(geo) |> sf::st_union()
-      if(sf::st_geometry_type(geo) %in% c('POLYGON', 'MULTIPOLYGON'))
-      {
-        # this will later allow load.mode 'clip' and 'mask' to proceed
-        is.poly = TRUE
-      }
+      is.poly = sf::st_geometry_type(geo) %in% c('POLYGON', 'MULTIPOLYGON')
 
       # transform to BC Albers projection
       geo = sf::st_transform(geo, crs='EPSG:3005')
@@ -84,11 +82,12 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
   idx.geo = names(fnames) %in% geo
 
   # check that all of these blocks have been downloaded already
-  idx.exists = listdata_bc(collection=collection, varname=varname, year=year, verbose=0, simple=TRUE)[idx.geo]
+  idx.exists = listdata_bc(collection, varname, year, verbose=0, simple=TRUE)[idx.geo]
   if(any(!idx.exists))
   {
     # error if some blocks are missing
-    stop(paste('blocks', paste(names(idx.exists)[idx.exists], collapse=', '), 'not found! Use getdata_bc to download them'))
+    msg.blocks = paste('blocks', paste(names(idx.exists)[idx.exists], collapse=', '), 'not found!')
+    stop(paste(msg.blocks, 'Use getdata_bc to download them'))
 
   }
 
@@ -101,7 +100,7 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
   } else {
 
     # ... otherwise, merge the blocks into a bigger geotiff
-    print(paste('creating mosaic of', sum(idx.geo), 'block(s)'))
+    if(!quiet) cat(paste('creating mosaic of', sum(idx.geo), 'block(s)\n'))
     out.raster = do.call(raster::merge, lapply(dest.files[idx.geo], raster::raster))
 
   }
@@ -109,24 +108,26 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
   # assign variable name
   names(out.raster) = paste(c(varname, year), collapse='_')
 
+  # trim output raster
   if(load.mode %in% c('clip', 'mask'))
   {
     if(is.poly)
     {
-      print('clipping layer...')
+      if(!quiet) cat('clipping layer...')
       out.raster = raster::crop(out.raster, as(geo.input, 'Spatial'))
       if(load.mode == 'mask')
       {
-        print('masking layer...')
+        if(!quiet) cat('masking layer...')
         out.raster = raster::mask(out.raster, as(geo.input, 'Spatial'))
       }
 
     } else {
 
-      print('loading block(s)')
+      if(!quiet) cat('loading block(s)...')
     }
   }
 
+  if(!quiet) cat('done\n')
   return(out.raster)
 
 }
