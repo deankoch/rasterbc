@@ -127,6 +127,21 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.
     }
   }
 
+  # reshape bcgz output as factor with attribute table
+  if(collection == 'bgcz')
+  {
+    # convert raster to factor type
+    out.raster = raster::ratify(out.raster)
+
+    # copy the lookup tables
+    lookup.list = rasterbc::metadata_bc$bgcz$metadata$coding
+
+    # copy levels dataframe, append code column, copy back to rasterlayer
+    bgcz.levels = raster::levels(out.raster)[[1]]
+    bgcz.levels$code = lookup.list[[varname]][bgcz.levels[['ID']]]
+    levels(out.raster) = list(bgcz.levels)
+  }
+
   if(!quiet) cat('done\n')
   return(out.raster)
 

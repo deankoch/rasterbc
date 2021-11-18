@@ -9,7 +9,7 @@ listdata_bc(
   varname = NULL,
   year = NULL,
   verbose = 2,
-  return.boolean = FALSE
+  simple = FALSE
 )
 }
 \arguments{
@@ -21,15 +21,15 @@ listdata_bc(
 
 \item{verbose}{An integer (0, 1, 2), indicating how much information about the files to print to the console}
 
-\item{return.boolean}{A boolean, indicating whether to return a dataframe or a nested list of booleans}
+\item{simple}{A boolean, indicating whether to return a dataframe or a nested list of booleans}
 }
 \value{
-Either a (list of) dataframe(s) containing information about each raster layer, or (when `return.boolean==TRUE`) a
+Either a (list of) dataframe(s) containing information about each raster layer, or (when `simple==TRUE`) a
 nested list of boolean values (named according to filepath), with entries for each data file in the specified subset.
 }
 \description{
 Returns a list of dataframes (one per collection) describing the variables available through rasterbc, or a subset (as
-specified by `collection`, `varname`, `year`). Alternatively, if `return.boolean==TRUE`, returns a nested list indicating
+specified by `collection`, `varname`, `year`). Alternatively, if `simple==TRUE`, returns a nested list indicating
 the filepaths associated with these layers, and which of them exist in the local data storage directory already.
 }
 \details{
