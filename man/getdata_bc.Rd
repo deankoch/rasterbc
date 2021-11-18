@@ -10,7 +10,8 @@ getdata_bc(
   varname = NULL,
   year = NULL,
   force.dl = FALSE,
-  load.mosaic = TRUE
+  load.mosaic = TRUE,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ getdata_bc(
 \item{force.dl}{A boolean indicating whether to overwrite any existing data}
 
 \item{load.mosaic}{A boolean indicating whether to return the full (merged) raster}
+
+\item{quiet}{logical, suppresses console messages}
 }
 \value{
 Either: a (vector of) character string(s) containing the absolute path(s) to the file(s) written (default); or a

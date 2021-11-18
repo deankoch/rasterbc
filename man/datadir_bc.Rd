@@ -23,16 +23,17 @@ by this function. The path to this directory is stored in the global options lis
 \details{
 If `data.dir=NA`, the data storage directory is set to the a subdirectory of `base::tempdir()`,
 a per-session temporary directory (cleared after each R session). This happens automatically if
-`opendata_bc` or `getdata_bc` are called before `datadir_bc`, ensuring that `rasterbc` can't
+`opendata_bc` or `getdata_bc` are called before `datadir_bc`, ensuring that `rasterbc` won't
 unexpectedly overwrite things or leave garbage in the user's file system.
 
 However, users are strongly encouraged to set the data directory manually to a non-temporary
 location. This allows copies of downloaded data to persist between sessions, so that
 `rasterbc::opendata_bc` can load the local copies in future R sessions. This is both much faster
-than downloading mapsheets repeatedly, and reduces the strain on FRDR's data hosting service.
+than downloading mapsheets repeatedly, and it reduces the strain on FRDR's data hosting service.
 
 The directory `data.dir` will be created if it doesn't already exist.
 }
 \examples{
 datadir_bc()
+datadir_bc(NA, quiet=TRUE)
 }

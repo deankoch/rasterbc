@@ -8,7 +8,7 @@ listdata_bc(
   collection = NULL,
   varname = NULL,
   year = NULL,
-  verbose = 2,
+  verbose = 1,
   simple = FALSE
 )
 }
@@ -21,11 +21,11 @@ listdata_bc(
 
 \item{verbose}{An integer (0, 1, 2), indicating how much information about the files to print to the console}
 
-\item{simple}{A boolean, indicating whether to return a dataframe or a nested list of booleans}
+\item{simple}{logical indicating to return a (list of) logical vector(s) indicating existence on disk of specific filenames}
 }
 \value{
 Either a (list of) dataframe(s) containing information about each raster layer, or (when `simple==TRUE`) a
-nested list of boolean values (named according to filepath), with entries for each data file in the specified subset.
+nested list of logical values (named according to filepath), with entries for each data file in the specified subset.
 }
 \description{
 Returns a list of dataframes (one per collection) describing the variables available through rasterbc, or a subset (as
@@ -39,11 +39,17 @@ Layers in a collection are further organized by variable name, and are uniquely 
 applicable subsets.
 }
 \examples{
-x = listdata_bc()
-x = listdata_bc(collection='bgcz', verbose=1)
-x = listdata_bc(collection='dem', verbose=2)
-x = listdata_bc(collection='dem', varname='aspect', verbose=2)
-x = listdata_bc(collection='fids', varname='IBM_trace', year=2005, verbose=2)
-print(x)
+# print available collections
+listdata_bc() |> names()
 
+# print info about a specific collection
+listdata_bc('bgcz')
+listdata_bc('bgcz', verbose=2)
+
+# example with a year field
+listdata_bc('fids', varname='IBM_mid', year=2005, verbose=2)
+listdata_bc('fids', varname='IBM_mid', verbose=2)
+
+# "simple=TRUE" mode returns logical vector indicating which mapsheets are downloaded
+listdata_bc(collection='dem', varname='aspect', verbose=2, simple=TRUE)
 }

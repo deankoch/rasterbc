@@ -9,7 +9,8 @@ opendata_bc(
   collection = NULL,
   varname = NULL,
   year = NULL,
-  load.mode = "mask"
+  load.mode = "mask",
+  quiet = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ opendata_bc(
 \item{year}{integer, indicating the year to query}
 
 \item{load.mode}{character string, one of 'all', 'clip', 'mask'}
+
+\item{quiet}{logical, suppresses console messages}
 }
 \value{
 A `rasterLayer` (or list of them)
