@@ -6,11 +6,13 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-rasterbc provides a set of helper functions for accessing a large
-collection of spatial ecological data on the province of BC during the
-period 2001-2018, in a common (gridded) raster format. The goal is to
-make this data more accessible and easier to import into R, for the
-benefit of modelers interested in the forest ecology of BC.
+rasterbc provides access to a large collection of spatial ecological
+data on the province of BC during the period 2001-2018, in a common
+(gridded) raster format in the standard [BC
+Albers](https://spatialreference.org/ref/epsg/nad83-bc-albers/)
+projection. The goal is to make this data more accessible and easier to
+import into R, for the benefit of modelers interested in the forest
+ecology of BC.
 
 Links to metadata associated with these layers, and code for downloading
 them from their original sources can be found in a sister repository,
@@ -104,11 +106,12 @@ lines:
 ``` r
 library(devtools)
 install_github('deankoch/rasterbc')
+#> Skipping install of 'rasterbc' from a github remote, the SHA1 (0b9aea04) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
-I have tried to keep dependencies to a minimum. Currently, the package
-requires: `rappdirs` (for an automated storage directory selection); and
-`sf`, `raster` (for loading and merging geospatial data). If these are
+I have tried to keep dependencies to a minimum. The package requires
+`sf` and `raster` for loading and merging geospatial data. If these are
 not already installed on your machine, the `install_github` line will
 ask to install them.
 
@@ -119,28 +122,32 @@ directory for the raster layers:
 
 ``` r
 library(rasterbc)
-datadir_bc('H:/rasterbc_data')
-#> [1] "data storage path set to: H:/rasterbc_data"
-#> [1] "directory exists"
-#> Warning in datadir_bc("H:/rasterbc_data"): warning: this directory appears to be non-empty. Contents may be overwritten!
-#> [1] "H:/rasterbc_data"
+library(raster)
+#> Warning: package 'raster' was built under R version 4.1.1
+#> Loading required package: sp
+datadir_bc('H:/rasterbc_data', quiet=TRUE)
 ```
 
-If this directory contains any files/folders (eg. if you have used
-`rasterbc` before with this directory), a warning message is printed.
-This is to caution users that if the storage directory has existing
-files matching those fetched by the `rasterbc` package, those data can
-be overwritten. This can only happen via calls of the form
-`raster::getdata_bc(..., force.dl=TRUE)`. However, to be safe you should
-set the data directory to a path that won’t used by other applications;
-*eg.* a subfolder of your home directory or external storage device,
-with a unique folder name.
+When `quiet=FALSE` (the default), the function will ask users to confirm
+that `rasterbc` should write files to the supplied directory, and warn
+if this directory contains any existing files/folders. This is to
+caution people that if the storage directory has existing files matching
+those fetched by the `rasterbc` package, those data can be overwritten.
+Note that files are only overwritten via calls of the form
+`raster::getdata_bc(..., force.dl=TRUE)` (the default is
+`force.dl=FALSE`).
+
+However, to be safe you should set the data directory to a path that
+won’t used by other applications; *eg.* a subfolder of your home
+directory or external storage device, with a unique folder name. In
+future sessions, users can set `quiet=TRUE` to skip the interactive
+prompt and suppress warnings about existing data.
 
 This path string is stored as an R option. View it using:
 
 ``` r
-print(getOption('rasterbc.data.dir'))
-#> [1] "H:/rasterbc_data"
+datadir_bc()
+#> current data storage path: H:/rasterbc_data
 ```
 
 Depending on the geographical extent of interest and the number
@@ -160,7 +167,8 @@ Regional District](https://www.regionaldistrict.com/)
 ``` r
 library(bcmaps)
 #> Loading required package: sf
-#> Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
+#> Warning: package 'sf' was built under R version 4.1.2
+#> Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
 #> The bcmapsdata package is no longer required to be installed for bcmaps to function.
 #> Layers are now cached as needed to 'C:\Users\deank\AppData\Local/R/cache/R/bcmaps' using the bcdata package.
 
@@ -249,13 +257,6 @@ getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
 loading one of the files as `RasterLayer`:
 
 ``` r
-library(raster)
-#> Warning:
-#> package
-#> 'raster' was
-#> built under R
-#> version 4.1.1
-#> Loading required package: sp
 example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
 print(example.raster)
 #> class      : RasterLayer 
@@ -283,9 +284,8 @@ object:
 ``` r
 example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
 #> [1] "all 3 block(s) found in local data storage. Nothing to download"
-#> [1] "creating mosaic of 3 block(s)"
-#> [1] "clipping layer..."
-#> [1] "masking layer..."
+#> creating mosaic of 3 block(s)
+#> clipping layer...masking layer...done
 print(example.tif)
 #> class      : RasterLayer 
 #> dimensions : 622, 893, 555446  (nrow, ncol, ncell)
@@ -312,14 +312,15 @@ containing coordinates of vertices) can often be coerced to `sf` using a
 command like `sf::st_as_sf(other_geometry_class_object)`.
 
 Alternatively, users can directly download individual blocks by
-specifying their their NTS/SNRC codes, *eg.*
+specifying their their NTS/SNRC codes, *eg.* here is the “slope”
+variable (from the “dem” collection), specified using the codes:
 
 ``` r
-example.blockcodes = c('092B', '092C')
+example.blockcodes = findblocks_bc(example.sf)
 example.tif = getdata_bc(example.blockcodes, collection='dem', varname='slope')
-#> [1] "all 2 block(s) found in local data storage. Nothing to download"
-#> [1] "creating mosaic of 2 block(s)"
-#> [1] "loading block(s)"
+#> [1] "all 3 block(s) found in local data storage. Nothing to download"
+#> creating mosaic of 3 block(s)
+#> loading block(s)...done
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.blockcodes, collapse=', '), ': slope'))
 plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
 text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
@@ -331,17 +332,16 @@ text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS
 
 If you forget which files have been downloaded, you can either check the
 directory `data.dir` using your file browser (subfolder ‘/dem/blocks’,
-in this case), or use the convenience function `listfiles_bc` to get a
-boolean vector indicating which files have been detected in your local
-storage directory:
+in this case), or use `listfiles_bc` to get a logical vector indicating
+which files are curerntly found in your local storage directory:
 
 ``` r
-is.downloaded = listdata_bc(collection='dem', varname='dem', return.boolean=TRUE)
+is.downloaded = listdata_bc(collection='dem', varname='dem', simple=TRUE)
 str(is.downloaded)
-#>  Named logi [1:89] FALSE FALSE FALSE FALSE FALSE TRUE ...
+#>  Named logi [1:89] TRUE FALSE FALSE FALSE FALSE TRUE ...
 #>  - attr(*, "names")= chr [1:89] "dem/blocks/dem_092B.tif" "dem/blocks/dem_092C.tif" "dem/blocks/dem_092E.tif" "dem/blocks/dem_092F.tif" ...
 sum(is.downloaded)
-#> [1] 4
+#> [1] 5
 length(is.downloaded)
 #> [1] 89
 ```
@@ -360,21 +360,20 @@ layers. *eg.* in the ‘dem’ collection we also have ‘aspect’ and ‘slope
 ``` r
 listdata_bc(collection='dem', verbose=2)
 #>        year                        description                                  unit blocks.downloaded
-#> dem      NA              digital elevation map              (metres above sea level)              4/89
-#> slope    NA derived from digital elevation map            (degrees above horizontal)              2/89
-#> aspect   NA derived from digital elevation map (degrees counterclockwise from north)              1/89
+#> dem      NA              digital elevation map              (metres above sea level)              5/89
+#> slope    NA derived from digital elevation map            (degrees above horizontal)              5/89
+#> aspect   NA derived from digital elevation map (degrees counterclockwise from north)              3/89
 ```
 
-And we now see listed the two ‘slope’ blocks (for southern Vancouver
-island) that were downloaded manually using NTS/SNRC codes. Recall that
-we merged the two blocks earlier on with a `opendata_bc` function call
-that created a single `RasterLayer`. Currently, this layer resides ‘in
-memory’ and can be accessed via the R object `example.tif`. To save a
-copy, one can use the `raster::writeRaster` function. *eg.*
+Notice the ‘slope’ blocks that were downloaded manually using NTS/SNRC
+codes. We merged these blocks earlier in the `opendata_bc` function call
+that created `example.tif`. Currently, this layer resides ‘in memory’
+and can be accessed via the R object `example.tif`. To save a copy, one
+can use the `raster::writeRaster` function. *eg.*
 
 ``` r
-victoria_slope.path = file.path(getOption('rasterbc.data.dir'), 'dem', 'victoria_slope.tif')
-writeRaster(example.tif, victoria_slope.path, overwrite=TRUE)
+slope.path = file.path(getOption('rasterbc.data.dir'), 'dem', 'example_slope.tif')
+writeRaster(example.tif, slope.path, overwrite=TRUE)
 ```
 
 `getdata_bc` writes all of its data inside a ‘blocks’ subdirectory (in
@@ -384,15 +383,15 @@ left empty. So it is a good place to store and organize such derivative
 files, where they can be loaded more quickly (in future), *eg.*
 
 ``` r
-raster(victoria_slope.path)
+raster(slope.path)
 #> class      : RasterLayer 
-#> dimensions : 913, 2992, 2731696  (nrow, ncol, ncell)
+#> dimensions : 2459, 2983, 7335197  (nrow, ncol, ncell)
 #> resolution : 100, 100  (x, y)
-#> extent     : 999987.5, 1299188, 359688, 450988  (xmin, xmax, ymin, ymax)
+#> extent     : 1286588, 1584888, 450888, 696788  (xmin, xmax, ymin, ymax)
 #> crs        : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
-#> source     : victoria_slope.tif 
-#> names      : victoria_slope 
-#> values     : 0, 55.09229  (min, max)
+#> source     : example_slope.tif 
+#> names      : example_slope 
+#> values     : 0, 67.20546  (min, max)
 ```
 
 If you’re finished with `rasterbc` and want to remove all of the stored
@@ -405,25 +404,58 @@ other package functions.
 ### Integer codes
 
 Note that the `bgcz` collection data are factors, which are then encoded
-in the geotiff files as integer codes. In a future release, we plan to
-load these factor names automatically as a raster attribute table for
-the `RasterLayer` object. However, for now, the lookup tables can be
-accessed using the following command.
+in the geotiff files as integer codes. `opendata_bc` returns these
+factor names in a raster attribute table for the `RasterLayer` object
+(column “code”). The complete lookup tables are also stored in the lazy
+loaded list object `metadata_bc`.
 
 ``` r
 lookup.list = rasterbc::metadata_bc$bgcz$metadata$coding
-
-# eg. for region, 1=CARIBOO, 2=KOOTENAY / BOUNDARY, etc
-print(lookup.list$region)
-#> [1] "CARIBOO"            
-#> [2] "KOOTENAY / BOUNDARY"
-#> [3] "NORTHEAST"          
-#> [4] "OMINECA"            
-#> [5] "SKEENA"             
-#> [6] "SOUTH COAST"        
-#> [7] "THOMPSON / OKANAGAN"
-#> [8] "WEST COAST"
+print(lookup.list$zone)
+#>  [1] "BAFA"
+#>  [2] "BG"  
+#>  [3] "BWBS"
+#>  [4] "CDF" 
+#>  [5] "CMA" 
+#>  [6] "CWH" 
+#>  [7] "ESSF"
+#>  [8] "ICH" 
+#>  [9] "IDF" 
+#> [10] "IMA" 
+#> [11] "MH"  
+#> [12] "MS"  
+#> [13] "PP"  
+#> [14] "SBPS"
+#> [15] "SBS" 
+#> [16] "SWB" 
+#> [17] NA
 ```
+
+For example we have zone, 1 = Boreal Altai Fescue Alpine (BAFA), 2 =
+Bunchgrass, etc. See the documentation for the [bgcz source
+script](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md)
+for links to a complete description of all codes.
+
+The code below plots this data for the example region, replacing in the
+legend the integer levels of the raster with the properly matched zone
+codes:
+
+``` r
+# open the biogeoclimatic zone raster
+bgcz.raster = opendata_bc(geo=example.sf, collection='bgcz', varname='zone')
+#> creating mosaic of 3 block(s)
+#> clipping layer...masking layer...done
+
+# a levels table (dataframe) can be extracted with `base::levels`
+bgcz.levels = levels(bgcz.raster)[[1]]
+
+# set up a colour palette and plot with legend defined manually
+bgcz.levels$color = rainbow(nrow(bgcz.levels))
+plot(bgcz.raster, legend=FALSE, col=bgcz.levels$color)
+legend('bottomright', legend=bgcz.levels$code, fill=bgcz.levels$color)
+```
+
+<img src="man/figures/README-bcgz plot-1.png" width="100%" />
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- rmarkdown::render('README.Rmd') -->
