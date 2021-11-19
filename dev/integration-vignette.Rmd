@@ -1,0 +1,54 @@
+---
+title: "Integration with other data sources"
+author: "Dean Koch"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Integration with other data sources}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette, we'll see at how other data sources can be used in R alongside the layers from `rasterbc`, looking at how they can be related (*eg.* polygons from `bcmaps` that match with `rasterbc`) and how they might be different (*eg.* weather data from `daymetr`, which is projected differently). Start by loading the necessary packages:
+
+```{r setup}
+library(rasterbc)
+library(bcmaps)
+library(daymetr)
+library(osmdata)
+```
+
+Say we're interested in the city of Victoria. To access the data, we first need coordinates to delineate this area. Four
+corner points are sufficient to define a *bounding box*. You could find these point coordinates using [openstreetmap](https://www.openstreetmap.org/) (right-click > "Show address"), or google maps (right-click > "What's here?"),
+then define a bounding box using functions like `st_point` `st_bbox`. 
+
+This can be tricky as you need to know coordinate system is in use (For google maps, I think the map is displayed
+using EPSG:3857, but the coordinates are lat/long with EPSG:4326?)
+
+Here we use the `osmdata` package to get a city boundary polygon directly:
+
+```{r bbox}
+vic.sf = getbb('victoria, bc',  format_out='sf_polygon', featuretype='city')
+st_crs(vic.sf)
+```
+
+Notice this has built-in coordinate reference system metadata, so we can simply pass it to `opendata_bc`
+to get a DEM:
+
+
+```{r bbox}
+datadir_bc('H:/rasterbc_data', quiet=TRUE)
+vic.dem = opendata_bc(geo=vic.sf, collection='dem', varname='slope')
+raster::plot(vic.dem)
+``` 
+
+
+
+
