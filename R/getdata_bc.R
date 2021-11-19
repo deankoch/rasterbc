@@ -164,7 +164,7 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   } else {
 
     # print a message when no downloads are necessary
-    print(paste('all', sum(idx.geo), 'block(s) found in local data storage. Nothing to download'))
+    cat(paste('all', sum(idx.geo), 'block(s) found in local data storage. Nothing to download\n'))
   }
 
   # mosaic mode: merge blocks, clip/mask as needed, and return RasterLayer in memory
