@@ -57,13 +57,13 @@ for instructions on getting started with this package.
 
 ## About
 
-This project grew out of my [doctoral thesis project]((https://doi.org/10.7939/r3-91zn-v276)) on modelling
-outbreaks of the mountain pine beetle in central BC. Parts of of the `rasterbc` collection appear
-in research publications with professors Mark A Lewis and Subhash Lele on 
+This project grew out of my [doctoral thesis project](https://doi.org/10.7939/r3-91zn-v276) on modelling
+outbreaks of the mountain pine beetle in central BC. Parts of of the `rasterbc` collection can be found
+in research publications with professors Mark Lewis and Subhash Lele on 
 [statistical methods for spatial data](https://doi.org/10.7939/r3-g6qb-bq70),
 [models for animal dispersal](https://doi.org/10.1098/rsif.2020.0434), and
 [an analysis of MPB activity in the Merrit TSA](https://doi.org/10.1007/s11538-021-00899-z).
-We gratefully acknowledge the support of NSERC, TRIA-Net, and the University of Alberta Lewis Lab.
+We gratefully acknowledge the support of NSERC, TRIA-Net, and the University of Alberta Lewis Lab in this work.
 
 ## News
 
