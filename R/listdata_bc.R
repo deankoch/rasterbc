@@ -72,7 +72,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1, simp
     {
       # append a column indicating the number of blocks downloaded
       booleans.list = lapply(varnames, function(varname) listdata_bc(collection, varname, year, simple=TRUE))
-      out.df$blocks.downloaded = sapply(booleans.list, function(lyr) paste(c(sum(unlist(lyr)), length(unlist(lyr))), collapse='/'))
+      out.df$tiles = sapply(booleans.list, function(lyr) paste(c(sum(unlist(lyr)), length(unlist(lyr))), collapse='/'))
     }
 
     return(out.df)
@@ -109,7 +109,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1, simp
     {
       # append a column indicating the number of blocks downloaded
       existence = listdata_bc(collection, varname, year, simple=TRUE)
-      out.df$blocks.downloaded = paste(c(sum(unlist(existence)), length(unlist(existence))), collapse='/')
+      out.df$tiles = paste(c(sum(unlist(existence)), length(unlist(existence))), collapse='/')
     }
     return(out.df)
   }
@@ -128,7 +128,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1, simp
     {
       # append a column indicating the number of blocks downloaded
       existence = listdata_bc(collection, varname, year, simple=TRUE)
-      out.df$blocks.downloaded = paste(c(sum(unlist(existence)), length(unlist(existence))), collapse='/')
+      out.df$tiles = paste(c(sum(unlist(existence)), length(unlist(existence))), collapse='/')
     }
     return(out.df)
   }
@@ -161,7 +161,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1, simp
   {
     # append a column indicating the number of blocks downloaded
     existence = listdata_bc(collection, varname, year, simple=TRUE)
-    out.df$blocks.downloaded = paste(c(sum(unlist(existence)), length(unlist(existence))), collapse='/')
+    out.df$tiles = paste(c(sum(unlist(existence)), length(unlist(existence))), collapse='/')
   }
   return(out.df)
 }
