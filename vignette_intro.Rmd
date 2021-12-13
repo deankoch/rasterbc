@@ -72,19 +72,20 @@ districts.sf = regional_districts()
 example.sf = districts.sf[districts.sf$ADMIN_AREA_NAME==example.name, ]
 
 # plot against map of BC
-plot(st_geometry(ntspoly_bc), main=example.name, border='red')
+blocks = findblocks_bc(type='sfc')
+plot(st_geometry(blocks), main=example.name, border='red')
 plot(st_geometry(bc.bound.sf), add=TRUE, col=adjustcolor('blue', alpha.f=0.2))
 plot(st_geometry(example.sf), add=TRUE, col=adjustcolor('yellow', alpha.f=0.5))
-text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
+text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, cex=0.5)
 ```
 
-The Okanagan polygon is shown in yellow, against a red grid that partitions the geographic extent of the province into 89 smaller regions, called *mapsheets*. This is the [NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-publications/maps/topographic-maps/10995)
+The Okanagan polygon is shown in yellow, against a red grid that partitions the geographic extent of the province into 89 smaller regions, called *mapsheets* (here I am calling them "blocks"). This is the [NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-publications/maps/topographic-maps/10995)
 grid used by Natural Resources Canada for their topographic maps, with each mapsheet identied by a
 [unique number-letter code](https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765).
-`rasterbc` uses this grid to package data into blocks for distribution. It is lazy-loaded as the `sf` object `ntspoly_bc`: 
+`rasterbc` uses this grid to package data into blocks for distribution. It is lazy-loaded as the `sf` object returned by `findblocks_bc(type='sfc')`, which we copied to variable `blocks` in the chunk above
 
-```{r ntspoly_bc}
-print(ntspoly_bc)
+```{r blocks}
+print(blocks)
 ```
 
 ## A basic example
@@ -99,13 +100,13 @@ findblocks_bc(example.sf)
 fetch them using the command:
 
 ```{r get-example, eval=FALSE}
-getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
+getdata_bc(geo=example.sf, collection='dem', varname='dem')
 ```
 
 You should see progress bars for a series of three downloads, and once finished, the paths of the downloaded files are printed to the console. Note that if a block has been downloaded already (*eg.* by a `getdata_bc` call with a different `geo` argument), the existing copy will be detected, and the download skipped. *eg.* repeat the call...
 
 ```{r get-example-again, R.options = list(width = 15)}
-getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
+getdata_bc(geo=example.sf, collection='dem', varname='dem')
 ```
 
 ... and nothing happens, because the data are there already. Verify by loading one of the files as `RasterLayer`:
@@ -118,26 +119,25 @@ plot(example.raster, main='elevation (metres)')
 
 ### Loading/merging blocks
 
-To display the elevation data for the entire district, we need to combine the three blocks downloaded earlier. This can be done using `getdata_bc` with `load.mosaic=TRUE` (the default setting), which loads all required blocks, merges them into a single layer, crops and masks as needed, and then loads into memory the returned `RasterLayer` object:
+To display the elevation data for the entire district, we need to combine the three blocks downloaded earlier. This can be done using `opendata_bc`, which loads all required blocks, merges them into a single layer, crops and masks as needed, and then loads into memory the returned `RasterLayer` object:
 ```{r okanagan_elevation_clipped}
-example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
+example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
 print(example.tif)
 plot(example.tif, main=paste(example.name, ': elevation'))
 plot(st_geometry(example.sf), add=TRUE)
-plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
+plot(st_geometry(blocks), add=TRUE, border='red')
 ```
 
-Any simple features object of class `sf` or `sfc` can be used for the argument `geo`, provided its geometry intersects with the provincial boundary of BC. The intended usage is for the user to delineate their region of interest as a `(MULTI)POLYGON` object (here, `example.sf` is a `MULTIPOLYGON`). Geometries of other classes (such `SpatialPolygons`, as defined by `sp`; or data frames containing coordinates of vertices) can often be coerced to `sf` using a command like `sf::st_as_sf(other_geometry_class_object)`.
+If you're opening the downloaded data right away, you can skip the `getdata_bc` call. The argument `dl` (by default `TRUE`) in `opendata_bc` will cause it to call `getdata_bc` automatically to download any missing blocks.
 
-Alternatively, users can directly download individual blocks by specifying their their NTS/SNRC codes, *eg.* here is the
-"slope" variable (from the "dem" collection), specified using the codes: 
+Any simple features object of class `sf` or `sfc` can be used for the argument `geo`, provided its geometry intersects with the provincial boundary of BC. The intended usage is for the user to delineate their region of interest as a `(MULTI)POLYGON` object (here, `example.sf` is a `MULTIPOLYGON`). Geometries of other classes (such `SpatialPolygons`, as defined by `sp`; or data frames containing coordinates of vertices) can often be coerced to `sf` using a command like `sf::st_as_sf(other_geometry_class_object)`. Alternatively, users can directly download individual blocks by specifying their NTS/SNRC codes, *eg.* the next chunk plots the "slope" variable (from the "dem" collection), specified using the codes: 
 ```{r okanagan_elevation_tiles, R.options = list(width = 10)}
 example.codes = findblocks_bc(example.sf)
-example.tif = getdata_bc(example.codes, collection='dem', varname='slope')
+example.tif = opendata_bc(example.codes, collection='dem', varname='slope')
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': slope'))
-plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
+plot(st_geometry(blocks), add=TRUE, border='red')
 plot(st_geometry(example.sf), add=TRUE)
-text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
+text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, cex=0.5)
 ```
 
 
@@ -147,8 +147,7 @@ If you forget which files have been downloaded, you can either check the directo
 
 ```{r listdata_bc-first, R.options = list(width = 10)}
 is.downloaded = listdata_bc(collection='dem', varname='dem', simple=TRUE)
-sum(is.downloaded)
-length(is.downloaded)
+paste('downloaded: ', sum(is.downloaded), '/', length(is.downloaded)) |> print()
 ```
 
 This shows that of the 89 blocks for the variable name 'dem' (in the collection 'dem'), we have downloaded three so far. Notice the return value of `listdata_bc` is a *named* vector, with names indicating the destination filenames and paths. This shows where they will be written by `getdata_bc`. All filenames are either of the form 'varname_mapsheet.tif' (as in this example) or else varname_year_mapsheet.tif (for time-series data).
@@ -192,7 +191,7 @@ raster with the properly matched zone codes:
 ```{r okanagan_bgcz}
 
 # open the biogeoclimatic zone raster
-bgcz.raster = getdata_bc(geo=example.sf, collection='bgcz', varname='zone', quiet=TRUE)
+bgcz.raster = opendata_bc(geo=example.sf, collection='bgcz', varname='zone', quiet=TRUE)
 
 # a levels table (dataframe) can be extracted with `base::levels`
 bgcz.levels = levels(bgcz.raster)[[1]]

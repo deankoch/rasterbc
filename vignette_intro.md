@@ -1,7 +1,7 @@
 Introduction to the rasterbc package
 ================
 Dean Koch
-2021-11-18
+2021-12-13
 
 <!-- vignette_intro.md is generated from vignette_intro.Rmd. Please edit that file -->
 
@@ -26,7 +26,9 @@ to define a study region (but it’s not a requirement of the package).
 
 ``` r
 library(sf)
+#> Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
 library(raster)
+#> Loading required package: sp
 library(bcmaps)
 library(rasterbc)
 ```
@@ -81,30 +83,35 @@ Regional District](https://www.regionaldistrict.com/)
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
 bc.bound.sf = bc_bound()
+#> bc_bound_hres was updated on 2021-11-16
 districts.sf = regional_districts()
 example.sf = districts.sf[districts.sf$ADMIN_AREA_NAME==example.name, ]
 
 # plot against map of BC
-plot(st_geometry(ntspoly_bc), main=example.name, border='red')
+blocks = findblocks_bc(type='sfc')
+plot(st_geometry(blocks), main=example.name, border='red')
 plot(st_geometry(bc.bound.sf), add=TRUE, col=adjustcolor('blue', alpha.f=0.2))
 plot(st_geometry(example.sf), add=TRUE, col=adjustcolor('yellow', alpha.f=0.5))
-text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
+text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, cex=0.5)
 ```
 
 <img src="man/figures/vignette_intro_okanagan_location-1.png" width="100%" />
 
 The Okanagan polygon is shown in yellow, against a red grid that
 partitions the geographic extent of the province into 89 smaller
-regions, called *mapsheets*. This is the
+regions, called *mapsheets* (here I am calling them “blocks”). This is
+the
 [NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-publications/maps/topographic-maps/10995)
 grid used by Natural Resources Canada for their topographic maps, with
 each mapsheet identied by a [unique number-letter
 code](https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765).
 `rasterbc` uses this grid to package data into blocks for distribution.
-It is lazy-loaded as the `sf` object `ntspoly_bc`:
+It is lazy-loaded as the `sf` object returned by
+`findblocks_bc(type='sfc')`, which we copied to variable `blocks` in the
+chunk above
 
 ``` r
-print(ntspoly_bc)
+print(blocks)
 #> Simple feature collection with 89 features and 1 field
 #> Geometry type: POLYGON
 #> Dimension:     XY
@@ -141,7 +148,7 @@ findblocks_bc(example.sf)
 fetch them using the command:
 
 ``` r
-getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
+getdata_bc(geo=example.sf, collection='dem', varname='dem')
 ```
 
 You should see progress bars for a series of three downloads, and once
@@ -151,7 +158,7 @@ Note that if a block has been downloaded already (*eg.* by a
 will be detected, and the download skipped. *eg.* repeat the call…
 
 ``` r
-getdata_bc(geo=example.sf, collection='dem', varname='dem', load.mosaic=FALSE)
+getdata_bc(geo=example.sf, collection='dem', varname='dem')
 #> all 3 block(s) found in local data storage. Nothing to download
 #> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
 #> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
@@ -181,13 +188,12 @@ plot(example.raster, main='elevation (metres)')
 
 To display the elevation data for the entire district, we need to
 combine the three blocks downloaded earlier. This can be done using
-`getdata_bc` with `load.mosaic=TRUE` (the default setting), which loads
-all required blocks, merges them into a single layer, crops and masks as
-needed, and then loads into memory the returned `RasterLayer` object:
+`opendata_bc`, which loads all required blocks, merges them into a
+single layer, crops and masks as needed, and then loads into memory the
+returned `RasterLayer` object:
 
 ``` r
-example.tif = getdata_bc(example.sf, collection='dem', varname='dem')
-#> all 3 block(s) found in local data storage. Nothing to download
+example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
 #> creating mosaic of 3 block(s)
 #> clipping layer...masking layer...done
 print(example.tif)
@@ -201,10 +207,15 @@ print(example.tif)
 #> values     : 340.43, 2153.29  (min, max)
 plot(example.tif, main=paste(example.name, ': elevation'))
 plot(st_geometry(example.sf), add=TRUE)
-plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
+plot(st_geometry(blocks), add=TRUE, border='red')
 ```
 
 <img src="man/figures/vignette_intro_okanagan_elevation_clipped-1.png" width="100%" />
+
+If you’re opening the downloaded data right away, you can skip the
+`getdata_bc` call. The argument `dl` (by default `TRUE`) in
+`opendata_bc` will cause it to call `getdata_bc` automatically to
+download any missing blocks.
 
 Any simple features object of class `sf` or `sfc` can be used for the
 argument `geo`, provided its geometry intersects with the provincial
@@ -213,22 +224,20 @@ region of interest as a `(MULTI)POLYGON` object (here, `example.sf` is a
 `MULTIPOLYGON`). Geometries of other classes (such `SpatialPolygons`, as
 defined by `sp`; or data frames containing coordinates of vertices) can
 often be coerced to `sf` using a command like
-`sf::st_as_sf(other_geometry_class_object)`.
-
-Alternatively, users can directly download individual blocks by
-specifying their their NTS/SNRC codes, *eg.* here is the “slope”
-variable (from the “dem” collection), specified using the codes:
+`sf::st_as_sf(other_geometry_class_object)`. Alternatively, users can
+directly download individual blocks by specifying their NTS/SNRC codes,
+*eg.* the next chunk plots the “slope” variable (from the “dem”
+collection), specified using the codes:
 
 ``` r
 example.codes = findblocks_bc(example.sf)
-example.tif = getdata_bc(example.codes, collection='dem', varname='slope')
-#> all 3 block(s) found in local data storage. Nothing to download
+example.tif = opendata_bc(example.codes, collection='dem', varname='slope')
 #> creating mosaic of 3 block(s)
-#> loading block(s)...done
+#> done
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': slope'))
-plot(st_geometry(ntspoly_bc), add=TRUE, border='red')
+plot(st_geometry(blocks), add=TRUE, border='red')
 plot(st_geometry(example.sf), add=TRUE)
-text(st_coordinates(st_centroid(st_geometry(ntspoly_bc))), labels=ntspoly_bc$NTS_SNRC, cex=0.5)
+text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, cex=0.5)
 ```
 
 <img src="man/figures/vignette_intro_okanagan_elevation_tiles-1.png" width="100%" />
@@ -242,10 +251,8 @@ which files are curerntly found in your local storage directory:
 
 ``` r
 is.downloaded = listdata_bc(collection='dem', varname='dem', simple=TRUE)
-sum(is.downloaded)
-#> [1] 3
-length(is.downloaded)
-#> [1] 89
+paste('downloaded: ', sum(is.downloaded), '/', length(is.downloaded)) |> print()
+#> [1] "downloaded:  3 / 89"
 ```
 
 This shows that of the 89 blocks for the variable name ‘dem’ (in the
@@ -344,8 +351,7 @@ codes:
 
 ``` r
 # open the biogeoclimatic zone raster
-bgcz.raster = getdata_bc(geo=example.sf, collection='bgcz', varname='zone', quiet=TRUE)
-#> all 3 block(s) found in local data storage. Nothing to download
+bgcz.raster = opendata_bc(geo=example.sf, collection='bgcz', varname='zone', quiet=TRUE)
 
 # a levels table (dataframe) can be extracted with `base::levels`
 bgcz.levels = levels(bgcz.raster)[[1]]
