@@ -1,105 +1,56 @@
-#' Download multiple blocks, and (optionally) merge/clip/mask them
+#' Download data from the rasterbc collection
 #'
-#' Downloads and/or loads all blocks covering the geographical extent specified in input argument `geo`. This can be a vector of
-#' (4-character) NTS/SNRC block codes, or any geometry set of type `sfc`.
+#' Downloads all mapsheet layers (geoTIFFs) covering the geographical extent of \code{geo} for the
+#' specified \code{collection}, \code{varname}, and \code{year}. Input \code{geo} can be a vector
+#' of (4-character) NTS/SNRC mapsheet codes or a geometry of class \code{sfc}.
 #'
-#' Data for the layer specified by `collection`, `varname`, and `year` are written to the directory specified by `rasterbc::datadir_bc`,
-#' and blocks already downloaded are not downloaded again (unless `force.dl==TRUE`). Default behaviour is to merge blocks as needed
-#' to construct a raster containing the requested data, returning it as a RasterLayer. If `load.mosaic==FALSE`, the function downloads
-#' any missing blocks (as needed), returning their filenames instead of loading them.
+#' The data files are written to the directory returned by \code{rasterbc::datadir_bc()}. Mapsheets
+#' found there (already downloaded) are not downloaded again unless \code{force.dl==TRUE}. Users
+#' should only need to download a mapsheet once - there are no plans to update the rasterbc
+#' collection in the future.
 #'
-#' @param geo A vector of (NTS/SNRC code) strings, or any geometry set of type sfc, specifying geographical extent to load
-#' @param collection A character string indicating the data collection to query
-#' @param varname A character string indicating the layer to query
-#' @param year An integer indicating the year to query (if applicable)
-#' @param force.dl A boolean indicating whether to overwrite any existing data
-#' @param load.mosaic A boolean indicating whether to return the full (merged) raster
+#' @param geo vector of character strings (NTS/SNRC codes) or a geometry of class \code{sfc}
+#' @param collection character string indicating the data collection to query
+#' @param varname character string indicating the layer to query
+#' @param year integer indicating the year to query (if applicable)
+#' @param force.dl logical indicating whether to overwrite any existing data
 #' @param quiet logical, suppresses console messages
 #'
-#' @return Either: a (vector of) character string(s) containing the absolute path(s) to the file(s) written (default); or a
-#' RasterLayer object containing the requested data
-#' @importFrom methods as
+#' @return a vector of character string(s) containing the absolute path(s) to the downloaded file(s)
+#'
+#' @seealso{\code{\link{findblocks_bc}} to identify which mapsheets will be downloaded}
+#' @seealso{\code{\link{listdata_bc}} for a list of available collections, variable names, years}
+#'
 #' @importFrom utils download.file
 #' @importFrom utils setTxtProgressBar
 #' @importFrom utils txtProgressBar
 #' @export
-getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.dl=FALSE, load.mosaic=TRUE, quiet=FALSE)
+#' @examples
+#' # define a location of interest, and a polygon around it then fetch the corresponding DEM data
+#' input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
+#' input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
+#' \dontrun{
+#' block.path = getdata_bc(input.point, 'dem')
+#' getdata_bc(input.polygon, 'dem')
+#'
+#' # load one of the mapsheets
+#' raster::raster(block.path)
+#' }
+getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.dl=FALSE, quiet=FALSE)
 {
   # get the data storage directory or prompt to create one if it doesn't exist yet
   data.dir = datadir_bc(quiet=TRUE)
-  if(is.null(data.dir)) data.dir = datadir_bc(NA)
+  if( is.null(data.dir) ) data.dir = datadir_bc(NA)
 
-  # check that geo is valid, replace (as needed) with the required mapsheet codes
-  is.poly = FALSE
-  if(is.character(geo))
-  {
-    # compare with list of BC codes and stop if any are misspelled
-    idx.valid = geo %in% rasterbc::ntspoly_bc$NTS_SNRC
-    if(!all(idx.valid))
-    {
-      msg.invalid = 'found no match in BC for the following NTS/SNRC code(s):'
-      stop(paste(msg.invalid, paste(geo[!idx.valid], collapse=', ')))
-    }
+  # find the required mapsheet codes and files
+  geo.codes = findblocks_bc(geo)
+  listfiles.out = listfiles_bc(collection, varname, year)
 
-    # codes are verified, save a copy in a new object
-    geo.codes = geo
-
-  } else {
-
-    if(any(c('sf', 'sfc') %in% class(geo)))
-    {
-      # for simple features, retain only the geometry and merge multiple polygons into one
-      geo = sf::st_geometry(geo) |> sf::st_union()
-      is.poly = sf::st_geometry_type(geo) %in% c('POLYGON', 'MULTIPOLYGON')
-
-      # transform to BC Albers projection
-      geo = sf::st_transform(geo, crs='EPSG:3005')
-
-      # find the mapsheet codes
-      geo.codes = findblocks_bc(geo)
-
-    } else {
-
-      # unrecognized input type:
-      stop('geo must of type sf, sfc, or character (vector of NTS/SNRC codes)')
-    }
-  }
-
-  # handle empty collection argument
-  if(is.null(collection))
-  {
-    # printout of collection and variables names
-    if(!quiet) cat('no collection specified. Returning list of collection names\n')
-    return(listdata_bc(verbose=0))
-  }
-
-  # build a list of filenames available to download for this collection/varname/year
-  if(all(is.na(rasterbc::metadata_bc[[collection]]$metadata$year[[varname]])))
-  {
-    # case: data are one-time, not time series
-    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
-
-  } else {
-
-    # case: data are from time-series. Check for year argument
-    if(is.null(year))
-    {
-      err.msg.line1 = paste0('Variable \"', varname, '\" from collection \"', collection, '\" requires a year argument')
-      err.msg.line2 = paste0('Please specify one of the years: ', rasterbc::metadata_bc[[collection]]$metadata$df[varname, 'year'])
-      stop(paste(c(err.msg.line1, err.msg.line2), collapse='\n'))
-    }
-
-    year.string = paste0('yr', year)
-    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[year.string]][[varname]]
-  }
-
-  # catch invalid requests (no matching files)
-  if(is.null(fnames))
-  {
-    # prompt an informative warning then stop with an error
-    listdata_bc(collection=collection, varname=varname, year=year, simple=TRUE)
-    stop('no files matching request. Check arguments and see ?listdata_bc')
-  }
+  # unpack listfiles.out and update input arguments (possibly modified by listfiles_bc)
+  collection = listfiles.out$collection
+  varname = listfiles.out$varname
+  fnames = listfiles.out$filenames
+  is.timeseries = listfiles.out$is.timeseries
 
   # find the index of the particular blocks needed
   idx.geo = names(fnames) %in% geo.codes
@@ -109,29 +60,20 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
   dest.files = file.path(data.dir, fnames)
 
   # check to see which (if any) of these blocks have been downloaded already
-  download.success = TRUE
+  dl.success = TRUE
   idx.exists = listdata_bc(collection=collection, varname=varname, year=year, simple=TRUE)[idx.geo]
   if(any(!idx.exists))
   {
     # some blocks are missing. Print a message before downloading them
-    printout.prefix = paste0('[', collection, ']:[', varname, ']')
-    if(!is.null(year))
-    {
-      printout.prefix = paste0('[', year, ']:', printout.prefix)
-    }
-    printout.suffix = paste0('downloading ', sum(!idx.exists), ' block(s) to: ', data.dir, '/', collection)
-    if(!quiet) cat(paste(printout.prefix, printout.suffix, '\n'))
+    msg.action = paste0('downloading ', sum(!idx.exists), ' block(s) to: ', data.dir, '/', collection)
+    msg.struct = paste0('[', collection, ']:[', varname, ']')
+    if( is.timeseries ) msg.struct = paste0('[', year, ']:', msg.struct)
+    if( !quiet ) cat(paste(msg.struct, msg.action, '\n'))
 
-    # create subdirectories of data.dir as needed
-    if(all(is.na(rasterbc::metadata_bc[[collection]]$metadata$year[[varname]])))
-    {
-      # case: data are one-time, not time series
-      suppressWarnings(dir.create(file.path(data.dir, collection, 'blocks'), recursive=TRUE))
-
-    } else {
-
-      # case: data are from time-series
-      suppressWarnings(dir.create(file.path(data.dir, collection, 'blocks', year), recursive=TRUE))
+    # create subdirectories of data.dir differently for time series data
+    dpath = file.path(data.dir, collection, 'blocks')
+    if( !is.timeseries ) { suppressWarnings(dir.create(dpath, recursive=TRUE)) } else {
+      suppressWarnings(dir.create(file.path(dpath, year), recursive=TRUE))
     }
 
     # download the blocks in a loop with a progress bar printout
@@ -139,25 +81,25 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
     for(idx.queue in 1:sum(!idx.exists))
     {
       # index of url to try and some console messages
-      idx.todownload = which(idx.geo)[idx.queue]
+      idx.todl = which(idx.geo)[idx.queue]
       if(!quiet)
       {
         setTxtProgressBar(pb, idx.queue)
-        cat(paste('\ndownloading to:', fnames[idx.todownload], '\n'))
+        cat(paste('\ndownloading to:', fnames[idx.todl], '\n'))
       }
 
       # print failed URL in case of download errors
-      download.result = tryCatch(
-        expr = { download.file(urls[idx.todownload], dest.files[idx.todownload], mode='wb', quiet=quiet) },
+      dl.result = tryCatch(
+        expr = { download.file(urls[idx.todl], dest.files[idx.todl], mode='wb', quiet=quiet) },
         error = function(cond) {
-          message(paste0('download failed for URL: ', urls[idx.todownload]))
-          message('Try calling the function again, or download the file to your local data directory using a web browser.')
+          message(paste0('download failed for URL: ', urls[idx.todl]))
+          message('Try downloading the file to your local data directory using a web browser.')
           message(paste('original error message:', cond))
           }
         )
 
       # flag for download errors
-      if( is.null(download.result) ) download.success = FALSE
+      if( is.null(dl.result) ) dl.success = FALSE
     }
     if(!quiet) close(pb)
 
@@ -166,9 +108,6 @@ getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.
     # print a message when no downloads are necessary
     cat(paste('all', sum(idx.geo), 'block(s) found in local data storage. Nothing to download\n'))
   }
-
-  # mosaic mode: merge blocks, clip/mask as needed, and return RasterLayer in memory
-  if(load.mosaic & download.success) return(opendata_bc(geo, collection, varname, year, quiet=quiet))
 
   # default behaviour: return the vector of file paths
   return(dest.files[idx.geo])

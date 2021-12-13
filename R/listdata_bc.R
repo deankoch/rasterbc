@@ -11,7 +11,7 @@
 #'
 #' @param collection (Optional) character string, indicating the data collection to query
 #' @param varname (Optional) character string, indicating the layer to query (see Details, below)
-#' @param year (Optional) integer, indicating the year to query (see Details, below)
+#' @param year (Optional) integer or character string, indicating the year to query (see Details, below)
 #' @param verbose An integer (0, 1, 2), indicating how much information about the files to print to the console
 #' @param simple logical indicating to return a (list of) logical vector(s) indicating existence on disk of specific filenames
 #'
@@ -52,7 +52,7 @@ listdata_bc = function(collection=NULL, varname=NULL, year=NULL, verbose=1, simp
   if( !(collection %in% collections) )
   {
     # error when "collection" argument is invalid
-    error.msg = paste0('unknown collection "', collection)
+    error.msg = paste0('unknown collection \"', collection, '\"')
     collections.msg = paste0('\"', paste(collections, collapse='\", \"'))
     suggestions.msg = paste('\nThe valid collection strings are:', collections.msg, '\"')
     stop(paste(error.msg, suggestions.msg))
