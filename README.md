@@ -1,7 +1,7 @@
 Introduction to the rasterbc package
 ================
 Dean Koch
-2021-11-18
+2021-12-13
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -10,13 +10,13 @@ Dean Koch
 <!-- badges: start -->
 <!-- badges: end -->
 
-`rasterbc` provides access to a collection of gridded spatial ecological
-data on the province of BC during the period 2001-2018, in the standard
-[BC Albers](https://spatialreference.org/ref/epsg/nad83-bc-albers/)
-projection. This package downloads and imports the data in R as
-RasterLayer objects in response to user queries. Our goal is to improve
-access to a number of publicly accessible datasets on BC forests by
-simplifying the (often laborious) data ingress stage of modelling.
+`rasterbc` provides access to a collection of 100m resolution gridded
+spatial ecological data on the province of BC during the period
+2001-2018. Given a user-defined geographical region (polygon), the
+package downloads and imports the requested data into R as a RasterLayer
+object. The goal is to improve access to a number of publicly accessible
+datasets on BC forests by simplifying the (often laborious) data ingress
+stage of modelling.
 
 The available layers are:
 
@@ -53,10 +53,12 @@ The available layers are:
     (‘pine’) from [Beaudoin et
     al. (2017)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184)
 
-These datasets were downloaded and processed in the years 2018-2020
+All datasets were downloaded and processed in the years 2018-2020
 (follow links above for code and documentation on this process), then
-stored as raster tiles hosted on [FRDR](https://www.frdr-dfdr.ca/repo/)
-in the form of [a data
+stored as raster tiles in the standard [BC
+Albers](https://spatialreference.org/ref/epsg/nad83-bc-albers/)
+projection, and hosted on [FRDR](https://www.frdr-dfdr.ca/repo/). The
+collection is published as [a data
 publication](https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283)
 (with associated [DOI](https://doi.org/10.20383/101.0283)) for
 permanence and easy referencing.
