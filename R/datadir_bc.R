@@ -37,7 +37,7 @@ datadir_bc = function(data.dir=NULL, quiet=FALSE)
   initial.msg = 'data storage path has not been set. Please provide a path using datadir_bc(data.dir)'
   if( is.null(data.dir) )
   {
-    if( is.null(data.dir.existing) ) { cat(initial.msg) } else {
+    if( is.null(data.dir.existing) ) { if( !quiet ) cat(initial.msg) } else {
 
       if(!quiet) cat(paste('current data storage path:', data.dir.existing, '\n'))
       if( !dir.exists(data.dir.existing) ) stop('data storage path not found on disk')
