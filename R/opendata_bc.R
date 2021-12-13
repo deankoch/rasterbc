@@ -1,21 +1,27 @@
-#' Load blocks and (optionally) merge/clip/mask them
+#' Load/merge data blocks and optionally clip/mask them
 #'
-#' Loads (as a single RasterLayer) all blocks covering the geographical extent specified in input argument `geo`. This can be a vector of
-#' (4-character) NTS/SNRC block codes, or any geometry set of type `sfc`.
+#' Loads all mapsheets covering the geographical extent of input argument
+#' `geo`. This can be a vector of (4-character) NTS/SNRC block codes, or a geometry of class
+#' `sfc` having a defined coordinate reference system.
 #'
-#' Data for the layer specified by `collection`, `varname`, and (as needed) `year`, are fetched from the directory specified by
-#' \code{\link{datadir_bc}}, merged into a single (mosaic) layer, cropped and masked as needed, and then loaded into memory and returned
-#' as a \code{\link{RasterLayer-class}} object.
+#' Data for the layer specified by `collection`, `varname`, and (as needed) `year`,
+#' are fetched from the directory specified by \code{\link{datadir_bc}}, merged into a single
+#' (mosaic) layer, cropped and masked as needed, and then loaded into memory and returned as a
+#' \code{\link{RasterLayer-class}} object.
 #'
-#' Argument `load.mode` specifies whether/how the blocks should be loaded into memory. 'all' uses `raster::merge` to merge the
-#' blocks into a larger rasterLayer, covering all (and likely more) of the input extent; 'clip' and 'mask' (the default) assume that `geo`
-#' is a (multi)polygon, cropping the merged blocks to its boundary; and  with 'mask', all data not inside the polygon is set to NA.
+#' When `geo` is a line or point type geometry (or when `type` is set to 'all'), the
+#' function uses `raster::merge` to create a larger (mosaic) RasterLayer containing the data
+#' from all mapsheets intersecting with the input extent.
 #'
-#' @param geo vector of character strings (NTS/SNRC codes) or any geometry set of type sfc
+#' When `geo` is a polygon, `type` can be set to clip or mask the returned raster: 'all'
+#' returns the mosaic, as above; 'clip' crops the mosaic and to the bounding box of `geo`;
+#' and 'mask' (the default) crops the mosaic then  sets all points not lying inside `geo` to NA.
+#'
+#' @param geo vector of character strings (NTS/SNRC codes) or a geometry of class `sfc`
 #' @param collection character string, indicating the data collection to query
 #' @param varname character string, indicating the layer to query
 #' @param year integer, indicating the year to query
-#' @param load.mode character string, one of 'all', 'clip', 'mask'
+#' @param type character string, one of 'all', 'clip', 'mask'
 #' @param quiet logical, suppresses console messages
 #'
 #' @return A `rasterLayer` (or list of them)
@@ -24,101 +30,96 @@
 #' @importFrom utils setTxtProgressBar
 #' @importFrom utils txtProgressBar
 #' @export
-opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, load.mode='mask', quiet=FALSE)
+#' @examples
+#' # define a location of interest, and a polygon around it
+#' input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
+#' input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
+#'
+#' # download the DEM mapsheets corresponding to the point
+#' opendata_bc(geo=input.polygon, varname='harvest', year=2005) |> raster::plot()
+#'
+#' # load the DEM mapsheet for the point of interest
+#' getdata_bc(input.point, 'dem', 'dem') |> raster::plot()
+#' findblocks_bc(input.point, type='sfc') |> sf::st_geometry() |> plot(add=TRUE)
+#' input.point |> sf::st_transform(input.point, crs='EPSG:3005')|> plot(add=TRUE)
+#'
+#'
+#' opendata_bc(input.line, 'dem', 'dem') |> plot()
+#'
+#' # make a polygon (circle) from the point and repeat
+#' input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
+#' blocks |> sf::st_geometry() |> plot()
+#' sf::st_transform(input.polygon, crs='EPSG:3005') |> plot(add=TRUE, pch=16)
+#' blocks |> sf::st_geometry() |> sf::st_centroid() |> sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
+#' findblocks_bc(input.polygon)
+opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, type='mask', quiet=FALSE, dl=TRUE)
 {
   # get the data storage directory or prompt to create one if it doesn't exist yet
   data.dir = datadir_bc(quiet=TRUE)
   if(is.null(data.dir)) data.dir = datadir_bc(NA)
+  rasterbc::ntspoly_bc
 
-  # check that geo is valid, replace (as needed)with the required mapsheet codes
-  is.poly = FALSE
-  if(is.character(geo))
-  {
-    # compare with list of BC codes
-    idx.valid = geo %in% rasterbc::ntspoly_bc$NTS_SNRC
-    if(!all(idx.valid))
-    {
-      msg.invalid = 'found no match in BC for the following NTS/SNRC code(s):'
-      stop(paste(msg.invalid, paste(geo[!idx.valid], collapse=', ')))
-    }
+  # reshape geo as a single sfc geometry
+  geo = parsegeo_bc(geo)
 
-  } else {
+  # find the required mapsheet codes and files
+  geo.codes = findblocks_bc(geo)
+  listfiles.out = listfiles_bc(collection, varname, year)
 
-    if(any(c('sf', 'sfc') %in% class(geo)))
-    {
-      # for simple features, retain only the geometry and merge multiple polygons into one
-      geo = sf::st_geometry(geo) |> sf::st_union()
-      is.poly = sf::st_geometry_type(geo) %in% c('POLYGON', 'MULTIPOLYGON')
-
-      # transform to BC Albers projection
-      geo = sf::st_transform(geo, crs='EPSG:3005')
-
-      # find the mapsheet codes, overwrite geo but keep a backup
-      geo.input = geo
-      geo = findblocks_bc(geo)
-
-    } else {
-
-      # unrecognize input type:
-      stop('geo must of type sf, sfc, or character (vector of NTS/SNRC codes)')
-    }
-  }
-
-  # build a list of filenames available to download for this collection/varname/year
-  if(all(is.na(rasterbc::metadata_bc[[collection]]$metadata$year[[varname]])))
-  {
-    # case: data are one-time, not time series
-    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[varname]]
-
-  } else {
-
-    # case: data are from time-series
-    year.string = paste0('yr', year)
-    fnames = rasterbc::metadata_bc[[collection]]$fname$block[[year.string]][[varname]]
-  }
-  dest.files = file.path(data.dir, fnames)
+  # unpack listfiles.out and update input arguments (possibly modified by listfiles_bc)
+  collection = listfiles.out$collection
+  varname = listfiles.out$varname
+  fnames = listfiles.out$filenames
+  is.timeseries = listfiles.out$is.timeseries
 
   # find the index of the particular blocks needed
-  idx.geo = names(fnames) %in% geo
+  idx.geo = names(fnames) %in% geo.codes
 
-  # check that all of these blocks have been downloaded already
+  # check if any of these blocks haven't been downloaded already
   idx.exists = listdata_bc(collection, varname, year, verbose=0, simple=TRUE)[idx.geo]
-  if(any(!idx.exists))
+  if( any(!idx.exists) )
   {
-    # error if some blocks are missing
-    msg.blocks = paste('blocks', paste(names(idx.exists)[idx.exists], collapse=', '), 'not found!')
-    stop(paste(msg.blocks, 'Use getdata_bc to download them'))
+    # halt if some blocks are missing and user has not specified to download
+    if( !dl )
+    {
+      msg.blocks = paste('files', paste(names(idx.exists)[!idx.exists], collapse=', '), 'not found!')
+      stop(paste(msg.blocks, 'Set dl=TRUE or use getdata_bc to download them'))
+    }
 
+    # download the missing blocks
+    getdata_bc(geo=geo.codes, collection=collection, varname=varname, year=year, quiet=quiet)
   }
 
-  # check how many blocks are requested
-  if(sum(idx.geo)==1)
+  # load the required blocks
+  fpath = file.path(data.dir, fnames)
+  if( sum(idx.geo)==1 )
   {
     # when only a single block is requested, load it directly, assign min/max stats
-    out.raster = raster::setMinMax(raster::raster(dest.files[idx.geo]))
+    out.raster = raster::setMinMax(raster::raster(fpath[idx.geo]))
 
   } else {
 
     # ... otherwise, merge the blocks into a bigger geotiff
     if(!quiet) cat(paste('creating mosaic of', sum(idx.geo), 'block(s)\n'))
-    out.raster = do.call(raster::merge, lapply(dest.files[idx.geo], raster::raster))
+    out.raster = do.call(raster::merge, lapply(fpath[idx.geo], raster::raster))
 
   }
 
   # assign variable name
   names(out.raster) = paste(c(varname, year), collapse='_')
 
-  # trim output raster
-  if(load.mode %in% c('clip', 'mask'))
+  # trim output raster (skip for point inputs to geo)
+  is.point = any( class(geo) %in% c('sfc_POINT', 'sfc_MULTIPOINT') )
+  if( ( type %in% c('clip', 'mask') ) & !is.point )
   {
-    if(is.poly)
+    if( 'sfc' %in% class(geo) )
     {
       if(!quiet) cat('clipping layer...')
-      out.raster = raster::crop(out.raster, as(geo.input, 'Spatial'))
-      if(load.mode == 'mask')
+      out.raster = raster::crop(out.raster, as(geo, 'Spatial'))
+      if(type == 'mask')
       {
         if(!quiet) cat('masking layer...')
-        out.raster = raster::mask(out.raster, as(geo.input, 'Spatial'))
+        out.raster = raster::mask(out.raster, as(geo, 'Spatial'))
       }
 
     } else {
