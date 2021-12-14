@@ -1,12 +1,17 @@
 Package: rasterbc
 Type: Package
-Title: Access Mountain Pine Beetle Data Layers for British Columbia
-Version: 0.1.0
-Author: Dean C Koch
-Maintainer: Dean C Koch <dkoch@ualberta.ca>
-Description: A simple set of helper functions for accessing a large set of ecological data variables in raster format for analysis in R. 
-    Metadata associated with these layers, and code for downloading them from their original sources can be found in a sister repository, rasterbc_src.
+Title: Access Forest Ecology Layers for British Columbia in 2001-2018
+Version: 1.0.0
+Authors@R: person("Dean", "Koch", email="dkoch@ualberta.ca", role = c("aut", "cre"), comment=c(ORCID="0000-0002-8849-859X"))
+Description: R-based access to a large set of data variables relevant to forest ecology in raster format at 100m resolution
+    in BC Albers projection. Collection includes: elevation; biogeoclimatic zone; wildfire; cutblocks; forest attributes from
+    Hansen et al. (2013) and Beaudoin et al. (2017); and FIDS survey maps for a number of insect pest species, all covering the period
+    2001-2018. Users supply a polygon or point location in the province of BC, and 'rasterbc' will download and merge the overlapping
+    raster tiles hosted at the Federated Data Repository (FRDR), returning the result in R as a RasterLayer. Metadata associated with
+    these layers, and code for downloading them from their original sources can be found in the github repository deankoch/rasterbc_src.
 License: MIT + file LICENSE
+URL: https://github.com/deankoch/rasterbc, https://github.com/deankoch/rasterbc_src
+BugReports: https://github.com/deankoch/rasterbc/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
