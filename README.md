@@ -1,12 +1,9 @@
-Introduction to the rasterbc package
+The rasterbc R Package
 ================
 Dean Koch
 2021-12-14
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# rasterbc
-
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -43,8 +40,8 @@ The available layers are:
     Forests](https://catalogue.data.gov.bc.ca/dataset/pest-infestation-polygons)
 -   [Forest extent and change,
     2001-2019](https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md)
-    (‘gfc’), from [Hansen et
-    al., (2013)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401)
+    (‘gfc’), from [Hansen et al.,
+    (2013)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401)
 -   [Canadian national fire database,
     2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md)
     (‘nfdb’), from [Natural Resources
@@ -64,9 +61,9 @@ publication](https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283)
 (with associated [DOI](https://doi.org/10.20383/101.0283)) for
 permanence and easy referencing.
 
-<img src="man/figures/vignette_intro_okanagan_location-1.png" width="30%"></img>
-<img src="man/figures/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
-<img src="man/figures/vignette_intro_okanagan_bgcz-1.png" width="30%"></img>
+<img src="vignettes/man/figures/vignette_intro_okanagan_location-1.png" width="30%"></img>
+<img src="vignettes/man/figures/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
+<img src="vignettes/man/figures/vignette_intro_okanagan_bgcz-1.png" width="30%"></img>
 
 ## Releases
 
@@ -79,8 +76,6 @@ devtools::install_github('deankoch/rasterbc')
 
 See the [introduction
 vignette](https://github.com/deankoch/rasterbc/blob/master/vignette_intro.md)
-([pdf
-link](https://github.com/deankoch/rasterbc/blob/master/vignette_intro.pdf))
 for instructions on getting started with this package.
 
 ## About
@@ -98,6 +93,10 @@ acknowledge the support of NSERC, TRIA-Net, and the University of
 Alberta Lewis Lab in this work.
 
 ## News
+
+**2021/12/14**
+
+Package finalized for submission to CRAN
 
 **2021/12/13**
 

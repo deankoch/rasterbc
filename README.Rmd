@@ -1,5 +1,5 @@
 ---
-title: "Introduction to the rasterbc package"
+title: "The rasterbc R Package"
 author: "Dean Koch"
 date: "`r Sys.Date()`"
 output: github_document
@@ -15,8 +15,6 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-
-# rasterbc
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -40,9 +38,9 @@ on this process), then stored as raster tiles in the standard
 [a data publication](https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283)
 (with associated [DOI](https://doi.org/10.20383/101.0283)) for permanence and easy referencing.
 
-<img src="man/figures/vignette_intro_okanagan_location-1.png" width="30%"></img>
-<img src="man/figures/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
-<img src="man/figures/vignette_intro_okanagan_bgcz-1.png" width="30%"></img>
+<img src="vignettes/man/figures/vignette_intro_okanagan_location-1.png" width="30%"></img>
+<img src="vignettes/man/figures/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
+<img src="vignettes/man/figures/vignette_intro_okanagan_bgcz-1.png" width="30%"></img>
 
 ## Releases
 
@@ -53,7 +51,6 @@ devtools::install_github('deankoch/rasterbc')
 ```
 
 See the [introduction vignette](https://github.com/deankoch/rasterbc/blob/master/vignette_intro.md)
-([pdf link](https://github.com/deankoch/rasterbc/blob/master/vignette_intro.pdf))
 for instructions on getting started with this package. 
 
 ## About
@@ -67,6 +64,10 @@ in research publications with professors Mark Lewis and Subhash Lele on
 We gratefully acknowledge the support of NSERC, TRIA-Net, and the University of Alberta Lewis Lab in this work.
 
 ## News
+
+**2021/12/14**
+
+Package finalized for submission to CRAN
 
 **2021/12/13**
 
