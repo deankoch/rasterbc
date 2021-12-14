@@ -13,6 +13,7 @@
 #'
 #' @return A list with the same structure and element names as input.list, but with each terminal element (character string, or
 #' vector of character strings) modified according to the prefix swap rule.
+#' @noRd
 #' @examples
 #' example.element = setNames(paste0('C:/', 1:10), paste0('foo', 1:10))
 #' example.list = list(a=example.element, b=list(c=example.element, d=example.element))
@@ -70,6 +71,7 @@ listswap_bc = function(input.list, input.prefix, output.prefix)
 #' @param quiet logical, suppresses console messages
 #'
 #' @return a list with elements 'collection', 'varname', 'ts', 'filenames' (see details)
+#' @noRd
 listfiles_bc = function(collection=NULL, varname=NULL, year=NULL, quiet=FALSE)
 {
   # handle empty collection argument
@@ -159,6 +161,7 @@ listfiles_bc = function(collection=NULL, varname=NULL, year=NULL, quiet=FALSE)
 #' @param geo A point, line, or polygon object of class \code{sfc}, or a character vector of 4-character codes
 #'
 #' @return An sf polygon or other geometry of the same type as geo
+#' @noRd
 parsegeo_bc = function(geo)
 {
   # handle character input
