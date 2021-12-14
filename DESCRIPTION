@@ -26,6 +26,4 @@ Suggests:
     rmarkdown,
     bcmaps,
     units
-VignetteBuilder: 
-    knitr,
-    bcmaps
+VignetteBuilder: knitr
