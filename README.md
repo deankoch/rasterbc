@@ -1,7 +1,7 @@
 Introduction to the rasterbc package
 ================
 Dean Koch
-2021-12-13
+2021-12-14
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -12,11 +12,12 @@ Dean Koch
 
 `rasterbc` provides access to a collection of 100m resolution gridded
 spatial ecological data on the province of BC during the period
-2001-2018. Given a user-defined geographical region (polygon), the
-package downloads and imports the requested data into R as a RasterLayer
-object. The goal is to improve access to a number of publicly accessible
-datasets on BC forests by simplifying the (often laborious) data ingress
-stage of modelling.
+2001-2018, including yearly rasterized Forest Insect and Disease Survey
+(FIDS) pest damage polygons. Given a user-defined geographical region
+(polygon), the package downloads and imports requested data layers into
+R as RasterLayer objects. The goal is to improve access to a number of
+publicly accessible datasets on BC forests by simplifying the (often
+laborious) data ingress stage of modelling.
 
 The available layers are:
 
@@ -97,6 +98,10 @@ acknowledge the support of NSERC, TRIA-Net, and the University of
 Alberta Lewis Lab in this work.
 
 ## News
+
+**2021/12/13**
+
+Major updates to tidy up codebase and complete the documentation
 
 **2021/11/16**
 
