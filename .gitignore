@@ -2,5 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-inst/doc
 dev/
+/doc/*.R
+/doc/*.Rmd
+/Meta/

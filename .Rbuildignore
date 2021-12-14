@@ -7,3 +7,5 @@
 ^demo\.R$
 ^demo\_files$
 ^data\-raw$
+^doc$
+^Meta$
