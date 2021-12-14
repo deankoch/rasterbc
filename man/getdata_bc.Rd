@@ -2,7 +2,7 @@
 % Please edit documentation in R/getdata_bc.R
 \name{getdata_bc}
 \alias{getdata_bc}
-\title{Download multiple blocks, and (optionally) merge/clip/mask them}
+\title{Download data from the rasterbc collection}
 \usage{
 getdata_bc(
   geo = NULL,
@@ -10,36 +10,50 @@ getdata_bc(
   varname = NULL,
   year = NULL,
   force.dl = FALSE,
-  load.mosaic = TRUE,
   quiet = FALSE
 )
 }
 \arguments{
-\item{geo}{A vector of (NTS/SNRC code) strings, or any geometry set of type sfc, specifying geographical extent to load}
+\item{geo}{vector of character strings (NTS/SNRC codes) or a geometry of class \code{sfc}}
 
-\item{collection}{A character string indicating the data collection to query}
+\item{collection}{character string indicating the data collection to query}
 
-\item{varname}{A character string indicating the layer to query}
+\item{varname}{character string indicating the layer to query}
 
-\item{year}{An integer indicating the year to query (if applicable)}
+\item{year}{integer indicating the year to query (if applicable)}
 
-\item{force.dl}{A boolean indicating whether to overwrite any existing data}
-
-\item{load.mosaic}{A boolean indicating whether to return the full (merged) raster}
+\item{force.dl}{logical indicating whether to overwrite any existing data}
 
 \item{quiet}{logical, suppresses console messages}
 }
 \value{
-Either: a (vector of) character string(s) containing the absolute path(s) to the file(s) written (default); or a
-RasterLayer object containing the requested data
+a vector of character string(s) containing the absolute path(s) to the downloaded file(s)
 }
 \description{
-Downloads and/or loads all blocks covering the geographical extent specified in input argument `geo`. This can be a vector of
-(4-character) NTS/SNRC block codes, or any geometry set of type `sfc`.
+Downloads all mapsheet layers (geoTIFFs) covering the geographical extent of \code{geo} for the
+specified \code{collection}, \code{varname}, and \code{year}. Input \code{geo} can be a vector
+of (4-character) NTS/SNRC mapsheet codes or a geometry of class \code{sfc}.
 }
 \details{
-Data for the layer specified by `collection`, `varname`, and `year` are written to the directory specified by `rasterbc::datadir_bc`,
-and blocks already downloaded are not downloaded again (unless `force.dl==TRUE`). Default behaviour is to merge blocks as needed
-to construct a raster containing the requested data, returning it as a RasterLayer. If `load.mosaic==FALSE`, the function downloads
-any missing blocks (as needed), returning their filenames instead of loading them.
+The data files are written to the directory returned by \code{rasterbc::datadir_bc()}. Mapsheets
+found there (already downloaded) are not downloaded again unless \code{force.dl==TRUE}. Users
+should only need to download a mapsheet once - there are no plans to update the rasterbc
+collection in the future.
+}
+\examples{
+# define a location of interest, and a polygon around it then fetch the corresponding DEM data
+input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
+input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
+\dontrun{
+block.path = getdata_bc(input.point, 'dem')
+getdata_bc(input.polygon, 'dem')
+
+# load one of the mapsheets
+raster::raster(block.path)
+}
+}
+\seealso{
+{\code{\link{findblocks_bc}} to identify which mapsheets will be downloaded}
+
+{\code{\link{listdata_bc}} for a list of available collections, variable names, years}
 }

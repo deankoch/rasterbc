@@ -17,7 +17,7 @@ listdata_bc(
 
 \item{varname}{(Optional) character string, indicating the layer to query (see Details, below)}
 
-\item{year}{(Optional) integer, indicating the year to query (see Details, below)}
+\item{year}{(Optional) integer or character string, indicating the year to query (see Details, below)}
 
 \item{verbose}{An integer (0, 1, 2), indicating how much information about the files to print to the console}
 

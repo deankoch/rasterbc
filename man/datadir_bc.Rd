@@ -34,6 +34,9 @@ than downloading mapsheets repeatedly, and it reduces the strain on FRDR's data 
 The directory `data.dir` will be created if it doesn't already exist.
 }
 \examples{
+# call without arguments to get the current directory (or a prompt to set it, if unset)
 datadir_bc()
+# call with argument NA to set a default location
 datadir_bc(NA, quiet=TRUE)
+datadir_bc()
 }

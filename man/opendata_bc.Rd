@@ -2,19 +2,20 @@
 % Please edit documentation in R/opendata_bc.R
 \name{opendata_bc}
 \alias{opendata_bc}
-\title{Load blocks and (optionally) merge/clip/mask them}
+\title{Load/merge data blocks and optionally clip/mask them}
 \usage{
 opendata_bc(
   geo = NULL,
   collection = NULL,
   varname = NULL,
   year = NULL,
-  load.mode = "mask",
-  quiet = FALSE
+  type = "mask",
+  quiet = FALSE,
+  dl = TRUE
 )
 }
 \arguments{
-\item{geo}{vector of character strings (NTS/SNRC codes) or any geometry set of type sfc}
+\item{geo}{vector of character strings (NTS/SNRC codes) or a geometry of class `sfc`}
 
 \item{collection}{character string, indicating the data collection to query}
 
@@ -22,7 +23,7 @@ opendata_bc(
 
 \item{year}{integer, indicating the year to query}
 
-\item{load.mode}{character string, one of 'all', 'clip', 'mask'}
+\item{type}{character string, one of 'all', 'clip', 'mask'}
 
 \item{quiet}{logical, suppresses console messages}
 }
@@ -30,15 +31,30 @@ opendata_bc(
 A `rasterLayer` (or list of them)
 }
 \description{
-Loads (as a single RasterLayer) all blocks covering the geographical extent specified in input argument `geo`. This can be a vector of
-(4-character) NTS/SNRC block codes, or any geometry set of type `sfc`.
+Loads all mapsheets covering the geographical extent of input argument
+`geo`. This can be a vector of (4-character) NTS/SNRC block codes, or a geometry of class
+`sfc` having a defined coordinate reference system.
 }
 \details{
-Data for the layer specified by `collection`, `varname`, and (as needed) `year`, are fetched from the directory specified by
-\code{\link{datadir_bc}}, merged into a single (mosaic) layer, cropped and masked as needed, and then loaded into memory and returned
-as a \code{\link{RasterLayer-class}} object.
+Data for the layer specified by `collection`, `varname`, and (as needed) `year`,
+are fetched from the directory specified by \code{\link{datadir_bc}}, merged into a single
+(mosaic) layer, cropped and masked as needed, and then loaded into memory and returned as a
+\code{\link{RasterLayer-class}} object.
 
-Argument `load.mode` specifies whether/how the blocks should be loaded into memory. 'all' uses `raster::merge` to merge the
-blocks into a larger rasterLayer, covering all (and likely more) of the input extent; 'clip' and 'mask' (the default) assume that `geo`
-is a (multi)polygon, cropping the merged blocks to its boundary; and  with 'mask', all data not inside the polygon is set to NA.
+When `geo` is a line or point type geometry (or when `type` is set to 'all'), the
+function uses `raster::merge` to create a larger (mosaic) RasterLayer containing the data
+from all mapsheets intersecting with the input extent.
+
+When `geo` is a polygon, `type` can be set to clip or mask the returned raster: 'all'
+returns the mosaic, as above; 'clip' crops the mosaic and to the bounding box of `geo`;
+and 'mask' (the default) crops the mosaic then  sets all points not lying inside `geo` to NA.
+}
+\examples{
+# define a location of interest, and a circle of radius 10km around it
+input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
+input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
+\dontrun{
+# open the DEM mapsheets corresponding to the polygon and plot
+opendata_bc(geo=input.polygon, 'dem') |> raster::plot()
+}
 }

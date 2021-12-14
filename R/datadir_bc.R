@@ -26,8 +26,11 @@
 #' @export
 #'
 #' @examples
+#' # call without arguments to get the current directory (or a prompt to set it, if unset)
 #' datadir_bc()
+#' # call with argument NA to set a default location
 #' datadir_bc(NA, quiet=TRUE)
+#' datadir_bc()
 datadir_bc = function(data.dir=NULL, quiet=FALSE)
 {
   # print the old data directory (if it was set already)

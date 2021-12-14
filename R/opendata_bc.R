@@ -31,27 +31,13 @@
 #' @importFrom utils txtProgressBar
 #' @export
 #' @examples
-#' # define a location of interest, and a polygon around it
+#' # define a location of interest, and a circle of radius 10km around it
 #' input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
 #' input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
-#'
-#' # download the DEM mapsheets corresponding to the point
-#' opendata_bc(geo=input.polygon, varname='harvest', year=2005) |> raster::plot()
-#'
-#' # load the DEM mapsheet for the point of interest
-#' getdata_bc(input.point, 'dem', 'dem') |> raster::plot()
-#' findblocks_bc(input.point, type='sfc') |> sf::st_geometry() |> plot(add=TRUE)
-#' input.point |> sf::st_transform(input.point, crs='EPSG:3005')|> plot(add=TRUE)
-#'
-#'
-#' opendata_bc(input.line, 'dem', 'dem') |> plot()
-#'
-#' # make a polygon (circle) from the point and repeat
-#' input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
-#' blocks |> sf::st_geometry() |> plot()
-#' sf::st_transform(input.polygon, crs='EPSG:3005') |> plot(add=TRUE, pch=16)
-#' blocks |> sf::st_geometry() |> sf::st_centroid() |> sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
-#' findblocks_bc(input.polygon)
+#' \dontrun{
+#' # open the DEM mapsheets corresponding to the polygon and plot
+#' opendata_bc(geo=input.polygon, 'dem') |> raster::plot()
+#' }
 opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, type='mask', quiet=FALSE, dl=TRUE)
 {
   # get the data storage directory or prompt to create one if it doesn't exist yet
