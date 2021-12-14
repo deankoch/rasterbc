@@ -9,3 +9,5 @@
 ^data\-raw$
 ^doc$
 ^Meta$
+^vignette_intro.md$
+^vignette_intro.Rmd$
