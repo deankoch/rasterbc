@@ -3,6 +3,4 @@
 .RData
 .Ruserdata
 dev/
-/doc/*.R
-/doc/*.Rmd
-/Meta/
+vignette_intro.Rmd
