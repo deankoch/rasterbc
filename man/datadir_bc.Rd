@@ -17,21 +17,21 @@ character string, the absolute path to the data storage directory
 \description{
 All files downloaded/created by the rasterbc package are written to the directory assigned
 by this function. The path to this directory is stored in the global options list for R under
-'rasterbc.data.dir'. To set this path, call `datadir_bc` with the path string in argument
-`data.dir`. To check the current setting, call `datadir_bc()` without arguments.
+'rasterbc.data.dir'. To set this path, call \code{datadir_bc} and pass the path as argument
+\code{data.dir}. To check the current setting, call \code{datadir_bc()} without arguments.
 }
 \details{
-If `data.dir=NA`, the data storage directory is set to the a subdirectory of `base::tempdir()`,
+If \code{data.dir=NA}, the data storage directory is set to the a subdirectory of \code{base::tempdir()},
 a per-session temporary directory (cleared after each R session). This happens automatically if
-`opendata_bc` or `getdata_bc` are called before `datadir_bc`, ensuring that `rasterbc` won't
+\code{opendata_bc} or \code{getdata_bc} are called before \code{datadir_bc}, ensuring that \code{rasterbc} won't
 unexpectedly overwrite things or leave garbage in the user's file system.
 
 However, users are strongly encouraged to set the data directory manually to a non-temporary
 location. This allows copies of downloaded data to persist between sessions, so that
-`rasterbc::opendata_bc` can load the local copies in future R sessions. This is both much faster
+\code{rasterbc::opendata_bc} can load the local copies in future R sessions. This is both much faster
 than downloading mapsheets repeatedly, and it reduces the strain on FRDR's data hosting service.
 
-The directory `data.dir` will be created if it doesn't already exist.
+The directory \code{data.dir} will be created if it doesn't already exist.
 }
 \examples{
 # call without arguments to get the current directory (or a prompt to set it, if unset)

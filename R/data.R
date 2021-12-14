@@ -39,5 +39,5 @@
 #'   \item{nfdb}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md}{Canadian national fire database}, 2001-2018, from Natural Resources Canada}
 #'   \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from Beaudoin et al. \href{https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184}{(2017)}}
 #' }
-#' @source Canadian Journal of Forest Research and various Canadian government environment ministries
+#' @source Original data sources were published by the Canadian Journal of Forest Research and various Canadian government environment ministries, and are described in full at \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src}
 'metadata_bc'

@@ -153,7 +153,7 @@ listfiles_bc = function(collection=NULL, varname=NULL, year=NULL, quiet=FALSE)
 
 #' Handle various inputs to argument geo
 #'
-#' Helper function for `findblocks_bc` and possibly others. Checks for valid input
+#' Helper function for \code{findblocks_bc} and possibly others. Checks for valid input
 #' and returns SNRC block centroid(s) when passed (one or more) code(s). Otherwise
 #' returns the input geometry geo after transformation to the Albers projection
 #' (the coordinate system used in the raster data)

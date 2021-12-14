@@ -41,21 +41,26 @@ input.point = sf::st_point(c(x=-120, y=50)) |> sf::st_sfc(crs='EPSG:4326')
 blocks = findblocks_bc(input.point, type='sfc')
 blocks |> sf::st_geometry() |> plot()
 sf::st_transform(input.point, crs='EPSG:3005') |> plot(add=TRUE)
-blocks |> sf::st_geometry() |> sf::st_centroid() |> sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
+blocks |> sf::st_geometry() |> sf::st_centroid() |>
+    sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
 
 # nudge the point slightly so it intersects with only one mapsheet
 input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
 blocks |> sf::st_geometry() |> plot()
 sf::st_transform(input.point, crs='EPSG:3005') |> plot(add=TRUE)
-blocks |> sf::st_geometry() |> sf::st_centroid() |> sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
+blocks |> sf::st_geometry() |> sf::st_centroid() |>
+   sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
 findblocks_bc(input.point)
 
 # make a polygon (circle) from the point and repeat
+if( requireNamespace('units', quietly = TRUE) ) {
 input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
 blocks |> sf::st_geometry() |> plot()
 sf::st_transform(input.polygon, crs='EPSG:3005') |> plot(add=TRUE)
-blocks |> sf::st_geometry() |> sf::st_centroid() |> sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
+blocks |> sf::st_geometry() |> sf::st_centroid() |>
+   sf::st_coordinates() |> text(labels=blocks$NTS_SNRC)
 findblocks_bc(input.polygon)
+}
 
 # geo can be a character vector of codes
 input.codes = c('093A', '093I', '104O')

@@ -24,18 +24,18 @@ listdata_bc(
 \item{simple}{logical indicating to return a (list of) logical vector(s) indicating existence on disk of specific filenames}
 }
 \value{
-Either a (list of) dataframe(s) containing information about each raster layer, or (when `simple==TRUE`) a
+Either a (list of) dataframe(s) containing information about each raster layer, or (when \code{simple==TRUE}) a
 nested list of logical values (named according to filepath), with entries for each data file in the specified subset.
 }
 \description{
 Returns a list of dataframes (one per collection) describing the variables available through rasterbc, or a subset (as
-specified by `collection`, `varname`, `year`). Alternatively, if `simple==TRUE`, returns a nested list indicating
+specified by \code{collection}, \code{varname}, \code{year}). Alternatively, if \code{simple==TRUE}, returns a nested list indicating
 the filepaths associated with these layers, and which of them exist in the local data storage directory already.
 }
 \details{
 The layers available through this package are organized into "collections", corresponding to their original online sources.
-Layers in a collection are further organized by variable name, and are uniquely identified by the character string `varname`
-(and, if applicable, `year`). The optional arguments `collection`, `varname`, `year` prompt this function to return only the
+Layers in a collection are further organized by variable name, and are uniquely identified by the character string \code{varname}
+(and, if applicable, \code{year}). The optional arguments \code{collection}, \code{varname}, \code{year} prompt this function to return only the
 applicable subsets.
 }
 \examples{

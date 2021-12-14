@@ -18,7 +18,7 @@ Nested list containing metadata and URLs for all of the files available as raste
 }
 }
 \source{
-Canadian Journal of Forest Research and various Canadian government environment ministries
+Original data sources were published by the Canadian Journal of Forest Research and various Canadian government environment ministries, and are described in full at \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src}
 }
 \usage{
 metadata_bc

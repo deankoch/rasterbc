@@ -15,7 +15,7 @@ opendata_bc(
 )
 }
 \arguments{
-\item{geo}{vector of character strings (NTS/SNRC codes) or a geometry of class `sfc`}
+\item{geo}{vector of character strings (NTS/SNRC codes) or a geometry of class \code{sfc}}
 
 \item{collection}{character string, indicating the data collection to query}
 
@@ -26,35 +26,45 @@ opendata_bc(
 \item{type}{character string, one of 'all', 'clip', 'mask'}
 
 \item{quiet}{logical, suppresses console messages}
+
+\item{dl}{logical, enables automatic downloading of missing files}
 }
 \value{
-A `rasterLayer` (or list of them)
+A \code{rasterLayer}
 }
 \description{
 Loads all mapsheets covering the geographical extent of input argument
-`geo`. This can be a vector of (4-character) NTS/SNRC block codes, or a geometry of class
-`sfc` having a defined coordinate reference system.
+\code{geo}. This can be a vector of (4-character) NTS/SNRC block codes, or a geometry of class
+\code{sfc} having a defined coordinate reference system.
 }
 \details{
-Data for the layer specified by `collection`, `varname`, and (as needed) `year`,
+Data for the layer specified by \code{collection}, \code{varname}, and (as needed) \code{year},
 are fetched from the directory specified by \code{\link{datadir_bc}}, merged into a single
 (mosaic) layer, cropped and masked as needed, and then loaded into memory and returned as a
-\code{\link{RasterLayer-class}} object.
+\code{\link{RasterLayer-class}} object. If the files are not found, and \code{dl=TRUE}, they
+will be automatically downloaded.
 
-When `geo` is a line or point type geometry (or when `type` is set to 'all'), the
-function uses `raster::merge` to create a larger (mosaic) RasterLayer containing the data
+When \code{geo} is a line or point type geometry (or when \code{type='all'}), the
+function uses \code{raster::merge} to create a larger (mosaic) RasterLayer containing the data
 from all mapsheets intersecting with the input extent.
 
-When `geo` is a polygon, `type` can be set to clip or mask the returned raster: 'all'
-returns the mosaic, as above; 'clip' crops the mosaic and to the bounding box of `geo`;
-and 'mask' (the default) crops the mosaic then  sets all points not lying inside `geo` to NA.
+When \code{geo} is a polygon, \code{type} can be set to clip or mask the returned raster: 'all'
+returns the mosaic, as above; 'clip' crops the mosaic and to the bounding box of \code{geo};
+and 'mask' (the default) crops the mosaic then  sets all points not lying inside \code{geo} to NA.
+Note that \code{type} is ignored when \code{geo} is a point geometry or a character string of
+codes (these cases behave like \code{type='all'}).
 }
 \examples{
 # define a location of interest, and a circle of radius 10km around it
 input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
+
+if( requireNamespace('units', quietly = TRUE) ) {
 input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
+
 \dontrun{
+# the following downloads data from FRDR
 # open the DEM mapsheets corresponding to the polygon and plot
 opendata_bc(geo=input.polygon, 'dem') |> raster::plot()
+}
 }
 }

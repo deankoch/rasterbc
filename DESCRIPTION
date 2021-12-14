@@ -24,7 +24,8 @@ Depends:
 Suggests: 
     knitr,
     rmarkdown,
-    bcmaps
+    bcmaps,
+    units
 VignetteBuilder: 
     knitr,
     bcmaps

@@ -43,13 +43,18 @@ collection in the future.
 \examples{
 # define a location of interest, and a polygon around it then fetch the corresponding DEM data
 input.point = sf::st_point(c(x=-120.1, y=50.1)) |> sf::st_sfc(crs='EPSG:4326')
+
+if( requireNamespace('units', quietly = TRUE) ) {
 input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
+
 \dontrun{
+# the following downloads data from FRDR
 block.path = getdata_bc(input.point, 'dem')
 getdata_bc(input.polygon, 'dem')
 
 # load one of the mapsheets
 raster::raster(block.path)
+}
 }
 }
 \seealso{
