@@ -1,11 +1,12 @@
 ---
 title: "Introduction to the rasterbc package"
-author: "Dean Koch"
+output: rmarkdown::html_vignette
 date: "`r Sys.Date()`"
-output: github_document
+vignette: >
+  %\VignetteIndexEntry{Introduction to the rasterbc package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
-
-<!-- vignette_intro.md is generated from vignette_intro.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -13,7 +14,9 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/vignette_intro_",
   out.width = "100%",
-  dpi=400
+  dpi = 300,
+  fig.width = 6,
+  fig.height = 5
 )
 ```
 
@@ -199,8 +202,7 @@ bgcz.levels = levels(bgcz.raster)[[1]]
 # set up a colour palette and plot with legend defined manually
 bgcz.levels$color = rainbow(nrow(bgcz.levels))
 plot(bgcz.raster, legend=FALSE, col=bgcz.levels$color, main='Biogeoclimatic zones')
+plot(st_geometry(example.sf), add=TRUE)
 legend('bottomright', legend=bgcz.levels$code, fill=bgcz.levels$color)
 
 ```
-
-<!-- rmarkdown::render('vignette_intro.Rmd') -->
