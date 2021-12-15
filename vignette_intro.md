@@ -24,8 +24,8 @@ to define a study region (but it’s not a requirement of the package).
 ``` r
 library(sf)
 #> Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
-library(raster)
-#> Loading required package: sp
+library(terra)
+#> terra version 1.4.22
 library(bcmaps)
 library(rasterbc)
 ```
@@ -51,7 +51,7 @@ that `rasterbc` should write files to the supplied directory, and warn
 if this directory contains any existing files/folders. Note that if the
 storage directory has existing files with names matching those fetched
 by the `rasterbc` package, those data will be overwritten by calls of
-the form `raster::getdata_bc(..., force.dl=TRUE)` (the default is
+the form `getdata_bc(..., force.dl=TRUE)` (the default is
 `force.dl=FALSE`).
 
 In future sessions, users can set `quiet=TRUE` to skip the interactive
@@ -61,7 +61,7 @@ This path string is stored as an R option. View it using:
 
 ``` r
 datadir_bc()
-#> current data storage path: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data
+#> current data storage path: C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data
 ```
 
 Depending on the geographical extent of interest and the number
@@ -148,16 +148,16 @@ fetch them using the command:
 
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
-#> [dem]:[dem] downloading 3 block(s) to: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem 
+#> [dem]:[dem] downloading 3 block(s) to: C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem 
 #>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%
 #> downloading to: dem/blocks/dem_092H.tif 
 #>   |                                                                              |===============================================                       |  67%
 #> downloading to: dem/blocks/dem_082E.tif 
 #>   |                                                                              |======================================================================| 100%
 #> downloading to: dem/blocks/dem_082L.tif
-#> [1] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_092H.tif"
-#> [2] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082E.tif"
-#> [3] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082L.tif"
+#> [1] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_092H.tif"
+#> [2] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082E.tif"
+#> [3] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082L.tif"
 ```
 
 You should see progress bars for a series of three downloads, and once
@@ -169,27 +169,28 @@ will be detected, and the download skipped. *eg.* repeat the call…
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
 #> all 3 block(s) found in local data storage. Nothing to download
-#> [1] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_092H.tif"
-#> [2] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082E.tif"
-#> [3] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082L.tif"
+#> [1] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_092H.tif"
+#> [2] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082E.tif"
+#> [3] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082L.tif"
 ```
 
 … and nothing happens, because the data are there already. Verify by
-loading one of the files as `RasterLayer`:
+loading one of the files as `SpatRaster`:
 
 ``` r
 tif.path = file.path(datadir_bc(), 'dem/blocks/dem_092H.tif')
-#> current data storage path: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data
-example.raster = raster(tif.path)
+#> current data storage path: C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data
+example.raster = terra::rast(tif.path)
 print(example.raster)
-#> class      : RasterLayer 
-#> dimensions : 1212, 1525, 1848300  (nrow, ncol, ncell)
-#> resolution : 100, 100  (x, y)
-#> extent     : 1286588, 1439088, 450888, 572088  (xmin, xmax, ymin, ymax)
-#> crs        : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
-#> source     : dem_092H.tif 
-#> names      : dem_092H 
-#> values     : 7.653875, 2608.961  (min, max)
+#> class       : SpatRaster 
+#> dimensions  : 1212, 1525, 1  (nrow, ncol, nlyr)
+#> resolution  : 100, 100  (x, y)
+#> extent      : 1286588, 1439088, 450888, 572088  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
+#> source      : dem_092H.tif 
+#> name        : dem_092H 
+#> min value   : 7.653875 
+#> max value   : 2608.961
 plot(example.raster, main='elevation (metres)')
 ```
 
@@ -201,21 +202,22 @@ To display the elevation data for the entire district, we need to
 combine the three blocks downloaded earlier. This can be done using
 `opendata_bc`, which loads all required blocks, merges them into a
 single layer, crops and masks as needed, and then loads into memory the
-returned `RasterLayer` object:
+returned `SpatRaster` object:
 
 ``` r
 example.tif = opendata_bc(example.sf, collection='dem', varname='dem')
 #> creating mosaic of 3 block(s)
 #> clipping layer...masking layer...done
 print(example.tif)
-#> class      : RasterLayer 
-#> dimensions : 622, 893, 555446  (nrow, ncol, ncell)
-#> resolution : 100, 100  (x, y)
-#> extent     : 1426588, 1515888, 539188, 601388  (xmin, xmax, ymin, ymax)
-#> crs        : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
-#> source     : memory
-#> names      : dem 
-#> values     : 340.43, 2153.29  (min, max)
+#> class       : SpatRaster 
+#> dimensions  : 622, 893, 1  (nrow, ncol, nlyr)
+#> resolution  : 100, 100  (x, y)
+#> extent      : 1426588, 1515888, 539188, 601388  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
+#> source      : memory 
+#> name        :     dem 
+#> min value   :  340.43 
+#> max value   : 2153.29
 plot(example.tif, main=paste(example.name, ': elevation'))
 plot(st_geometry(example.sf), add=TRUE)
 plot(st_geometry(blocks), add=TRUE, border='red')
@@ -237,20 +239,11 @@ defined by `sp`; or data frames containing coordinates of vertices) can
 often be coerced to `sf` using a command like
 `sf::st_as_sf(other_geometry_class_object)`. Alternatively, users can
 directly download individual blocks by specifying their NTS/SNRC codes,
-*eg.* the next chunk plots the “slope” variable (from the “dem”
-collection), specified using the codes:
+*eg.* the next chunk plots the DEM again, using the codes:
 
 ``` r
 example.codes = findblocks_bc(example.sf)
-example.tif = opendata_bc(example.codes, collection='dem', varname='slope')
-#> [dem]:[slope] downloading 3 block(s) to: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem 
-#>   |        ||   0%  |        ||  33%
-#> downloading to: dem/blocks/slope_092H.tif 
-#>   |        ||  67%
-#> downloading to: dem/blocks/slope_082E.tif 
-#>   |        || 100%
-#> downloading to: dem/blocks/slope_082L.tif 
-#> 
+example.tif = opendata_bc(example.codes, collection='dem', varname='dem')
 #> creating mosaic of 3 block(s)
 #> done
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': slope'))
@@ -289,19 +282,19 @@ layers. *eg.* in the ‘dem’ collection we also have ‘aspect’ and ‘slope
 listdata_bc(collection='dem', verbose=2)
 #>        year                        description                                  unit tiles
 #> dem      NA              digital elevation map              (metres above sea level)  3/89
-#> slope    NA derived from digital elevation map            (degrees above horizontal)  3/89
+#> slope    NA derived from digital elevation map            (degrees above horizontal)  0/89
 #> aspect   NA derived from digital elevation map (degrees counterclockwise from north)  0/89
 ```
 
-Notice the ‘slope’ blocks that were downloaded manually using NTS/SNRC
-codes. We merged these blocks earlier in the `opendata_bc` function call
-that created `example.tif`. Currently, this layer resides in memory and
-can be accessed via the R object `example.tif`. To save a copy, one can
-use the `raster::writeRaster` function:
+Notice the ‘dem’ blocks that were downloaded earlier. We merged these
+blocks in the `opendata_bc` function call that created `example.tif`.
+Currently, this layer resides in memory and can be accessed via the R
+object `example.tif`. To save a copy, one can use the
+`terra::writeRaster` function:
 
 ``` r
-slope.path = file.path(getOption('rasterbc.data.dir'), 'dem', 'example_slope.tif')
-writeRaster(example.tif, slope.path, overwrite=TRUE)
+dem.path = file.path(getOption('rasterbc.data.dir'), 'dem', 'example_dem.tif')
+terra::writeRaster(example.tif, dem.path, overwrite=TRUE)
 ```
 
 `getdata_bc` writes all of its data inside a ‘blocks’ subdirectory (in
@@ -311,15 +304,16 @@ left empty. So it is a good place to store and organize such derivative
 files, where they can be loaded more quickly (in future), *eg.*
 
 ``` r
-raster(slope.path)
-#> class      : RasterLayer 
-#> dimensions : 2459, 2983, 7335197  (nrow, ncol, ncell)
-#> resolution : 100, 100  (x, y)
-#> extent     : 1286588, 1584888, 450888, 696788  (xmin, xmax, ymin, ymax)
-#> crs        : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
-#> source     : example_slope.tif 
-#> names      : example_slope 
-#> values     : 0, 67.20546  (min, max)
+terra::rast(dem.path)
+#> class       : SpatRaster 
+#> dimensions  : 2459, 2983, 1  (nrow, ncol, nlyr)
+#> resolution  : 100, 100  (x, y)
+#> extent      : 1286588, 1584888, 450888, 696788  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +datum=NAD83 +units=m +no_defs 
+#> source      : example_dem.tif 
+#> name        :      dem 
+#> min value   : 7.653875 
+#> max value   : 2918.951
 ```
 
 If you’re finished with `rasterbc` and want to remove all of the stored
@@ -332,9 +326,9 @@ other package functions.
 ### Integer codes
 
 Note that the `bgcz` collection data are factors, which are then encoded
-in the geotiff files as integer codes. `opendata_bc` returns these
-factor names in a raster attribute table for the `RasterLayer` object
-(column “code”). The complete lookup tables are also stored in the lazy
+in the geotiff files as integer codes. `opendata_bc` returns a
+plot-ready categorical raster in this case, with coded levels replaced
+by factor names. The complete lookup tables are also stored in the lazy
 loaded list object `metadata_bc`.
 
 ``` r
@@ -364,22 +358,15 @@ Bunchgrass, etc. See the documentation for the [bgcz source
 script](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md)
 for links to a complete description of all codes.
 
-The code below plots this data for the example region, replacing in the
-legend the integer levels of the raster with the properly matched zone
-codes:
+The code below plots this data for the example region:
 
 ``` r
 # open the biogeoclimatic zone raster
 bgcz.raster = opendata_bc(geo=example.sf, collection='bgcz', varname='zone', quiet=TRUE)
 
-# a levels table (dataframe) can be extracted with `base::levels`
-bgcz.levels = levels(bgcz.raster)[[1]]
-
 # set up a colour palette and plot with legend defined manually
-bgcz.levels$color = rainbow(nrow(bgcz.levels))
-plot(bgcz.raster, legend=FALSE, col=bgcz.levels$color, main='Biogeoclimatic zones')
+plot(bgcz.raster, col=rainbow(5), main='Biogeoclimatic zones')
 plot(st_geometry(example.sf), add=TRUE)
-legend('bottomright', legend=bgcz.levels$code, fill=bgcz.levels$color)
 ```
 
 <img src="vignettes/man/figures/vignette_intro_okanagan_bgcz-1.png" width="100%" />
