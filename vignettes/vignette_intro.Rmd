@@ -54,7 +54,7 @@ recommended to pick a more permanent location so that files only need to be down
 When `quiet=FALSE` (the default), the function will ask users to confirm that `rasterbc` should write files
 to the supplied directory, and warn if this directory contains any existing files/folders. Note that if the
 storage directory has existing files with names matching those fetched by the `rasterbc` package, those data
-will be overwritten by calls of the form `raster::getdata_bc(..., force.dl=TRUE)` (the default is `force.dl=FALSE`).
+will be overwritten by calls of the form `getdata_bc(..., force.dl=TRUE)` (the default is `force.dl=FALSE`).
 
 In future sessions, users can set `quiet=TRUE` to skip the interactive prompt and suppress warnings about existing data.
 
