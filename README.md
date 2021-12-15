@@ -56,8 +56,9 @@ stored as raster tiles in the standard [BC
 Albers](https://spatialreference.org/ref/epsg/nad83-bc-albers/)
 projection, and hosted on [FRDR](https://www.frdr-dfdr.ca/repo/). Follow
 the links in the list above for code and documentation on this process.
-The collection is published as a data publication
-(<doi:10.20383/101.0283>) for permanence and easy referencing.
+The collection is published as a [data
+publication](https://doi.org/10.20383/101.0283) for permanence and easy
+referencing.
 
 <img src="vignettes/man/figures/vignette_intro_okanagan_location-1.png" width="30%"></img>
 <img src="vignettes/man/figures/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
