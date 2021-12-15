@@ -85,7 +85,7 @@ text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, c
 ```
 
 The Okanagan polygon is shown in yellow, against a red grid that partitions the geographic extent of the province into 89 smaller regions, called *mapsheets* (here I am calling them "blocks"). This is the [NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
-grid used by Natural Resources Canada for their topographic maps, with each mapsheet identied by a
+grid used by Natural Resources Canada for their topographic maps, with each mapsheet identified by a
 [unique number-letter code](https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765).
 `rasterbc` uses this grid to package data into blocks for distribution. It is lazy-loaded as the `sf` object returned by `findblocks_bc(type='sfc')`, which we copied to variable `blocks` in the chunk above
 
