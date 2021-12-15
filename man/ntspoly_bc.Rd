@@ -12,7 +12,7 @@ Simple feature collection (of type POLYGON), with 89 features and 1 field:
 }
 \source{
 Reproduced (in NAD83 / BC Albers projection) from the shapefile 'nts_snrc_250k.shp' in the zip archive 'nts_snrc.zip'
-available from \href{http://ftp.geogratis.gc.ca/pub/nrcan_rncan/vector/index/}{http://geogratis.gc.ca/} (accessed June 11, 2020).
+available from \href{https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/index/}{http://geogratis.gc.ca/} (accessed June 11, 2020).
 }
 \usage{
 ntspoly_bc

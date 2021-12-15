@@ -25,7 +25,7 @@ The available layers are:
 -   [Geographical coordinates
     grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md)
     (‘borders’), from [Natural Resources
-    Canada](https://www.nrcan.gc.ca/maps-tools-publications/maps/topographic-maps/10995)
+    Canada](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
 -   [Consolidated cutblocks,
     2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md)
     (‘cutblocks’), from the [BC Ministry of
@@ -33,7 +33,7 @@ The available layers are:
 -   [Digital elevation
     model](https://github.com/deankoch/rasterbc_src/blob/master/src_dem.knit.md)
     (‘dem’) from [Natural Resources
-    Canada](http://ftp.geogratis.gc.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_en.pdf)
+    Canada](https://ftp.maps.canada.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_en.pdf)
 -   [Forest insect and disease survey,
     2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md)
     (‘fids’), from the [BC Ministry of
@@ -41,7 +41,7 @@ The available layers are:
 -   [Forest extent and change,
     2001-2019](https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md)
     (‘gfc’), from [Hansen et al.,
-    (2013)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401)
+    (2013)](https://cdnsciencepub.com/doi/full/10.1139/cjfr-2013-0401)
 -   [Canadian national fire database,
     2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md)
     (‘nfdb’), from [Natural Resources
@@ -124,9 +124,8 @@ have been simplified; `getdata_bc` now loads/merges data by default
 
 **2020/07/05**
 
-All collections except ‘cutblocks’ are now on [FRDR’s demo
-site](https://demo.frdr-dfdr.ca/repo/handle/doi:10.80217/demo.278?mode=full),
-and can be accessed via this package.
+All collections except ‘cutblocks’ are now on FRDR’s demo site, and can
+be accessed via this package.
 
 **2020/06/30**
 

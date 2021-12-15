@@ -9,7 +9,7 @@
 #'   \item{NTS_SNRC}{four-character mapsheet code}
 #' }
 #' @source Reproduced (in NAD83 / BC Albers projection) from the shapefile 'nts_snrc_250k.shp' in the zip archive 'nts_snrc.zip'
-#' available from \href{http://ftp.geogratis.gc.ca/pub/nrcan_rncan/vector/index/}{http://geogratis.gc.ca/} (accessed June 11, 2020).
+#' available from \href{https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/index/}{http://geogratis.gc.ca/} (accessed June 11, 2020).
 'ntspoly_bc'
 
 #' Metadata for rasterbc collections
@@ -20,7 +20,7 @@
 #' Relevant contents of the file can be accessed dataframe using the function listdata_bc.
 #'
 #' The rasterbc collection is published as \href{https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283}{a data publication}
-#' with associated \href{https://doi.org/10.20383/101.0283}{DOI} for permanence and easy referencing. For a more complete
+#' with associated \doi{10.20383/101.0283}{DOI} for permanence and easy referencing. For a more complete
 #' description, along with instructions on downloading the collections from their sources and reproducing the collection,
 #' see the \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src} github repository.
 #'
@@ -35,7 +35,7 @@
 #'   \item{cutblocks}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md}{Consolidated cutblocks}, 2001-2018, from BC Ministry of Forests}
 #'   \item{dem}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_dem.knit.md}{Digital elevation model} from Natural Resources Canada}
 #'   \item{fids}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md}{Forest insect and disease survey}, 2001-2018, from BC Ministry of Forests}
-#'   \item{gfc}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md}{Forest extent and change}, 2001-2019 from Hansen et al. \href{https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2013-0401}{(2013)}}
+#'   \item{gfc}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md}{Forest extent and change}, 2001-2019 from Hansen et al. \href{https://cdnsciencepub.com/doi/full/10.1139/cjfr-2013-0401}{(2013)}}
 #'   \item{nfdb}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md}{Canadian national fire database}, 2001-2018, from Natural Resources Canada}
 #'   \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from Beaudoin et al. \href{https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184}{(2017)}}
 #' }
