@@ -37,7 +37,7 @@ datadir_bc = function(data.dir=NULL, quiet=FALSE)
   data.dir.existing = getOption('rasterbc.data.dir')
 
   # return/print the existing data directory
-  initial.msg = 'data storage path has not been set. Please provide a path using datadir_bc(data.dir)'
+  initial.msg = 'data storage path has not been set. Please provide a path using datadir_bc(data.dir)\n'
   if( is.null(data.dir) )
   {
     if( is.null(data.dir.existing) ) { if( !quiet ) cat(initial.msg) } else {

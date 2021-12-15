@@ -36,30 +36,32 @@ library(rasterbc)
 directory for the raster layers
 
 ``` r
-# replace 'H:/rasterbc_data' with your own path
-datadir_bc('H:/rasterbc_data', quiet=TRUE)
+# replace NA with your own path, like 'C:/rasterbc_data'
+datadir_bc(NA, quiet=TRUE)
 ```
+
+Setting the first argument to `NA` like this (or failing to call
+`datadir_bc` before `getdata_bc`) will cause the package to select a
+temporary directory (`base::tempdir`) that is emptied after your R
+session ends. We recommended to pick a more permanent location so that
+files only need to be downloaded once.
 
 When `quiet=FALSE` (the default), the function will ask users to confirm
 that `rasterbc` should write files to the supplied directory, and warn
 if this directory contains any existing files/folders. Note that if the
 storage directory has existing files with names matching those fetched
-by the `rasterbc` package, those data can be overwritten. Note that
-files are only overwritten via calls of the form
-`raster::getdata_bc(..., force.dl=TRUE)` (the default is
+by the `rasterbc` package, those data will be overwritten by calls of
+the form `raster::getdata_bc(..., force.dl=TRUE)` (the default is
 `force.dl=FALSE`).
 
-However, to be safe you should set the data directory to a path that
-won’t used by other applications; *eg.* a subfolder of your home
-directory or external storage device, with a unique folder name. In
-future sessions, users can set `quiet=TRUE` to skip the interactive
+In future sessions, users can set `quiet=TRUE` to skip the interactive
 prompt and suppress warnings about existing data.
 
 This path string is stored as an R option. View it using:
 
 ``` r
 datadir_bc()
-#> current data storage path: H:/rasterbc_data
+#> current data storage path: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data
 ```
 
 Depending on the geographical extent of interest and the number
@@ -74,7 +76,7 @@ To demonstrate this package we’ll need a polygon covering a (relatively)
 small geographical extent in BC. Start by loading the
 [bcmaps](https://github.com/bcgov/bcmaps) package and grabbing the
 polygons for the BC provincial boundary and the [Central Okanagan
-Regional District](https://www.regionaldistrict.com/)
+Regional District](https://www.rdco.com/en/index.aspx)
 
 ``` r
 # define and load the geometry
@@ -98,7 +100,7 @@ The Okanagan polygon is shown in yellow, against a red grid that
 partitions the geographic extent of the province into 89 smaller
 regions, called *mapsheets* (here I am calling them “blocks”). This is
 the
-[NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-publications/maps/topographic-maps/10995)
+[NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
 grid used by Natural Resources Canada for their topographic maps, with
 each mapsheet identied by a [unique number-letter
 code](https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765).
@@ -131,7 +133,7 @@ print(blocks)
 ## A basic example
 
 Let’s download Canada’s 1:250,000 digital elevation model
-([CDEM](http://ftp.geogratis.gc.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_product_specs.pdf))
+([CDEM](https://ftp.maps.canada.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_product_specs.pdf))
 layers corresponding to the yellow polygon. For the full BC extent,
 these rasters would occupy around 1.2GB of space. But we only want the
 smaller extent corresponding to the polygon. There are three blocks
@@ -146,6 +148,16 @@ fetch them using the command:
 
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
+#> [dem]:[dem] downloading 3 block(s) to: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem 
+#>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%
+#> downloading to: dem/blocks/dem_092H.tif 
+#>   |                                                                              |===============================================                       |  67%
+#> downloading to: dem/blocks/dem_082E.tif 
+#>   |                                                                              |======================================================================| 100%
+#> downloading to: dem/blocks/dem_082L.tif
+#> [1] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_092H.tif"
+#> [2] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082E.tif"
+#> [3] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082L.tif"
 ```
 
 You should see progress bars for a series of three downloads, and once
@@ -157,16 +169,18 @@ will be detected, and the download skipped. *eg.* repeat the call…
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
 #> all 3 block(s) found in local data storage. Nothing to download
-#> [1] "H:/rasterbc_data/dem/blocks/dem_092H.tif"
-#> [2] "H:/rasterbc_data/dem/blocks/dem_082E.tif"
-#> [3] "H:/rasterbc_data/dem/blocks/dem_082L.tif"
+#> [1] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_092H.tif"
+#> [2] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082E.tif"
+#> [3] "C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem/blocks/dem_082L.tif"
 ```
 
 … and nothing happens, because the data are there already. Verify by
 loading one of the files as `RasterLayer`:
 
 ``` r
-example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
+tif.path = file.path(datadir_bc(), 'dem/blocks/dem_092H.tif')
+#> current data storage path: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data
+example.raster = raster(tif.path)
 print(example.raster)
 #> class      : RasterLayer 
 #> dimensions : 1212, 1525, 1848300  (nrow, ncol, ncell)
@@ -229,6 +243,14 @@ collection), specified using the codes:
 ``` r
 example.codes = findblocks_bc(example.sf)
 example.tif = opendata_bc(example.codes, collection='dem', varname='slope')
+#> [dem]:[slope] downloading 3 block(s) to: C:/Users/deank/AppData/Local/Temp/Rtmp6VWv6u/rasterbc_data/dem 
+#>   |        ||   0%  |        ||  33%
+#> downloading to: dem/blocks/slope_092H.tif 
+#>   |        ||  67%
+#> downloading to: dem/blocks/slope_082E.tif 
+#>   |        || 100%
+#> downloading to: dem/blocks/slope_082L.tif 
+#> 
 #> creating mosaic of 3 block(s)
 #> done
 plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': slope'))

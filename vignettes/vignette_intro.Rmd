@@ -43,18 +43,20 @@ library(rasterbc)
 `rasterbc` is a data-retrieval tool. Start by setting a storage directory for the raster layers
 
 ```{r initializing}
-# replace 'H:/rasterbc_data' with your own path
-datadir_bc('H:/rasterbc_data', quiet=TRUE)
+# replace NA with your own path, like 'C:/rasterbc_data'
+datadir_bc(NA, quiet=TRUE)
 ```
+
+Setting the first argument to `NA` like this (or failing to call `datadir_bc` before `getdata_bc`) will cause
+the package to select a temporary directory (`base::tempdir`) that is emptied after your R session ends. We
+recommended to pick a more permanent location so that files only need to be downloaded once.
 
 When `quiet=FALSE` (the default), the function will ask users to confirm that `rasterbc` should write files
 to the supplied directory, and warn if this directory contains any existing files/folders. Note that if the
 storage directory has existing files with names matching those fetched by the `rasterbc` package, those data
-can be overwritten. Note that
-files are only overwritten via calls of the form `raster::getdata_bc(..., force.dl=TRUE)` (the default is `force.dl=FALSE`).
+will be overwritten by calls of the form `raster::getdata_bc(..., force.dl=TRUE)` (the default is `force.dl=FALSE`).
 
-However, to be safe you should set the data directory to a path that won't used by other applications; *eg.* a subfolder of your home directory or external storage device, with a unique folder name. In future sessions, users can set `quiet=TRUE` to skip
-the interactive prompt and suppress warnings about existing data.
+In future sessions, users can set `quiet=TRUE` to skip the interactive prompt and suppress warnings about existing data.
 
 This path string is stored as an R option. View it using:
 ```{r view-datadir}
@@ -65,7 +67,7 @@ Depending on the geographical extent of interest and the number different layers
 
 ## Getting started
 
-To demonstrate this package we'll need a polygon covering a (relatively) small geographical extent in BC. Start by loading the [bcmaps](https://github.com/bcgov/bcmaps) package and grabbing the polygons for the BC provincial boundary and the [Central Okanagan Regional District](https://www.regionaldistrict.com/)
+To demonstrate this package we'll need a polygon covering a (relatively) small geographical extent in BC. Start by loading the [bcmaps](https://github.com/bcgov/bcmaps) package and grabbing the polygons for the BC provincial boundary and the [Central Okanagan Regional District](https://www.rdco.com/en/index.aspx)
 
 ```{r okanagan_location}
 # define and load the geometry
@@ -82,7 +84,7 @@ plot(st_geometry(example.sf), add=TRUE, col=adjustcolor('yellow', alpha.f=0.5))
 text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, cex=0.5)
 ```
 
-The Okanagan polygon is shown in yellow, against a red grid that partitions the geographic extent of the province into 89 smaller regions, called *mapsheets* (here I am calling them "blocks"). This is the [NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-publications/maps/topographic-maps/10995)
+The Okanagan polygon is shown in yellow, against a red grid that partitions the geographic extent of the province into 89 smaller regions, called *mapsheets* (here I am calling them "blocks"). This is the [NTS/SNRC](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
 grid used by Natural Resources Canada for their topographic maps, with each mapsheet identied by a
 [unique number-letter code](https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765).
 `rasterbc` uses this grid to package data into blocks for distribution. It is lazy-loaded as the `sf` object returned by `findblocks_bc(type='sfc')`, which we copied to variable `blocks` in the chunk above
@@ -93,7 +95,7 @@ print(blocks)
 
 ## A basic example
 
-Let's download Canada's 1:250,000 digital elevation model ([CDEM](http://ftp.geogratis.gc.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_product_specs.pdf))
+Let's download Canada's 1:250,000 digital elevation model ([CDEM](https://ftp.maps.canada.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_product_specs.pdf))
 layers corresponding to the yellow polygon. For the full BC extent, these rasters would occupy around 1.2GB of space. But we only want the smaller extent corresponding to the polygon. There are three blocks (totalling about 20 MB) which overlap with our region of interest
 
 ```{r finblocks-example}
@@ -102,7 +104,7 @@ findblocks_bc(example.sf)
 
 fetch them using the command:
 
-```{r get-example, eval=FALSE}
+```{r get-example}
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
 ```
 
@@ -115,7 +117,9 @@ getdata_bc(geo=example.sf, collection='dem', varname='dem')
 ... and nothing happens, because the data are there already. Verify by loading one of the files as `RasterLayer`:
 
 ```{r okanagan_elevation, R.options = list(width = 15)}
-example.raster = raster('H:/rasterbc_data/dem/blocks/dem_092H.tif')
+
+tif.path = file.path(datadir_bc(), 'dem/blocks/dem_092H.tif')
+example.raster = raster(tif.path)
 print(example.raster)
 plot(example.raster, main='elevation (metres)')
 ```
