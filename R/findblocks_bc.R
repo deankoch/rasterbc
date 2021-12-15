@@ -17,7 +17,6 @@
 #' @param type character, the object type to return, either 'character' or 'sfc'
 #'
 #' @return either a character vector or an sfc object (see details)
-#' @importFrom utils choose.dir
 #' @export
 #' @examples
 #' # list all mapsheet codes then print the corresponding sfc object
