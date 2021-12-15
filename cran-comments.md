@@ -4,7 +4,7 @@ Please note that the vignette for this package takes around 1-2 minutes to build
 
 ## R CMD check results
 
-I have run check on my Windows 10 machine, as well as Winbuilder, and R-hub on the linux platform. There were no errors, warnings, or notes
+I have run check on my Windows 10 machine, as well as Winbuilder, and R-hub with the linux environment. There were no errors, warnings, or notes
 
 ## Downstream dependencies
 
