@@ -7,11 +7,11 @@
 #' Data for the layer specified by \code{collection}, \code{varname}, and (as needed) \code{year},
 #' are fetched from the directory specified by \code{\link{datadir_bc}}, merged into a single
 #' (mosaic) layer, cropped and masked as needed, and then loaded into memory and returned as a
-#' \code{\link{RasterLayer-class}} object. If the files are not found, and \code{dl=TRUE}, they
+#' \code{SpatRaster} object. If the files are not found, and \code{dl=TRUE}, they
 #' will be automatically downloaded.
 #'
 #' When \code{geo} is a line or point type geometry (or when \code{type='all'}), the
-#' function uses \code{raster::merge} to create a larger (mosaic) RasterLayer containing the data
+#' function uses \code{terra::merge} to create a larger (mosaic) SpatRaster containing the data
 #' from all mapsheets intersecting with the input extent.
 #'
 #' When \code{geo} is a polygon, \code{type} can be set to clip or mask the returned raster: 'all'
@@ -28,7 +28,7 @@
 #' @param quiet logical, suppresses console messages
 #' @param dl logical, enables automatic downloading of missing files
 #'
-#' @return A \code{rasterLayer}
+#' @return A \code{SpatRaster}
 #' @importFrom methods as
 #' @importFrom utils download.file
 #' @importFrom utils setTxtProgressBar
@@ -44,7 +44,7 @@
 #' \dontrun{
 #' # the following downloads data from FRDR
 #' # open the DEM mapsheets corresponding to the polygon and plot
-#' opendata_bc(geo=input.polygon, 'dem') |> raster::plot()
+#' opendata_bc(geo=input.polygon, 'dem') |> terra::plot()
 #' }
 #' }
 opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, type='mask', quiet=FALSE, dl=TRUE)
@@ -90,13 +90,13 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, type=
   if( sum(idx.geo)==1 )
   {
     # when only a single block is requested, load it directly, assign min/max stats
-    out.raster = raster::setMinMax(raster::raster(fpath[idx.geo]))
+    out.raster = terra::rast(fpath[idx.geo])
 
   } else {
 
     # ... otherwise, merge the blocks into a bigger geotiff
     if(!quiet) cat(paste('creating mosaic of', sum(idx.geo), 'block(s)\n'))
-    out.raster = do.call(raster::merge, lapply(fpath[idx.geo], raster::raster))
+    out.raster = do.call(terra::merge, lapply(fpath[idx.geo], terra::rast))
 
   }
 
@@ -110,11 +110,11 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, type=
     if( 'sfc' %in% class(geo) )
     {
       if(!quiet) cat('clipping layer...')
-      out.raster = raster::crop(out.raster, as(geo, 'Spatial'))
+      out.raster = terra::crop(out.raster, geo)
       if(type == 'mask')
       {
         if(!quiet) cat('masking layer...')
-        out.raster = raster::mask(out.raster, as(geo, 'Spatial'))
+        out.raster = terra::mask(out.raster, as(geo, 'SpatVector'))
       }
 
     } else {
@@ -127,15 +127,15 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, type=
   if(collection == 'bgcz')
   {
     # convert raster to factor type
-    out.raster = raster::ratify(out.raster)
+    out.raster = terra::as.factor(out.raster)
 
-    # copy the lookup tables
-    lookup.list = rasterbc::metadata_bc$bgcz$metadata$coding
+    # copy the lookup table and reshape as dataframe
+    lookup.list = rasterbc::metadata_bc$bgcz$metadata$coding[[varname]]
+    rat = data.frame(seq_along(lookup.list), lookup.list)
+    names(rat) = c('id', varname)
 
-    # copy levels dataframe, append code column, copy back to rasterlayer
-    bgcz.levels = raster::levels(out.raster)[[1]]
-    bgcz.levels$code = lookup.list[[varname]][bgcz.levels[['ID']]]
-    levels(out.raster) = list(bgcz.levels)
+    # assign raster attribute table
+    levels(out.raster) = rat
   }
 
   if(!quiet) cat('done\n')

@@ -30,7 +30,7 @@ opendata_bc(
 \item{dl}{logical, enables automatic downloading of missing files}
 }
 \value{
-A \code{rasterLayer}
+A \code{SpatRaster}
 }
 \description{
 Loads all mapsheets covering the geographical extent of input argument
@@ -41,11 +41,11 @@ Loads all mapsheets covering the geographical extent of input argument
 Data for the layer specified by \code{collection}, \code{varname}, and (as needed) \code{year},
 are fetched from the directory specified by \code{\link{datadir_bc}}, merged into a single
 (mosaic) layer, cropped and masked as needed, and then loaded into memory and returned as a
-\code{\link{RasterLayer-class}} object. If the files are not found, and \code{dl=TRUE}, they
+\code{SpatRaster} object. If the files are not found, and \code{dl=TRUE}, they
 will be automatically downloaded.
 
 When \code{geo} is a line or point type geometry (or when \code{type='all'}), the
-function uses \code{raster::merge} to create a larger (mosaic) RasterLayer containing the data
+function uses \code{terra::merge} to create a larger (mosaic) SpatRaster containing the data
 from all mapsheets intersecting with the input extent.
 
 When \code{geo} is a polygon, \code{type} can be set to clip or mask the returned raster: 'all'
@@ -64,7 +64,7 @@ input.polygon = input.point |> sf::st_buffer(units::set_units(10, km))
 \dontrun{
 # the following downloads data from FRDR
 # open the DEM mapsheets corresponding to the polygon and plot
-opendata_bc(geo=input.polygon, 'dem') |> raster::plot()
+opendata_bc(geo=input.polygon, 'dem') |> terra::plot()
 }
 }
 }

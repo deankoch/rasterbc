@@ -38,7 +38,7 @@
 #' getdata_bc(input.polygon, 'dem')
 #'
 #' # load one of the mapsheets
-#' raster::raster(block.path)
+#' terra::rast(block.path)
 #' }
 #' }
 getdata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, force.dl=FALSE, quiet=FALSE)

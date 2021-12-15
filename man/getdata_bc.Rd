@@ -53,7 +53,7 @@ block.path = getdata_bc(input.point, 'dem')
 getdata_bc(input.polygon, 'dem')
 
 # load one of the mapsheets
-raster::raster(block.path)
+terra::rast(block.path)
 }
 }
 }
