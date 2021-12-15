@@ -10,7 +10,7 @@ Description: R-based access to a large set of data variables relevant to forest 
     Forest Insect and Disease Survey (FIDS) maps for a number of insect pest species, all covering the period 2001-2018.
     Users supply a polygon or point location in the province of BC, and 'rasterbc' will download the overlapping raster tiles
     hosted at FRDR, merging them as needed and returning the result in R as a 'SpatRaster' object. Metadata associated with these
-    layers, and code for downloading them from their original sources can be found in the github repository
+    layers, and code for downloading them from their original sources can be found in the 'github' repository
     <https://github.com/deankoch/rasterbc_src>.
 License: MIT + file LICENSE
 URL: https://github.com/deankoch/rasterbc, https://github.com/deankoch/rasterbc_src

@@ -2,13 +2,13 @@
 
 This is my first submission to CRAN.
 
-Please note that the vignette for this package takes around 1-2 minutes to build, as it downloads several geoTIFF files, totalling 22MB, into a temporary directory. If that is too resource-heavy, or if it's more appropriate for this kind of data-retrieval package to pre-build its vignette (or disable checking, etc) please let me know how proceed with that.
+Please note that the vignette for this package took around 20-40 seconds to build, as it downloads several geoTIFF files, totalling 22MB, into a temporary directory. If that is too resource-heavy, or if it's more appropriate for this kind of data-retrieval package to pre-build its vignette (or disable checking, etc) please let me know how proceed with that.
 
 ## R CMD check results
 
 I have run check on my Windows 10 machine with R version 4.1.2 and on R-hub with the development version of R in the Debian Linux environment. There were no ERRORs, WARNINGs, or NOTEs.
 
-On Winbuilder with the development version of R, I get 0 ERRORs, 0 WARNINGs, and 1 NOTE:
+On Winbuilder with the development version of R, I get 0 ERRORs, 0 WARNINGs, and 1 NOTE about misspelled words:
 
 * Possibly misspelled words in DESCRIPTION:
   Albers (7:55)
@@ -19,35 +19,9 @@ On Winbuilder with the development version of R, I get 0 ERRORs, 0 WARNINGs, and
   biogeoclimatic (8:71)
   cutblocks (8:102)
   et (9:12, 9:68)
-  github (13:91)
   rasterized (9:116)
   
 These are proper names, abbreviations and technical terminology. All are spelled correctly.
-
-* Found the following (possibly) invalid URLs:
-  URL: https://doi.org/10.20383/101.0283
-    From: man/metadata_bc.Rd
-          README.md
-    Status: 503
-    Message: Service Unavailable
-  URL: https://www.frdr-dfdr.ca/repo/
-    From: man/metadata_bc.Rd
-          README.md
-    Status: 503
-    Message: Service Unavailable
-  URL: https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283
-    From: man/metadata_bc.Rd
-    Status: 503
-    Message: Service Unavailable
-
-* Found the following (possibly) invalid DOIs:
-  DOI: 10.20383/101.0283
-    From: DESCRIPTION
-    Status: Service Unavailable
-    Message: 503
-    
-These links are valid, but unfortunately the FRDR site is down for maintenance at the moment
-
 
 ## Downstream dependencies
 
