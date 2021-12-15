@@ -1,20 +1,20 @@
 The rasterbc R Package
 ================
 Dean Koch
-2021-12-14
+2021-12-15
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 <!-- badges: end -->
 
 `rasterbc` provides access to a collection of 100m resolution gridded
-spatial ecological data on the province of BC during the period
-2001-2018, including yearly rasterized Forest Insect and Disease Survey
-(FIDS) pest damage polygons. Given a user-defined geographical region
-(polygon), the package downloads and imports requested data layers into
-R as SpatRaster objects. The goal is to improve access to a number of
-publicly accessible datasets on BC forests by simplifying the (often
-laborious) data ingress stage of modelling.
+spatial ecological data on the province of British Columbia during the
+period 2001-2018, including yearly rasterized Forest Insect and Disease
+Survey (FIDS) pest damage polygons. Given a user-defined geographical
+region (polygon), the package downloads and imports requested data
+layers into R as SpatRaster objects. The goal is to improve access to a
+number of publicly accessible datasets on BC forests and simplify data
+ingress for modellers.
 
 The available layers are:
 
@@ -49,14 +49,14 @@ The available layers are:
 -   [Interpolated forest attributes, 2001,
     2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
     (‘pine’) from [Beaudoin et
-    al. (2017)](https://www.nrcresearchpress.com/doi/full/10.1139/cjfr-2017-0184)
+    al. (2017)](https://cdnsciencepub.com/doi/full/10.1139/cjfr-2017-0184)
 
-All datasets were downloaded and processed in the years 2018-2020
-(follow links above for code and documentation on this process), then
+All datasets were downloaded and processed in the years 2018-2020, then
 stored as raster tiles in the standard [BC
 Albers](https://spatialreference.org/ref/epsg/nad83-bc-albers/)
-projection, and hosted on [FRDR](https://www.frdr-dfdr.ca/repo/). The
-collection is published as [a data
+projection, and hosted on [FRDR](https://www.frdr-dfdr.ca/repo/). Follow
+the links in the list above for code and documentation on this process.
+The collection is published as [a data
 publication](https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283)
 (with associated [DOI](https://doi.org/10.20383/101.0283)) for
 permanence and easy referencing.
@@ -74,7 +74,8 @@ installed in R using the command
 devtools::install_github('deankoch/rasterbc')
 ```
 
-See the [introduction
+This will also install the dependencies `sf` and `terra`, if you don’t
+have them already. See the [introduction
 vignette](https://github.com/deankoch/rasterbc/blob/master/vignette_intro.md)
 for instructions on getting started with this package.
 
