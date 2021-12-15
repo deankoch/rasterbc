@@ -61,7 +61,7 @@ This path string is stored as an R option. View it using:
 
 ``` r
 datadir_bc()
-#> current data storage path: C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data
+#> current data storage path: C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data
 ```
 
 Depending on the geographical extent of interest and the number
@@ -148,16 +148,16 @@ fetch them using the command:
 
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
-#> [dem]:[dem] downloading 3 block(s) to: C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem 
+#> [dem]:[dem] downloading 3 block(s) to: C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data/dem 
 #>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%
 #> downloading to: dem/blocks/dem_092H.tif 
 #>   |                                                                              |===============================================                       |  67%
 #> downloading to: dem/blocks/dem_082E.tif 
 #>   |                                                                              |======================================================================| 100%
 #> downloading to: dem/blocks/dem_082L.tif
-#> [1] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_092H.tif"
-#> [2] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082E.tif"
-#> [3] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082L.tif"
+#> [1] "C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data/dem/blocks/dem_092H.tif"
+#> [2] "C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data/dem/blocks/dem_082E.tif"
+#> [3] "C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data/dem/blocks/dem_082L.tif"
 ```
 
 You should see progress bars for a series of three downloads, and once
@@ -169,9 +169,9 @@ will be detected, and the download skipped. *eg.* repeat the call…
 ``` r
 getdata_bc(geo=example.sf, collection='dem', varname='dem')
 #> all 3 block(s) found in local data storage. Nothing to download
-#> [1] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_092H.tif"
-#> [2] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082E.tif"
-#> [3] "C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data/dem/blocks/dem_082L.tif"
+#> [1] "C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data/dem/blocks/dem_092H.tif"
+#> [2] "C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data/dem/blocks/dem_082E.tif"
+#> [3] "C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data/dem/blocks/dem_082L.tif"
 ```
 
 … and nothing happens, because the data are there already. Verify by
@@ -179,7 +179,7 @@ loading one of the files as `SpatRaster`:
 
 ``` r
 tif.path = file.path(datadir_bc(), 'dem/blocks/dem_092H.tif')
-#> current data storage path: C:/Users/deank/AppData/Local/Temp/RtmpOYLzGn/rasterbc_data
+#> current data storage path: C:/Users/deank/AppData/Local/Temp/Rtmpm6QQJ7/rasterbc_data
 example.raster = terra::rast(tif.path)
 print(example.raster)
 #> class       : SpatRaster 
@@ -246,7 +246,7 @@ example.codes = findblocks_bc(example.sf)
 example.tif = opendata_bc(example.codes, collection='dem', varname='dem')
 #> creating mosaic of 3 block(s)
 #> done
-plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': slope'))
+plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': elevation'))
 plot(st_geometry(blocks), add=TRUE, border='red')
 plot(st_geometry(example.sf), add=TRUE)
 text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, cex=0.5)

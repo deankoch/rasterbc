@@ -141,7 +141,7 @@ Any simple features object of class `sf` or `sfc` can be used for the argument `
 ```{r okanagan_elevation_tiles, R.options = list(width = 10)}
 example.codes = findblocks_bc(example.sf)
 example.tif = opendata_bc(example.codes, collection='dem', varname='dem')
-plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': slope'))
+plot(example.tif, main=paste('NTS/SNRC mapsheets ', paste(example.codes, collapse=', '), ': elevation'))
 plot(st_geometry(blocks), add=TRUE, border='red')
 plot(st_geometry(example.sf), add=TRUE)
 text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, cex=0.5)
