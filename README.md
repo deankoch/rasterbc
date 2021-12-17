@@ -75,7 +75,7 @@ devtools::install_github('deankoch/rasterbc')
 
 This will also install the dependencies `sf` and `terra`, if you don’t
 have them already. See the [introduction
-vignette](https://github.com/deankoch/rasterbc/blob/master/vignette_intro.md)
+vignette](https://github.com/deankoch/rasterbc/blob/master/vignettes/vignette_intro.md)
 for instructions on getting started with this package.
 
 ## About
