@@ -1,7 +1,7 @@
 The rasterbc R Package
 ================
 Dean Koch
-2021-12-16
+2021-12-17
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
@@ -60,9 +60,9 @@ The collection is published as a [data
 publication](https://doi.org/10.20383/101.0283) for permanence and easy
 referencing.
 
-<img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/man/figures/vignette_intro_okanagan_location-1.png" width="30%"></img>
-<img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/man/figures/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
-<img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/man/figures/vignette_intro_okanagan_bgcz-1.png" width="30%"></img>
+<img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/vignette_intro_okanagan_location-1.png" width="30%"></img>
+<img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
+<img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/vignette_intro_okanagan_bgcz-1.png" width="30%"></img>
 
 ## Releases
 
