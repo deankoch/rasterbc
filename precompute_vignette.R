@@ -26,13 +26,17 @@
 # INPUT:
 #
 # the source Rmd vignette file with filename extension orig
-# located at <projdir>/<fname>.Rmd.orig
+# located at <vdir>/<fname>.Rmd.orig
 #
 # OUTPUT:
 #
-# <projdir>/<fname>.Rmd, the new pre-built vignette Rmd file for CRAN
-# <projdir>/<fname>.R, copy of the R code executed in the Rmd
-# <projdir>/<fname>.md, a github-friendly markdown file
+# <vdir>/<fname>.Rmd, the new pre-built vignette Rmd file for CRAN
+# <vdir>/<fname>.R, copy of the R code executed in the Rmd
+# <vdir>/<fname>.md, a github-friendly markdown file
+#
+# where <vdir> is the path to the package vignettes directory and
+# <fname> is the filename (without file extension). These are defined
+# in the code below
 #
 # ####################################################################
 #
@@ -63,19 +67,19 @@
 # ####################################################################
 
 # define the filename to work on (must be found in vignettes/)
-vignettes.dir = 'I:/MPB_ARCHIVE/git-MPB/rasterbc/vignettes'
+vdir = 'I:/MPB_ARCHIVE/git-MPB/rasterbc/vignettes'
 fname = 'vignette_intro'
 
 # define paths of files to create
-path.orig = file.path(vignettes.dir, paste0(fname, '.Rmd.orig'))
-path.rmd = file.path(vignettes.dir, paste0(fname, '.Rmd'))
-path.temp.rmd = file.path(vignettes.dir, paste0(fname, '_TEMPORARY.Rmd'))
-path.r = file.path(vignettes.dir, paste0(fname, '.R'))
-path.md = file.path(vignettes.dir, paste0(fname, '.md'))
+path.orig = file.path(vdir, paste0(fname, '.Rmd.orig'))
+path.rmd = file.path(vdir, paste0(fname, '.Rmd'))
+path.temp.rmd = file.path(vdir, paste0(fname, '_TEMPORARY.Rmd'))
+path.r = file.path(vdir, paste0(fname, '.R'))
+path.md = file.path(vdir, paste0(fname, '.md'))
 
 # run the vignette and save result to the Rmd file (and save code to R file)
 originalwd = getwd()
-setwd(vignettes.dir)
+setwd(vdir)
 knitr::knit(path.orig, output=path.rmd)
 knitr::purl(path.orig, output=path.r)
 setwd(originalwd)
