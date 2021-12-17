@@ -66,11 +66,12 @@ referencing.
 
 ## Releases
 
-`rasterbc` is not yet available on CRAN but it can be downloaded and
-installed in R using the command
+`rasterbc` is now available on
+[CRAN](https://cran.r-project.org/web/packages/rasterbc/index.html).
+Install it in R using the command
 
 ``` r
-devtools::install_github('deankoch/rasterbc')
+install.packages('rasterbc')
 ```
 
 This will also install the dependencies `sf` and `terra`, if you don’t

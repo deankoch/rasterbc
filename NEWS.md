@@ -1,5 +1,13 @@
 # development
 
+**2021/12/17**
+
+New version 1.0.1 addressing CRAN check issues related to the vignette builder. Vignette is now pre-built
+
+**2021/12/16**
+
+rasterbc v.1.0.0 accepted at CRAN
+
 **2021/12/15**
 
 Switched from raster to terra. Package finalized for submission to CRAN
