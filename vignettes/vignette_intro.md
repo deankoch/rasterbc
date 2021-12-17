@@ -12,21 +12,23 @@ vignette: >
 
 ## Installation
 
-This package is still in development, but a release on [CRAN](https://CRAN.R-project.org) is planned in the near future. For now the package may be tested by installing the `devtools` package (run `install.packages('devtools')`), and then running the following two lines:
+This package is published on [CRAN](https://CRAN.R-project.org). Install it with:
 
 
 ```r
-library(devtools)
-install_github('deankoch/rasterbc')
+install_packages('rasterbc')
 ```
-I have tried to keep dependencies to a minimum. The package requires `sf` and `terra` for loading and merging geospatial data. If these are not already installed on your machine, the `install_github` line will ask to install them. We also use the
-`bcmaps` package in this vignette to define a study region (but it's not a requirement of the package).
+I have tried to keep dependencies to a minimum. The package requires `sf` and `terra` for loading and merging geospatial data. If these are not already installed on your machine, the `install_github` line will ask to install them. We also use the `bcmaps` package in this vignette to define a study region (but it's not a requirement of the package).
 
 
 ```r
 library(sf)
+#> Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
 library(terra)
+#> terra version 1.4.22
 library(bcmaps)
+#> The bcmapsdata package is no longer required to be installed for bcmaps to function.
+#> Layers are now cached as needed to 'C:\Users\deank\AppData\Local/R/cache/R/bcmaps' using the bcdata package.
 library(rasterbc)
 ```
 
@@ -70,6 +72,7 @@ To demonstrate this package we'll need a polygon covering a (relatively) small g
 # define and load the geometry
 example.name = 'Regional District of Central Okanagan'
 bc.bound.sf = bc_bound()
+#> bc_bound_hres was updated on 2021-11-16
 districts.sf = regional_districts()
 example.sf = districts.sf[districts.sf$ADMIN_AREA_NAME==example.name, ]
 
