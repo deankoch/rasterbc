@@ -44,7 +44,13 @@ a [data publication](https://doi.org/10.20383/101.0283) for permanence and easy 
 
 ## Releases
 
-`rasterbc` is now available on [CRAN](https://cran.r-project.org/web/packages/rasterbc/index.html). Install it in R using the command
+`rasterbc` is available on CRAN:
+
+[rasterbc v1.0.0](https://cran.r-project.org/web/packages/rasterbc/index.html)
+
+[![](https://cranlogs.r-pkg.org/badges/rasterbc)](https://cran.r-project.org/package=rasterbc)
+
+Install it in R using the command
 
 ```{r eval=FALSE}
 install.packages('rasterbc')
