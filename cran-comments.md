@@ -6,7 +6,7 @@ Previously, the vignette would download geoTIFF data from a web resource (globus
 service is occasionally unavailable, there are times when the vignette cannot be re-built. This recently led to WARN results
 on CRAN's package check results.
 
-This update fixes this problem by replacing the vignette file with one in which all images and output have been
+This update fixes the problem by replacing the vignette file with one in which all images and output have been
 pre-computed, so the web resource is no longer required. My thanks to the CRAN team for pointing out the issue.
 
 

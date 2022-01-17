@@ -210,7 +210,7 @@ text(st_coordinates(st_centroid(st_geometry(blocks))), labels=blocks$NTS_SNRC, c
 
 ### File management
 
-If you forget which files have been downloaded, you can either check the directory `data.dir` using your file browser (subfolder '/dem/blocks', in this case), or use `listfiles_bc` to get a logical vector indicating which files are curerntly found in your local storage directory:
+If you forget which files have been downloaded, you can either check the directory `data.dir` using your file browser (subfolder '/dem/blocks', in this case), or use `listfiles_bc` to get a logical vector indicating which files are currently found in your local storage directory:
 
 
 ```r
