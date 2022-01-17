@@ -7,6 +7,12 @@ Dean Koch
 <!-- badges: start -->
 <!-- badges: end -->
 
+**NOTE (January 17, 2022): FRDR’s direct download functionality is
+[temporarily unavailable](https://www.frdr-dfdr.ca/repo/). Unfortunately
+this prevents rasterbc from downloading data tiles from the expected
+URLs at globus.org. Please be patient as FRDR works to resolve the
+issue.**
+
 `rasterbc` provides access to a collection of 100m resolution gridded
 spatial ecological data on the province of British Columbia during the
 period 2001-2018, including yearly rasterized Forest Insect and Disease
