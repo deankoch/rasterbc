@@ -67,7 +67,7 @@
 # ####################################################################
 
 # define the filename to work on (must be found in vignettes/)
-vdir = 'I:/MPB_ARCHIVE/git-MPB/rasterbc/vignettes'
+vdir = 'L:/MPB_ARCHIVE/git-MPB/rasterbc/vignettes'
 fname = 'vignette_intro'
 
 # define paths of files to create

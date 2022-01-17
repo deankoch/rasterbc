@@ -46,7 +46,7 @@ a [data publication](https://doi.org/10.20383/101.0283) for permanence and easy 
 
 `rasterbc` is available on CRAN:
 
-[rasterbc v1.0.0](https://cran.r-project.org/web/packages/rasterbc/index.html)
+[rasterbc v1.0.0](https://CRAN.R-project.org/package=rasterbc)
 
 [![](https://cranlogs.r-pkg.org/badges/rasterbc)](https://cran.r-project.org/package=rasterbc)
 

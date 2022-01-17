@@ -1,7 +1,7 @@
 ---
 title: "Introduction to the rasterbc package"
 output: github_document
-date: "2021-12-17"
+date: "2022-01-17"
 vignette: >
   %\VignetteIndexEntry{Introduction to the rasterbc package}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,7 +12,7 @@ vignette: >
 
 ## Installation
 
-This package is published on [CRAN](https://CRAN.R-project.org). Install it with:
+This package is published on [CRAN](https://CRAN.R-project.org/package=rasterbc). Install it with:
 
 
 ```r
@@ -192,7 +192,7 @@ plot(st_geometry(blocks), add=TRUE, border='red')
 
 If you're opening the downloaded data right away, you can skip the `getdata_bc` call. The argument `dl` (by default `TRUE`) in `opendata_bc` will cause it to call `getdata_bc` automatically to download any missing blocks.
 
-Any simple features object of class `sf` or `sfc` can be used for the argument `geo`, provided its geometry intersects with the provincial boundary of BC. The intended usage is for the user to delineate their region of interest as a `(MULTI)POLYGON` object (here, `example.sf` is a `MULTIPOLYGON`). Geometries of other classes (such `SpatialPolygons`, as defined by `sp`; or data frames containing coordinates of vertices) can often be coerced to `sf` using a command like `sf::st_as_sf(other_geometry_class_object)`. Alternatively, users can directly download individual blocks by specifying their NTS/SNRC codes, *eg.* the next chunk plots the DEM again, using the codes: 
+Any simple features object of class `sf` or `sfc` can be used for the argument `geo`, provided its geometry intersects with the provincial boundary of BC. The intended usage is for the user to delineate their region of interest as a `(MULTI)POLYGON` object (here, `example.sf` is a `MULTIPOLYGON`). Geometries of other classes (such `SpatialPolygons`, as defined by `sp`; or data frames containing coordinates of vertices) can often be coerced to `sf` using a command like `sf::st_as_sf(other_geometry_class_object)`. Alternatively, users can directly download individual blocks by specifying their NTS/SNRC codes, *eg.* the next chunk plots the DEM again, using the codes:
 
 ```r
 example.codes = findblocks_bc(example.sf)
@@ -228,7 +228,7 @@ By default, the `listdata_bc` function prints a list of all available layers. *e
 listdata_bc(collection='dem', verbose=2)
 #>        year                        description                                  unit tiles
 #> dem      NA              digital elevation map              (metres above sea level)  3/89
-#> slope    NA derived from digital elevation map            (degrees above horizontal)  0/89
+#> slope    NA derived from digital elevation map            (degrees above horizontal)  3/89
 #> aspect   NA derived from digital elevation map (degrees counterclockwise from north)  0/89
 ```
 
@@ -256,7 +256,7 @@ terra::rast(dem.path)
 #> max value   : 2918.951
 ```
 
-If you're finished with `rasterbc` and want to remove all of the stored data, or if you simply want to free up space, the entire data directory or any of its contents can be deleted using your file browser. This will not break the `rasterbc` installation. However, all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions. 
+If you're finished with `rasterbc` and want to remove all of the stored data, or if you simply want to free up space, the entire data directory or any of its contents can be deleted using your file browser. This will not break the `rasterbc` installation. However, all downloaded data will be erased and you will need to run `datadir_bc` again before using the other package functions.
 
 ### Integer codes
 

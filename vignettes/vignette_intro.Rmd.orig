@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-This package is published on [CRAN](https://cran.r-project.org/web/packages/rasterbc/index.html). Install it with:
+This package is published on [CRAN](https://CRAN.R-project.org/package=rasterbc). Install it with:
 
 ```{r installation, eval=FALSE}
 install_packages('rasterbc')

@@ -1,8 +1,13 @@
 ## Comments for CRAN maintainers:
 
-This is my first submission to CRAN.
+This update is to switch to a precompiled vignette.
 
-Please note that the vignette for this package took around 20-40 seconds to build, as it downloads several geoTIFF files, totalling 22MB, into a temporary directory. If that is too resource-heavy, or if it's more appropriate for this kind of data-retrieval package to pre-build its vignette (or disable checking, etc) please let me know how proceed with that.
+Previously, the vignette would download geoTIFF data from a web resource (at frdr.ca) to use in examples. Since this web
+service is occasionally down for maintenance, there are times when the vignette cannot be re-built. This recently led to
+a WARN result on CRAN's check.
+
+The updated package fixes this problem by replacing the Rmd vignette file with one in which all images and output have been
+pre-computed, so the web resource is no longer accessed. My thanks to the CRAN team for pointing out the issue
 
 ## R CMD check results
 
