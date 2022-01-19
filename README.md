@@ -1,7 +1,7 @@
 The rasterbc R Package
 ================
 Dean Koch
-2022-01-17
+2022-01-18
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
@@ -74,7 +74,7 @@ referencing.
 
 `rasterbc` is available on CRAN:
 
-[rasterbc v1.0.0](https://CRAN.R-project.org/package=rasterbc)
+[rasterbc v1.0.1](https://CRAN.R-project.org/package=rasterbc)
 
 [![](https://cranlogs.r-pkg.org/badges/rasterbc)](https://cran.r-project.org/package=rasterbc)
 
