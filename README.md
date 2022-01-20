@@ -1,17 +1,11 @@
 The rasterbc R Package
 ================
 Dean Koch
-2022-01-18
+2022-01-19
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 <!-- badges: end -->
-
-**NOTE (January 17, 2022): FRDR’s direct download functionality is
-[temporarily unavailable](https://www.frdr-dfdr.ca/repo/). Unfortunately
-this prevents rasterbc from downloading data tiles from the expected
-URLs at globus.org. Please be patient as FRDR works to resolve the
-issue.**
 
 `rasterbc` provides access to a collection of 100m resolution gridded
 spatial ecological data on the province of British Columbia during the
@@ -66,6 +60,12 @@ The collection is published as a [data
 publication](https://doi.org/10.20383/101.0283) for permanence and easy
 referencing.
 
+## Vignette
+
+See the [introduction
+vignette](https://github.com/deankoch/rasterbc/blob/master/vignettes/vignette_intro.md)
+for instructions on getting started with this package.
+
 <img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/vignette_intro_okanagan_location-1.png" width="30%"></img>
 <img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/vignette_intro_okanagan_elevation_tiles-1.png" width="30%"></img>
 <img src="https://raw.githubusercontent.com/deankoch/rasterbc/master/vignettes/vignette_intro_okanagan_bgcz-1.png" width="30%"></img>
@@ -85,9 +85,13 @@ install.packages('rasterbc')
 ```
 
 This will also install the dependencies `sf` and `terra`, if you don’t
-have them already. See the [introduction
-vignette](https://github.com/deankoch/rasterbc/blob/master/vignettes/vignette_intro.md)
-for instructions on getting started with this package.
+have them already.
+
+Note that FRDR’s direct download services are occasionally unavailable,
+at which times the download functionality of rasterbc will also be
+unavailable. Check [the FRDR homepage](https://www.frdr-dfdr.ca/repo/)
+(eg for news about maintenance downtime) if you are having trouble
+downloading data tiles with rasterbc.
 
 ## About
 
