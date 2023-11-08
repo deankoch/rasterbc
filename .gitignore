@@ -2,8 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-NEWS_backup.md
-dev/
 /doc/
 /Meta/
+/garbage/
 vignette_intro.Rmd
