@@ -1,7 +1,7 @@
 The rasterbc R Package
 ================
 Dean Koch
-2022-01-19
+2023-11-08
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
@@ -18,38 +18,38 @@ ingress for modellers.
 
 The available layers are:
 
--   [BC biogeoclimatic
-    zone](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md)
-    (‘bgcz’), from the [BC Ministry of
-    Forests](https://catalogue.data.gov.bc.ca/dataset/f358a53b-ffde-4830-a325-a5a03ff672c3)
--   [Geographical coordinates
-    grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md)
-    (‘borders’), from [Natural Resources
-    Canada](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
--   [Consolidated cutblocks,
-    2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md)
-    (‘cutblocks’), from the [BC Ministry of
-    Forests](https://catalogue.data.gov.bc.ca/dataset/harvested-areas-of-bc-consolidated-cutblocks-)
--   [Digital elevation
-    model](https://github.com/deankoch/rasterbc_src/blob/master/src_dem.knit.md)
-    (‘dem’) from [Natural Resources
-    Canada](https://ftp.maps.canada.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_en.pdf)
--   [Forest insect and disease survey,
-    2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md)
-    (‘fids’), from the [BC Ministry of
-    Forests](https://catalogue.data.gov.bc.ca/dataset/pest-infestation-polygons)
--   [Forest extent and change,
-    2001-2019](https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md)
-    (‘gfc’), from [Hansen et al.,
-    (2013)](https://cdnsciencepub.com/doi/full/10.1139/cjfr-2013-0401)
--   [Canadian national fire database,
-    2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md)
-    (‘nfdb’), from [Natural Resources
-    Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
--   [Interpolated forest attributes, 2001,
-    2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
-    (‘pine’) from [Beaudoin et
-    al. (2017)](https://cdnsciencepub.com/doi/full/10.1139/cjfr-2017-0184)
+- [BC biogeoclimatic
+  zone](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md)
+  (‘bgcz’), from the [BC Ministry of
+  Forests](https://catalogue.data.gov.bc.ca/dataset/f358a53b-ffde-4830-a325-a5a03ff672c3)
+- [Geographical coordinates
+  grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md)
+  (‘borders’), from [Natural Resources
+  Canada](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
+- [Consolidated cutblocks,
+  2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md)
+  (‘cutblocks’), from the [BC Ministry of
+  Forests](https://catalogue.data.gov.bc.ca/dataset/harvested-areas-of-bc-consolidated-cutblocks-)
+- [Digital elevation
+  model](https://github.com/deankoch/rasterbc_src/blob/master/src_dem.knit.md)
+  (‘dem’) from [Natural Resources
+  Canada](https://ftp.maps.canada.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_en.pdf)
+- [Forest insect and disease survey,
+  2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md)
+  (‘fids’), from the [BC Ministry of
+  Forests](https://catalogue.data.gov.bc.ca/dataset/pest-infestation-polygons)
+- [Forest extent and change,
+  2001-2019](https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md)
+  (‘gfc’), from [Hansen et al.,
+  (2013)](http://earthenginepartners.appspot.com/science-2013-global-forest)
+- [Canadian national fire database,
+  2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md)
+  (‘nfdb’), from [Natural Resources
+  Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
+- [Interpolated forest attributes, 2001,
+  2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
+  (‘pine’) from [Beaudoin et
+  al. (2017)](https://cdnsciencepub.com/doi/full/10.1139/cjfr-2017-0184)
 
 All datasets were downloaded and processed in the years 2018-2020, then
 stored as raster tiles in the standard [BC
