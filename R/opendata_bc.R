@@ -104,10 +104,12 @@ opendata_bc = function(geo=NULL, collection=NULL, varname=NULL, year=NULL, type=
   names(out.raster) = paste(c(varname, year), collapse='_')
 
   # trim output raster (skip for point inputs to geo)
-  is.point = any( class(geo) %in% c('sfc_POINT', 'sfc_MULTIPOINT') )
+  is.point = inherits(geo, c('sfc_POINT', 'sfc_MULTIPOINT'))
+  #is.point = any( class(geo) %in% c('sfc_POINT', 'sfc_MULTIPOINT') )
   if( ( type %in% c('clip', 'mask') ) & !is.point )
   {
-    if( 'sfc' %in% class(geo) )
+    #if( 'sfc' %in% class(geo) )
+    if( inherits(geo, 'sfc') )
     {
       if(!quiet) cat('clipping layer...')
       out.raster = terra::crop(out.raster, geo)

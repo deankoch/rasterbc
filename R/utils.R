@@ -26,7 +26,7 @@ listswap_bc = function(input.list, input.prefix, output.prefix)
     return(sapply(input.list, function(path) {
 
       # handle non-character list entries
-      if(class(input.list) != 'character')
+      if(!inherits(input.list, 'character'))
       {
         # non-character entries are not touched
         return(path)
