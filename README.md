@@ -49,7 +49,7 @@ The available layers are:
 - [Interpolated forest attributes, 2001,
   2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
   (‘pine’) from [Beaudoin et
-  al. (2017)](https://cdnsciencepub.com/doi/full/10.1139/cjfr-2017-0184)
+  al. (2017)](https://doi.org/10.1139/cjfr-2017-0184)
 
 All datasets were downloaded and processed in the years 2018-2020, then
 stored as raster tiles in the standard [BC

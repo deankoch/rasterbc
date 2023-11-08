@@ -2,7 +2,7 @@
 #'
 #' Mapsheet boundary polygons for 1:250,000 scale maps, from Natural Resources Canada. The
 #' \href{https://open.canada.ca/en/open-government-licence-canada}{Open Government License - Canada} applies.
-#' More info \href{https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765}{available here}
+#' More info \href{https://natural-resources.canada.ca/earth-sciences/geography/topographic-information/maps/9765}{available here}
 #'
 #' @format Simple feature collection (of type POLYGON), with 89 features and 1 field:
 #' \describe{
@@ -14,7 +14,7 @@
 
 #' Metadata for rasterbc collections
 #'
-#' This file contains a summary of metadata about the available datasets in rasterbc. The script ('metadata.R') used to
+#' This file contains a summary of metadata about the available datasets in rasterbc. The script ('metadata_bc.R') used to
 #' generate this file can be found in the subdirectory rasterbc/data-raw/ (updated November 23, 2021).
 #'
 #' Relevant contents of the file can be accessed dataframe using the function listdata_bc.
@@ -37,7 +37,7 @@
 #'   \item{fids}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md}{Forest insect and disease survey}, 2001-2018, from BC Ministry of Forests}
 #'   \item{gfc}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md}{Forest extent and change}, 2001-2019 from Hansen et al. \href{http://earthenginepartners.appspot.com/science-2013-global-forest}{(2013)}}
 #'   \item{nfdb}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md}{Canadian national fire database}, 2001-2018, from Natural Resources Canada}
-#'   \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from Beaudoin et al. \href{https://cdnsciencepub.com/doi/full/10.1139/cjfr-2017-0184}{(2017)}}
+#'   \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from Beaudoin et al. \href{https://doi.org/10.1139/cjfr-2017-0184}{(2017)}}
 #' }
 #' @source Original data sources were published by the Canadian Journal of Forest Research and various Canadian government environment ministries, and are described in full at \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src}
 'metadata_bc'

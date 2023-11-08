@@ -20,6 +20,6 @@ ntspoly_bc
 \description{
 Mapsheet boundary polygons for 1:250,000 scale maps, from Natural Resources Canada. The
 \href{https://open.canada.ca/en/open-government-licence-canada}{Open Government License - Canada} applies.
-More info \href{https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9765}{available here}
+More info \href{https://natural-resources.canada.ca/earth-sciences/geography/topographic-information/maps/9765}{available here}
 }
 \keyword{datasets}
