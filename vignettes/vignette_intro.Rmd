@@ -18,7 +18,7 @@ This package is published on [CRAN](https://CRAN.R-project.org/package=rasterbc)
 ```r
 install_packages('rasterbc')
 ```
-I have tried to keep dependencies to a minimum. The package requires `sf` and `terra` for loading and merging geospatial data. If these are not already installed on your machine, the `install_github` line will ask to install them. We also use the `bcmaps` package in this vignette to define a study region (but it's not a requirement of the package).
+I have tried to keep dependencies to a minimum. The package requires `sf` and `terra` for loading and merging geospatial data. If these are not already installed on your machine, the `install_packages` line will ask to install them. We also use the `bcmaps` package in this vignette to define a study region (but it's not a requirement of the package).
 
 
 ```r
