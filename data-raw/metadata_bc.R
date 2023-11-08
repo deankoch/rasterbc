@@ -5,7 +5,7 @@
 #' output: github_document
 #' ---
 #'
-#' **Development version**: testing R code for preparing metadata list
+#' R code for preparing metadata list
 #' eventually this may be turned into a public component of the rasterbc package, allowing
 #' users to recreate all the steps used in preparing the dataset, and/or add their new collections
 #'
