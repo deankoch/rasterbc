@@ -14,7 +14,7 @@ Nested list containing metadata and URLs for all of the files available as raste
   \item{fids}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md}{Forest insect and disease survey}, 2001-2018, from BC Ministry of Forests}
   \item{gfc}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md}{Forest extent and change}, 2001-2019 from Hansen et al. \href{http://earthenginepartners.appspot.com/science-2013-global-forest}{(2013)}}
   \item{nfdb}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md}{Canadian national fire database}, 2001-2018, from Natural Resources Canada}
-  \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from Beaudoin et al. \href{https://doi.org/10.1139/cjfr-2017-0184}{(2017)}}
+  \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from Beaudoin et al. \doi{10.1139/cjfr-2017-0184}{(2017)}}
 }
 }
 \source{
@@ -30,7 +30,7 @@ generate this file can be found in the subdirectory rasterbc/data-raw/ (updated 
 \details{
 Relevant contents of the file can be accessed dataframe using the function listdata_bc.
 
-The rasterbc collection is published as \href{https://www.frdr-dfdr.ca/repo/handle/doi:10.20383/101.0283}{a data publication}
+The rasterbc collection is published as a data publication
 with associated \doi{10.20383/101.0283}{DOI} for permanence and easy referencing. For a more complete
 description, along with instructions on downloading the collections from their sources and reproducing the collection,
 see the \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src} github repository.

@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 The available layers are:
 
 * [BC biogeoclimatic zone](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md) ('bgcz'), from the [BC Ministry of Forests](https://catalogue.data.gov.bc.ca/dataset/f358a53b-ffde-4830-a325-a5a03ff672c3)
-* [Geographical coordinates grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md) ('borders'), from [Natural Resources Canada](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
+* [Geographical coordinates grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md) ('borders'), from [Natural Resources Canada](https://natural-resources.canada.ca/maps-tools-and-publications/maps/topographic-maps/10995)
 * [Consolidated cutblocks, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md) ('cutblocks'), from the [BC Ministry of Forests](https://catalogue.data.gov.bc.ca/dataset/harvested-areas-of-bc-consolidated-cutblocks-)
 * [Digital elevation model](https://github.com/deankoch/rasterbc_src/blob/master/src_dem.knit.md) ('dem') from [Natural Resources Canada](https://ftp.maps.canada.ca/pub/nrcan_rncan/elevation/cdem_mnec/doc/CDEM_en.pdf)
 * [Forest insect and disease survey, 2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md) ('fids'), from the [BC Ministry of Forests](https://catalogue.data.gov.bc.ca/dataset/pest-infestation-polygons)

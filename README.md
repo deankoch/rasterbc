@@ -25,7 +25,7 @@ The available layers are:
 - [Geographical coordinates
   grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md)
   (‘borders’), from [Natural Resources
-  Canada](https://www.nrcan.gc.ca/maps-tools-and-publications/maps/topographic-maps/10995)
+  Canada](https://natural-resources.canada.ca/maps-tools-and-publications/maps/topographic-maps/10995)
 - [Consolidated cutblocks,
   2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md)
   (‘cutblocks’), from the [BC Ministry of
