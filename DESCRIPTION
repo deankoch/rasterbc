@@ -1,7 +1,7 @@
 Package: rasterbc
 Type: Package
 Title: Access Forest Ecology Layers for British Columbia in 2001-2018
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: person("Dean", "Koch", email="dkoch@ualberta.ca", role = c("aut", "cre"), comment=c(ORCID="0000-0002-8849-859X"))
 Description: R-based access to a large set of data variables relevant to forest ecology in British Columbia (BC), Canada. Layers
     are in raster format at 100m resolution in the BC Albers projection, hosted at the Federated Research Data Repository (FRDR)
