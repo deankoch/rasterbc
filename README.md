@@ -1,7 +1,7 @@
 The rasterbc R Package
 ================
 Dean Koch
-2023-11-08
+2023-11-09
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
@@ -74,7 +74,7 @@ for instructions on getting started with this package.
 
 `rasterbc` is available on CRAN:
 
-[rasterbc v1.0.1](https://CRAN.R-project.org/package=rasterbc)
+[rasterbc v1.0.2](https://CRAN.R-project.org/package=rasterbc)
 
 [![](https://cranlogs.r-pkg.org/badges/rasterbc)](https://cran.r-project.org/package=rasterbc)
 
@@ -87,11 +87,12 @@ install.packages('rasterbc')
 This will also install the dependencies `sf` and `terra`, if you don’t
 have them already.
 
-Note that FRDR’s direct download services are occasionally unavailable,
-at which times the download functionality of rasterbc will also be
-unavailable. Check [the FRDR homepage](https://www.frdr-dfdr.ca/repo/)
-(eg for news about maintenance downtime) if you are having trouble
-downloading data tiles with rasterbc.
+Note that FRDR’s direct download services may occasionally be
+unavailable, during which the download functionality of rasterbc will
+also be unavailable. If you are having trouble downloading data tiles
+with rasterbc, first check [the FRDR
+homepage](https://www.frdr-dfdr.ca/repo/) for news about maintenance
+downtime.
 
 ## About
 
