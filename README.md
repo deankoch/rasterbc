@@ -48,7 +48,8 @@ The available layers are:
   Canada](https://cwfis.cfs.nrcan.gc.ca/ha/nfdb)
 - [Interpolated forest attributes, 2001,
   2011](https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md)
-  (‘pine’) from [Beaudoin et al. (2017)](doi.org/10.1139/cjfr-2017-0184)
+  (‘pine’) from [Beaudoin et
+  al. (2017)](https://doi.org/10.1139/cjfr-2017-0184)
 
 All datasets were downloaded and processed in the years 2018-2020, then
 stored as raster tiles in the standard [BC
@@ -95,15 +96,16 @@ downloading data tiles with rasterbc.
 ## About
 
 This project grew out of my [doctoral thesis
-project](doi.org/10.7939/r3-91zn-v276) on modelling outbreaks of the
-mountain pine beetle in central BC. Parts of of the `rasterbc`
+project](https://doi.org/10.7939/r3-91zn-v276) on modelling outbreaks of
+the mountain pine beetle in central BC. Parts of of the `rasterbc`
 collection can be found in research publications with professors Mark
 Lewis and Subhash Lele on [statistical methods for spatial
-data](doi.org/10.7939/r3-g6qb-bq70), [models for animal
-dispersal](doi.org/10.1098/rsif.2020.0434), and [an analysis of MPB
-activity in the Merrit TSA](doi.org/10.1007/s11538-021-00899-z). We
-gratefully acknowledge the support of NSERC, TRIA-Net, and the
-University of Alberta Lewis Lab in this work.
+data](https://doi.org/10.7939/r3-g6qb-bq70), [models for animal
+dispersal](https://doi.org/10.1098/rsif.2020.0434), and [an analysis of
+MPB activity in the Merrit
+TSA](https://doi.org/10.1007/s11538-021-00899-z). We gratefully
+acknowledge the support of NSERC, TRIA-Net, and the University of
+Alberta Lewis Lab in this work.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- rmarkdown::render('README.Rmd') -->
