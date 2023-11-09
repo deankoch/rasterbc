@@ -1,3 +1,5 @@
+# rasterbc (development version)
+
 # rasterbc 1.0.2
 
 * Updated the syntax of `NEWS.md`
