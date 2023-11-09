@@ -1,22 +1,22 @@
 ## Comments for CRAN maintainers:
 
-This v1.0.2 update fixes raster download URLs that were broken by a recent change to endpoint domains at Globus.ca
-
-The updated package now uses permanent links that redirect to the correct location. This should prevent the problem from happening again in the future.
+Version 1.0.2 fixes raster download URLs that were broken by a recent change to endpoint domains at the Globus server. The updated package now uses permanent links that redirect to the correct location. This should prevent the problem from happening again in the future.
 
 ## Check results
 
-The package passed check with no ERRORS, WARNINGS, or NOTES in the following test environments:
+The package passed check with 0 ERRORS, WARNINGS, or NOTES in the following test environments:
 
-* my workstation
-    * Windows 10 (x86_64-w64-mingw32 64-bit), R version 4.3.1 (2023-06-16 ucrt)
-* Winbuilder with
-    * Windows Server 2008 (64-bit), R-release 4.1.2 (2021-11-01)
-    * Windows Server 2022, R-devel (2022-01-16 r81507 ucrt)
-* R-hub
-    * macOS 10.13.6 High Sierra, R-release, CRAN's setup 
-    * Debian Linux, R-devel, GCC
-
+* with devtools::check()
+    * Windows 10 64 bit, R-release version 4.3.1 (2023-06-16 ucrt)
+    
+* with devtools::check_win_devel()
+    * Windows Server 2022 64bit (build 20348), R-devel (2023-11-08 r85496 ucrt)
+    
+* with rhub::check_for_cran()
+    * Ubuntu Linux 20.04.1 LTS, R-release 4.3.2 (2023-10-31)
+    * Windows Server 2022 x64 (build 20348), R-devel (2023-10-14 r85331 ucrt)
+    * Fedora Linux 36, R-devel (2023-11-07 r85491)
+    
 ## Downstream dependencies
 
 There are currently no downstream dependencies for this package
