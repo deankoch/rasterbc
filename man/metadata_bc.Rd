@@ -14,7 +14,7 @@ Nested list containing metadata and URLs for all of the files available as raste
   \item{fids}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_fids.knit.md}{Forest insect and disease survey}, 2001-2018, from BC Ministry of Forests}
   \item{gfc}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_gfc.knit.md}{Forest extent and change}, 2001-2019 from Hansen et al. \href{http://earthenginepartners.appspot.com/science-2013-global-forest}{(2013)}}
   \item{nfdb}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_nfdb.knit.md}{Canadian national fire database}, 2001-2018, from Natural Resources Canada}
-  \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from \href{https://cdnsciencepub.com/doi/10.1139/cjfr-2017-0184}{Beaudoin et al. (2017)}}
+  \item{pine}{\href{https://github.com/deankoch/rasterbc_src/blob/master/src_pine.knit.md}{Interpolated forest attributes}, 2001, 2011, from Beaudoin et al. (2017) (DOI: 10.1139/cjfr-2017-0184)}
 }
 }
 \source{
