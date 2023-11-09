@@ -18,8 +18,8 @@
 #'
 #' @return a vector of character string(s) containing the absolute path(s) to the downloaded file(s)
 #'
-#' @seealso{\code{\link{findblocks_bc}} to identify which mapsheets will be downloaded}
-#' @seealso{\code{\link{listdata_bc}} for a list of available collections, variable names, years}
+#' @seealso \code{\link{findblocks_bc}} to identify which mapsheets will be downloaded
+#' @seealso \code{\link{listdata_bc}} for a list of available collections, variable names, years
 #'
 #' @importFrom utils download.file
 #' @importFrom utils setTxtProgressBar

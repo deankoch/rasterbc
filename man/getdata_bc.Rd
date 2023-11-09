@@ -58,7 +58,7 @@ terra::rast(block.path)
 }
 }
 \seealso{
-{\code{\link{findblocks_bc}} to identify which mapsheets will be downloaded}
+\code{\link{findblocks_bc}} to identify which mapsheets will be downloaded
 
-{\code{\link{listdata_bc}} for a list of available collections, variable names, years}
+\code{\link{listdata_bc}} for a list of available collections, variable names, years
 }
