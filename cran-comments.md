@@ -1,21 +1,20 @@
-## Comments for CRAN maintainers:
+## Overview of Version 1.0.3
 
-Version 1.0.2 fixes raster download URLs that were broken by a recent change to endpoint domains at the Globus server. The updated package now uses permanent links that redirect to the correct location. This should prevent the problem from happening again in the future.
+This update changes the following:
 
-## Check results
+* updated maintainer email address
+* minor edits to documentation to address notes from R CMD check 
+* added some tests (using the testthat package)
 
-The package passed check with 0 ERRORS, WARNINGS, or NOTES in the following test environments:
+## R CMD check results
 
-* with devtools::check()
-    * Windows 10 64 bit, R-release version 4.3.1 (2023-06-16 ucrt)
-    
-* with devtools::check_win_devel()
-    * Windows Server 2022 64bit (build 20348), R-devel (2023-11-08 r85496 ucrt)
-    
-* with rhub::check_for_cran()
-    * Ubuntu Linux 20.04.1 LTS, R-release 4.3.2 (2023-10-31)
-    * Windows Server 2022 x64 (build 20348), R-devel (2023-10-14 r85331 ucrt)
-    * Fedora Linux 36, R-devel (2023-11-07 r85491)
+0 errors | 0 warnings | 0 notes
+
+## Test environments
+
+* `devtools::check()` running Ubuntu 24.04.4 LTS, R-release
+
+* `rhub::check()` on platforms: macos-arm64 (latest), windows (latest)
     
 ## Downstream dependencies
 
