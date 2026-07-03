@@ -2,7 +2,7 @@
 #'
 #' Mapsheet boundary polygons for 1:250,000 scale maps, from Natural Resources Canada. The
 #' \href{https://open.canada.ca/en/open-government-licence-canada}{Open Government License - Canada} applies.
-#' More info \href{https://natural-resources.canada.ca/earth-sciences/geography/topographic-information/maps/9765}{available here}
+#' More info \href{https://natural-resources.canada.ca/maps-tools-publications/maps/topographic-maps/national-topographic-system-index-maps}{available here}
 #'
 #' @format Simple feature collection (of type POLYGON), with 89 features and 1 field:
 #' \describe{
