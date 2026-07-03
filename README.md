@@ -1,10 +1,12 @@
 The rasterbc R Package
 ================
 Dean Koch
-2023-11-09
+2026-07-03
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 `rasterbc` provides access to a collection of 100m resolution gridded
@@ -109,4 +111,5 @@ acknowledge the support of NSERC, TRIA-Net, and the University of
 Alberta Lewis Lab in this work.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- rmarkdown::render('README.Rmd') -->
