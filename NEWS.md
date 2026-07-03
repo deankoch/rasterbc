@@ -1,5 +1,3 @@
-# rasterbc (development version)
-
 # rasterbc 1.0.3
 
 * add missing dependency on R >= 4.1.0 (for pipe)
