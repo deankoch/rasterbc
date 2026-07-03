@@ -16,5 +16,5 @@
 ^vignettes\vignette_intro.Rmd.orig$
 ^vignettes\vignette_intro.md$
 ^vignettes\vignette_intro.R$
-
+^rasterbc.Rcheck$
 ^CRAN-SUBMISSION$
