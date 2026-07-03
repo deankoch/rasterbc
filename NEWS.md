@@ -1,5 +1,10 @@
 # rasterbc (development version)
 
+# rasterbc 1.0.3
+
+* add missing dependency on R >= 4.1.0 (for pipe)
+* update maintainer email contact address
+
 # rasterbc 1.0.2
 
 * Updated the syntax of `NEWS.md`
