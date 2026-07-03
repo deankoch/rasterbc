@@ -20,14 +20,12 @@ ingress for modellers.
 
 The available layers are:
 
-- [BC biogeoclimatic
-  zone](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md)
-  (‘bgcz’), from the [BC Ministry of
-  Forests](https://catalogue.data.gov.bc.ca/dataset/f358a53b-ffde-4830-a325-a5a03ff672c3)
+<!-- * [BC biogeoclimatic zone](https://github.com/deankoch/rasterbc_src/blob/master/src_bgcz.knit.md) ('bgcz'), from the [BC Ministry of Forests](https://catalogue.data.gov.bc.ca/dataset/f358a53b-ffde-4830-a325-a5a03ff672c3) -->
+
 - [Geographical coordinates
   grid](https://github.com/deankoch/rasterbc_src/blob/master/src_borders.knit.md)
   (‘borders’), from [Natural Resources
-  Canada](https://natural-resources.canada.ca/maps-tools-and-publications/maps/topographic-maps/10995)
+  Canada](https://natural-resources.canada.ca/maps-tools-publications/maps/topographic-maps)
 - [Consolidated cutblocks,
   2001-2018](https://github.com/deankoch/rasterbc_src/blob/master/src_cutblocks.knit.md)
   (‘cutblocks’), from the [BC Ministry of
@@ -55,10 +53,10 @@ The available layers are:
 
 All datasets were downloaded and processed in the years 2018-2020, then
 stored as raster tiles in the standard [BC
-Albers](https://spatialreference.org/ref/epsg/nad83-bc-albers/)
-projection, and hosted on [FRDR](https://www.frdr-dfdr.ca/repo/). Follow
-the links in the list above for code and documentation on this process.
-The collection is published as a [data
+Albers](https://spatialreference.org/ref/epsg/3005/) projection, and
+hosted on [FRDR](https://www.frdr-dfdr.ca/repo/). Follow the links in
+the list above for code and documentation on this process. The
+collection is published as a [data
 publication](https://doi.org/10.20383/101.0283) for permanence and easy
 referencing.
 
