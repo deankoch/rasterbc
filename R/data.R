@@ -25,7 +25,7 @@
 #' see the \href{https://github.com/deankoch/rasterbc_src}{rasterbc_src} github repository.
 #'
 #' All were downloaded from sources and processed in the years 2018-2020, then stored as raster tiles in the standard
-#' \href{https://spatialreference.org/ref/epsg/nad83-bc-albers/}{BC Albers} projection, and hosted on
+#' \href{https://spatialreference.org/ref/epsg/3005/}{BC Albers} projection, and hosted on
 #' \href{https://www.frdr-dfdr.ca/repo/}{FRDR}.
 #'
 #' @format Nested list containing metadata and URLs for all of the files available as rasterbc collections
