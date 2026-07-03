@@ -18,3 +18,4 @@
 ^vignettes\vignette_intro.R$
 ^rasterbc.Rcheck$
 ^CRAN-SUBMISSION$
+^.github$
